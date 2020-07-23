@@ -42,7 +42,7 @@ class SendForgotPasswordEmailService {
         name: user.name,
         email: user.email,
       },
-      subject: '[Xilolite-API-CQ] Recuperação de senha',
+      subject: '[TIC] Recuperação de senha',
       templateData: {
         file: forgotPasswordTemplate,
         variables: {
