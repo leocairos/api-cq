@@ -8,7 +8,6 @@ import { errors } from 'celebrate';
 
 import helmet from 'helmet';
 
-import uploadConfig from '@config/upload';
 import AppError from '@shared/errors/AppError';
 
 import routes from './routes';
@@ -24,9 +23,6 @@ app.use(express.json());
 
 app.use(helmet());
 app.disable('x-powered-by');
-
-// app.use('/files', express.static(uploadConfig.uploadsFolder));
-app.use('/files-default', express.static(uploadConfig.defaultAssetsFolder));
 
 app.use(rateLimiter);
 app.use(routes);
