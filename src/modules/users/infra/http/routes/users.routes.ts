@@ -1,15 +1,13 @@
 import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 
-import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
+// import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 import ensureAuthorization from '@modules/users/infra/http/middlewares/ensureAuthorization';
 
 import UsersController from '../controllers/UsersController';
 
 const usersRouter = Router();
 const usersController = new UsersController();
-
-usersRouter.get('/', ensureAuthorization(['admin']), usersController.list);
 
 usersRouter.post(
   '/',
