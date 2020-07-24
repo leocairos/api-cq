@@ -11,7 +11,7 @@ interface ITokenPayload {
   role: string;
 }
 
-const permissionRoleRequired = (roles = ['']) => {
+const ensureAuthorized = (roles = ['']) => {
   return (request: Request, response: Response, next: NextFunction): void => {
     const authHeader = request.headers.authorization;
     if (!authHeader) {
@@ -39,4 +39,4 @@ const permissionRoleRequired = (roles = ['']) => {
   };
 };
 
-export default permissionRoleRequired;
+export default ensureAuthorized;

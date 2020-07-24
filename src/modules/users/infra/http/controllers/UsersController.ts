@@ -2,10 +2,26 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
 
+import ListUserService from '@modules/users/services/ListUserService';
 import CreateUserService from '@modules/users/services/CreateUserService';
 import UpdateUserService from '@modules/users/services/UpdateUserService';
 
 export default class UsersController {
+  public async list(request: Request, response: Response): Promise<Response> {
+    const { skip = 0, take = 20 } = request.query;
+
+    const listUsers = container.resolve(ListUserService);
+    const { users, count } = await listUsers.execute(
+      skip as number,
+      take as number,
+    );
+
+    response.header('x-total-count', count.toString());
+    response.header('Access-Control-Expose-Headers', 'x-total-count');
+
+    return response.json(users);
+  }
+
   public async create(request: Request, response: Response): Promise<Response> {
     const { name, email, password, role } = request.body;
 
