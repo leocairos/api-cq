@@ -5,6 +5,7 @@ import SamplesController from './SamplesController';
 const samplesRouter = Router();
 const samplesController = new SamplesController();
 
-samplesRouter.get('/', samplesController.getSamples);
+samplesRouter.get('/', samplesController.list);
+samplesRouter.get('/:id', samplesController.show);
 
 export default samplesRouter;
