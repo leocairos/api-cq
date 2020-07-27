@@ -75,6 +75,166 @@ interface IInfosCQ {
   Value: string;
 }
 
+interface IMethodMyLIMS {
+  Method: {
+    MethodType: {
+      Identification: string;
+    };
+    Identification: string;
+  };
+  ServiceArea: {
+    Identification: string;
+  };
+  CurrentStatus: {
+    MethodStatus: {
+      Identification: string;
+    };
+    EditionUser: {
+      Identification: string;
+    };
+    EditionDateTime: Date;
+    ExecuteUser: {
+      Identification: string;
+    };
+    ExecuteDateTime: Date;
+    StartUser: {
+      Identification: string;
+    };
+    StartDateTime: Date;
+  };
+}
+
+interface IMethodCQ {
+  MethodType: string;
+  MethodIdentification: string;
+  ServiceArea: string;
+  CurrentMethodStatus: string;
+  CurrentEditionUser: string;
+  CurrentEditionDateTime: Date;
+  CurrentExecuteUser: string;
+  CurrentExecuteDateTime: Date;
+  CurrentStartUser: string;
+  CurrentStartDateTime: Date;
+}
+
+interface IAnalysesMyLIMS {
+  Id: number;
+  EditionUser: null;
+  EditionDateTime: null;
+  Method: {
+    MasterId: number;
+    Id: number;
+    Identification: string;
+  };
+  AnalysisGroup: {
+    Identification: string;
+  };
+  Info: {
+    Identification: string;
+  };
+  MeasurementUnit: {
+    Identification: string;
+  };
+  Conclusion: {
+    Identification: string;
+  };
+  MethodAnalysisType: {
+    Identification: string;
+  };
+  DisplayValue: string;
+  ForceScale: number;
+  ValueFloat: number;
+  Order: number;
+  K: string;
+  Veff: string;
+  ReferenceMethod: string;
+}
+
+interface IAnalysesCQ {
+  Id: number;
+  EditionUser: null;
+  EditionDateTime: null;
+  Method: {
+    MasterId: number;
+    Id: number;
+    Identification: string;
+  };
+  AnalysisGroup: string;
+  Info: string;
+  MeasurementUnit: string;
+  Conclusion: string;
+  MethodAnalysisType: string;
+  DisplayValue: string;
+  ForceScale: number;
+  ValueFloat: number;
+  Order: number;
+  K: string;
+  Veff: string;
+  ReferenceMethod: string;
+}
+
+const getAnalyses = async (sampleId: number): Promise<IAnalysesCQ[]> => {
+  const analyses = await apiMYLIMS.get(`/samples/${sampleId}/analyses`);
+
+  const analysesSample = analyses.data.Result as IAnalysesMyLIMS[];
+
+  const analysesData = analysesSample.map(analyse => {
+    return {
+      Id: analyse.Id,
+      EditionUser: analyse.EditionUser,
+      EditionDateTime: analyse.EditionDateTime,
+      Method: {
+        MasterId: analyse.Method.MasterId,
+        Id: analyse.Method.Id,
+        Identification: analyse.Method.Identification,
+      },
+      AnalysisGroup:
+        analyse.AnalysisGroup && analyse.AnalysisGroup.Identification,
+      Info: analyse.Info.Identification,
+      MeasurementUnit:
+        analyse.MeasurementUnit && analyse.MeasurementUnit.Identification,
+      Conclusion: analyse.Conclusion && analyse.Conclusion.Identification,
+      MethodAnalysisType: analyse.MethodAnalysisType.Identification,
+      DisplayValue: analyse.DisplayValue,
+      ForceScale: analyse.ForceScale,
+      ValueFloat: analyse.ValueFloat,
+      Order: analyse.Order,
+      K: analyse.K,
+      Veff: analyse.Veff,
+      ReferenceMethod: analyse.ReferenceMethod,
+    };
+  });
+
+  return analysesData;
+};
+
+const getMethods = async (sampleId: number): Promise<IMethodCQ[]> => {
+  const methods = await apiMYLIMS.get(`/samples/${sampleId}/methods`);
+
+  const methodsSample = methods.data.Result as IMethodMyLIMS[];
+
+  const methodsData = methodsSample.map(method => {
+    return {
+      MethodType: method.Method.MethodType.Identification,
+      MethodIdentification: method.Method.Identification,
+      ServiceArea: method.ServiceArea.Identification,
+      CurrentMethodStatus: method.CurrentStatus.MethodStatus.Identification,
+      CurrentEditionUser: method.CurrentStatus.EditionUser.Identification,
+      CurrentEditionDateTime: method.CurrentStatus.EditionDateTime,
+      CurrentExecuteUser:
+        method.CurrentStatus.ExecuteUser &&
+        method.CurrentStatus.ExecuteUser.Identification,
+      CurrentExecuteDateTime: method.CurrentStatus.ExecuteDateTime,
+      CurrentStartUser:
+        method.CurrentStatus.StartUser &&
+        method.CurrentStatus.StartUser.Identification,
+      CurrentStartDateTime: method.CurrentStatus.StartDateTime,
+    };
+  });
+
+  return methodsData;
+};
+
 const getInfos = async (sampleId: number): Promise<IInfosCQ[]> => {
   const infos = await apiMYLIMS.get(`/samples/${sampleId}/infos`);
 
@@ -135,12 +295,20 @@ export default class Samples {
         SampleType: sample.SampleType.Identification,
         CollectionPoint: sample.CollectionPoint.Identification,
         Infos: [],
+        Methods: [],
+        Analyses: [],
       };
     });
 
     for (let s = 0; s < samplesCQ.length; s += 1) {
       const infos = await getInfos(samplesCQ[s].Id);
       samplesCQ[s].Infos = infos;
+
+      const methods = await getMethods(samplesCQ[s].Id);
+      samplesCQ[s].Methods = methods;
+
+      const analyses = await getAnalyses(samplesCQ[s].Id);
+      samplesCQ[s].Analyses = analyses;
     }
 
     return response.status(200).json(samplesCQ);
