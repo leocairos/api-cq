@@ -76,7 +76,11 @@ interface IInfosCQ {
 }
 
 interface IMethodMyLIMS {
+  Id: number;
   Method: {
+    MasterId: number;
+    Version: number;
+    Id: number;
     MethodType: {
       Identification: string;
     };
@@ -105,14 +109,24 @@ interface IMethodMyLIMS {
 }
 
 interface IMethodCQ {
+  Id: number;
+  
+  MethodMasterId: number;
+  MethodVersion: number;
+  MethodId: number;
   MethodType: string;
   MethodIdentification: string;
+  
   ServiceArea: string;
+  
   CurrentMethodStatus: string;
+  
   CurrentEditionUser: string;
   CurrentEditionDateTime: Date;
+  
   CurrentExecuteUser: string;
   CurrentExecuteDateTime: Date;
+  
   CurrentStartUser: string;
   CurrentStartDateTime: Date;
 }
@@ -215,6 +229,10 @@ const getMethods = async (sampleId: number): Promise<IMethodCQ[]> => {
 
   const methodsData = methodsSample.map(method => {
     return {
+      Id: method.Id,     
+      MethdoMasterId: method.Method.MasterId,
+      MethodVersion: method.Method.Version,
+      MethodId: method.Method.Id,
       MethodType: method.Method.MethodType.Identification,
       MethodIdentification: method.Method.Identification,
       ServiceArea: method.ServiceArea.Identification,
