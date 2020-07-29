@@ -61,6 +61,7 @@ interface ISample {
 }
 
 interface IInfosMyLIS {
+  Id: number;
   Order: number;
   Info: {
     Identification: string;
@@ -69,7 +70,8 @@ interface IInfosMyLIS {
 }
 
 interface IInfosCQ {
-  // SampleId: number;
+  SampleId: number;
+  Id: number;
   Order: number;
   Info: string;
   Value: string;
@@ -110,23 +112,21 @@ interface IMethodMyLIMS {
 
 interface IMethodCQ {
   Id: number;
-  
-  MethodMasterId: number;
-  MethodVersion: number;
+
   MethodId: number;
   MethodType: string;
   MethodIdentification: string;
-  
+
   ServiceArea: string;
-  
+
   CurrentMethodStatus: string;
-  
+
   CurrentEditionUser: string;
   CurrentEditionDateTime: Date;
-  
+
   CurrentExecuteUser: string;
   CurrentExecuteDateTime: Date;
-  
+
   CurrentStartUser: string;
   CurrentStartDateTime: Date;
 }
@@ -166,13 +166,7 @@ interface IAnalysesMyLIMS {
 
 interface IAnalysesCQ {
   Id: number;
-  EditionUser: null;
-  EditionDateTime: null;
-  Method: {
-    MasterId: number;
-    Id: number;
-    Identification: string;
-  };
+  Method: number;
   AnalysisGroup: string;
   Info: string;
   MeasurementUnit: string;
@@ -184,7 +178,6 @@ interface IAnalysesCQ {
   Order: number;
   K: string;
   Veff: string;
-  ReferenceMethod: string;
 }
 
 const getAnalyses = async (sampleId: number): Promise<IAnalysesCQ[]> => {
@@ -195,19 +188,11 @@ const getAnalyses = async (sampleId: number): Promise<IAnalysesCQ[]> => {
   const analysesData = analysesSample.map(analyse => {
     return {
       Id: analyse.Id,
-      EditionUser: analyse.EditionUser,
-      EditionDateTime: analyse.EditionDateTime,
-      Method: {
-        MasterId: analyse.Method.MasterId,
-        Id: analyse.Method.Id,
-        Identification: analyse.Method.Identification,
-      },
-      AnalysisGroup:
-        analyse.AnalysisGroup && analyse.AnalysisGroup.Identification,
+      Method: analyse.Method?.Id,
+      AnalysisGroup: analyse.AnalysisGroup?.Identification,
       Info: analyse.Info.Identification,
-      MeasurementUnit:
-        analyse.MeasurementUnit && analyse.MeasurementUnit.Identification,
-      Conclusion: analyse.Conclusion && analyse.Conclusion.Identification,
+      MeasurementUnit: analyse.MeasurementUnit?.Identification,
+      Conclusion: analyse.Conclusion?.Identification,
       MethodAnalysisType: analyse.MethodAnalysisType.Identification,
       DisplayValue: analyse.DisplayValue,
       ForceScale: analyse.ForceScale,
@@ -215,7 +200,6 @@ const getAnalyses = async (sampleId: number): Promise<IAnalysesCQ[]> => {
       Order: analyse.Order,
       K: analyse.K,
       Veff: analyse.Veff,
-      ReferenceMethod: analyse.ReferenceMethod,
     };
   });
 
@@ -229,9 +213,7 @@ const getMethods = async (sampleId: number): Promise<IMethodCQ[]> => {
 
   const methodsData = methodsSample.map(method => {
     return {
-      Id: method.Id,     
-      MethdoMasterId: method.Method.MasterId,
-      MethodVersion: method.Method.Version,
+      Id: method.Id,
       MethodId: method.Method.Id,
       MethodType: method.Method.MethodType.Identification,
       MethodIdentification: method.Method.Identification,
@@ -239,13 +221,9 @@ const getMethods = async (sampleId: number): Promise<IMethodCQ[]> => {
       CurrentMethodStatus: method.CurrentStatus.MethodStatus.Identification,
       CurrentEditionUser: method.CurrentStatus.EditionUser.Identification,
       CurrentEditionDateTime: method.CurrentStatus.EditionDateTime,
-      CurrentExecuteUser:
-        method.CurrentStatus.ExecuteUser &&
-        method.CurrentStatus.ExecuteUser.Identification,
+      CurrentExecuteUser: method.CurrentStatus.ExecuteUser?.Identification,
       CurrentExecuteDateTime: method.CurrentStatus.ExecuteDateTime,
-      CurrentStartUser:
-        method.CurrentStatus.StartUser &&
-        method.CurrentStatus.StartUser.Identification,
+      CurrentStartUser: method.CurrentStatus.StartUser?.Identification,
       CurrentStartDateTime: method.CurrentStatus.StartDateTime,
     };
   });
@@ -260,7 +238,8 @@ const getInfos = async (sampleId: number): Promise<IInfosCQ[]> => {
 
   const infosData = infosSample.map(info => {
     return {
-      // SampleId: sampleId,
+      SampleId: sampleId,
+      Id: info.Id,
       Order: info.Order,
       Info: info.Info.Identification,
       Value: info.DisplayValue,
@@ -285,7 +264,7 @@ export default class Samples {
     const samplesCQ = samplesData.map(sample => {
       return {
         Id: sample.Id,
-        Identificatio: sample.Identification,
+        Identification: sample.Identification,
         ControlNumber: sample.ControlNumber,
         Number: sample.Number,
         Year: sample.Year,
@@ -303,8 +282,7 @@ export default class Samples {
         ReviewedTime: sample.ReviewedTime,
         ReferenceSample: sample.ReferenceSample,
         ServiceCenter: sample.ServiceCenter.Identification,
-        SampleConclusion:
-          sample.SampleConclusion && sample.SampleConclusion.Identification,
+        SampleConclusion: sample.SampleConclusion?.Identification,
         SampleReason: sample.SampleReason.Identification,
         CurrentSampleStatus: sample.CurrentStatus.SampleStatus.Identification,
         CurrentSampleEditionUser:
@@ -322,11 +300,11 @@ export default class Samples {
       const infos = await getInfos(samplesCQ[s].Id);
       samplesCQ[s].Infos = infos;
 
-      const methods = await getMethods(samplesCQ[s].Id);
-      samplesCQ[s].Methods = methods;
-
       const analyses = await getAnalyses(samplesCQ[s].Id);
       samplesCQ[s].Analyses = analyses;
+
+      const methods = await getMethods(samplesCQ[s].Id);
+      samplesCQ[s].Methods = methods;
     }
 
     return response.status(200).json(samplesCQ);
