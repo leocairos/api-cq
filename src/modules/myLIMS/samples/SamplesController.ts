@@ -28,12 +28,14 @@ interface ISample {
   ReviewedTime: Date;
   ReferenceSample: null;
   ServiceCenter: {
+    Id: number;
     Identification: string;
   };
   SampleConclusion: {
     Identification: string;
   };
   SampleReason: {
+    Id: number;
     Identification: string;
   };
   CurrentStatus: {
@@ -281,15 +283,35 @@ export default class Samples {
         PublishedTime: sample.PublishedTime,
         ReviewedTime: sample.ReviewedTime,
         ReferenceSample: sample.ReferenceSample,
-        ServiceCenter: sample.ServiceCenter.Identification,
+        ServiceCenter: {
+          Id: sample.ServiceCenter.Id,
+          Identification: sample.ServiceCenter.Identification,
+        },
         SampleConclusion: sample.SampleConclusion?.Identification,
-        SampleReason: sample.SampleReason.Identification,
-        CurrentSampleStatus: sample.CurrentStatus.SampleStatus.Identification,
-        CurrentSampleEditionUser:
-          sample.CurrentStatus.EditionUser.Identification,
-        CurrentSampleEditionDate: sample.CurrentStatus.EditionDateTime,
-        SampleType: sample.SampleType.Identification,
-        CollectionPoint: sample.CollectionPoint.Identification,
+        SampleReason: {
+          Id: sample.SampleReason.Id,
+          Identification: sample.SampleReason.Identification,
+        },
+        CurrentStatus: {
+          Id: sample.CurrentStatus.Id,
+          SampleStatus: {
+            Id: sample.CurrentStatus.SampleStatus.Id,
+            Identification: sample.CurrentStatus.SampleStatus.Identification,
+          },
+          EditionUser: {
+            Id: sample.CurrentStatus.EditionUser.Id,
+            Identification: sample.CurrentStatus.EditionUser.Identification,
+          },
+          EditionDate: sample.CurrentStatus?.EditionDateTime,
+        },
+        SampleType: {
+          Id: sample.SampleType?.Id,
+          Identification: sample.SampleType?.Identification,
+        },
+        CollectionPoint: {
+          Id: sample.CollectionPoint?.Id,
+          Identification: sample.CollectionPoint?.Identification,
+        },
         Infos: [],
         Methods: [],
         Analyses: [],

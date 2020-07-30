@@ -17,6 +17,11 @@ export default class CreateSamples1595610121140 implements MigrationInterface {
             isPrimary: true,
           },
           {
+            name: 'ControlNumber',
+            type: 'varchar',
+            isPrimary: true,
+          },
+          {
             name: 'Number',
             type: 'integer',
           },
@@ -34,6 +39,22 @@ export default class CreateSamples1595610121140 implements MigrationInterface {
           },
           {
             name: 'Active',
+            type: 'boolean',
+          },
+          {
+            name: 'Received',
+            type: 'boolean',
+          },
+          {
+            name: 'Finalized',
+            type: 'boolean',
+          },
+          {
+            name: 'Published',
+            type: 'boolean',
+          },
+          {
+            name: 'Reviewed',
             type: 'boolean',
           },
           {
@@ -55,6 +76,34 @@ export default class CreateSamples1595610121140 implements MigrationInterface {
           {
             name: 'ReviewedTime',
             type: 'timestamp',
+          },
+          {
+            name: 'ServiceCenter',
+            type: 'varchar',
+          },
+          {
+            name: 'SampleConclusion',
+            type: 'varchar',
+          },
+          {
+            name: 'SampleReason',
+            type: 'varchar',
+          },
+          {
+            name: 'CurrentSampleStatus',
+            type: 'varchar',
+          },
+          {
+            name: 'CurrentSampleEditionUser',
+            type: 'varchar',
+          },
+          {
+            name: 'CurrentSampleEditionDate',
+            type: 'timestamp',
+          },
+          {
+            name: 'SampleType',
+            type: 'varchar',
           },
           {
             name: 'created_at',
