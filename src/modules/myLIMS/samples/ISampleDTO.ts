@@ -1,3 +1,13 @@
+import {
+  IServiceCenter,
+  ISampleConclusion,
+  ISampleReason,
+  ISampleStatus,
+  IMyLIMSUser,
+  ISampleType,
+  ICollectionPoint,
+} from './IAuxiliariesDTO';
+
 // api/v2/samples
 export interface ISample {
   Id: number;
@@ -18,39 +28,18 @@ export interface ISample {
   FinalizedTime: Date;
   PublishedTime: Date;
   ReviewedTime: Date;
-  ServiceCenter: {
-    Id: number;
-    Identification: string;
-  };
-  SampleConclusion: {
-    Id: number;
-    Identification: string;
-  };
-  SampleReason: {
-    Id: number;
-    Identification: string;
-  };
+  ServiceCenter: IServiceCenter;
+  SampleConclusion: ISampleConclusion;
+  SampleReason: ISampleReason;
   CurrentStatus: {
     Id: number;
-    SampleStatus: {
-      Id: number;
-      Identification: string;
-    };
-    EditionUser: {
-      Id: number;
-      Identification: string;
-    };
+    SampleStatus: ISampleStatus;
+    EditionUser: IMyLIMSUser;
     EditionDateTime: Date;
   };
-  SampleType: {
-    Id: number;
-    Identification: string;
-  };
+  SampleType: ISampleType;
 
-  CollectionPoint: {
-    Id: number;
-    Identification: string;
-  };
+  CollectionPoint: ICollectionPoint;
 }
 
 // api/v2/{sampleId}/infos

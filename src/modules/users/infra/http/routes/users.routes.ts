@@ -8,8 +8,6 @@ import UsersController from '../controllers/UsersController';
 const usersRouter = Router();
 const usersController = new UsersController();
 
-usersRouter.get('/', ensureAuthorized(['admin']), usersController.list);
-
 usersRouter.post(
   '/',
   celebrate({

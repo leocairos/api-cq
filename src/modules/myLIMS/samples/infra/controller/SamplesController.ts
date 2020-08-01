@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
-import apiMYLIMS from '../services/api';
-import { ISample } from './ISampleDTO';
+import apiMYLIMS from '@shared/services/apiMYLIMS';
+import { ISample } from '../../ISampleDTO';
 
 const getAnalyses = async (sampleId: number): Promise<IAnalysesCQ[]> => {
   const analyses = await apiMYLIMS.get(`/samples/${sampleId}/analyses`);
@@ -124,8 +124,7 @@ export default class Samples {
           },
           EditionUser: {
             Id: sample.CurrentStatus?.EditionUser?.Id,
-            Identification:
-              sample.CurrentStatus?.EditionUser?.Identification.trim,
+            Identification: sample.CurrentStatus?.EditionUser?.Identification.trim(),
           },
           EditionDate: sample.CurrentStatus?.EditionDateTime,
         },

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import SamplesController from './SamplesController';
+import SamplesController from '../controller/SamplesController';
 
 const samplesRouter = Router();
 const samplesController = new SamplesController();
