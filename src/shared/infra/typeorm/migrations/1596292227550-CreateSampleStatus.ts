@@ -8,14 +8,24 @@ export default class CreateSampleStatus1596292227550
         name: 'sample_status',
         columns: [
           {
-            name: 'Id',
+            name: 'id',
             type: 'integer',
             isPrimary: true,
           },
           {
-            name: 'Identification',
+            name: 'identification',
             type: 'varchar',
             isNullable: false,
+          },
+          {
+            name: 'created_at',
+            type: 'timestamp',
+            default: 'now()',
+          },
+          {
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'now()',
           },
         ],
       }),

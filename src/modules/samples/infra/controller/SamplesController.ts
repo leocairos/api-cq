@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
+import { container } from 'tsyringe';
 
 import apiMYLIMS from '@shared/services/apiMYLIMS';
+import CreateSampleService from '@modules/samples/services/CreateSampleService';
 import { ISample } from '../../ISampleDTO';
 
+/*
 const getAnalyses = async (sampleId: number): Promise<IAnalysesCQ[]> => {
   const analyses = await apiMYLIMS.get(`/samples/${sampleId}/analyses`);
 
@@ -71,7 +74,7 @@ const getInfos = async (sampleId: number): Promise<IInfosCQ[]> => {
 
   return infosData;
 };
-
+*/
 export default class Samples {
   public async list(request: Request, response: Response): Promise<Response> {
     const { skip = 0, top = 50, filter = '' } = request.query;
@@ -83,9 +86,29 @@ export default class Samples {
     );
 
     const samplesData = samples.data.Result as ISample[];
+    const createSample = container.resolve(CreateSampleService);
 
-    const samplesCQ = samplesData.map(sample => {
-      return {
+    const samplesCQ = samplesData.map(async sample => {
+      const sampleSaved = await createSample.execute({
+        id: sample.Id,
+        identification: sample.Identification,
+
+        serviceCenter: {
+          id: sample.ServiceCenter?.Id,
+          identification: sample.ServiceCenter?.Identification,
+        },
+
+        sampleConclusion: sample.SampleConclusion?.Id
+          ? {
+              id: sample.SampleConclusion?.Id,
+              identification: sample.SampleConclusion?.Identification,
+            }
+          : undefined,
+      });
+
+      // console.log(sampleSaved);
+      return sampleSaved;
+      /* return {
         Id: sample.Id,
         Identification: sample.Identification,
         ControlNumber: sample.ControlNumber,
@@ -136,10 +159,10 @@ export default class Samples {
           Id: sample.CollectionPoint?.Id,
           Identification: sample.CollectionPoint?.Identification,
         },
-        /* Infos: [],
+         Infos: [],
         Methods: [],
-        Analyses: [], */
-      };
+        Analyses: [],
+      }; */
     });
 
     /* for (let s = 0; s < samplesCQ.length; s += 1) {
@@ -152,45 +175,6 @@ export default class Samples {
       const methods = await getMethods(samplesCQ[s].Id);
       samplesCQ[s].Methods = methods;
     } */
-
-    return response.status(200).json(samplesCQ);
-  }
-
-  public async show(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params;
-
-    const sampleResponse = await apiMYLIMS.get(`/samples/${id}`);
-
-    const sample = sampleResponse.data as ISample;
-
-    const samplesCQ = {
-      Id: sample.Id,
-      Identificatio: sample.Identification,
-      ControlNumber: sample.ControlNumber,
-      Number: sample.Number,
-      Year: sample.Year,
-      SubNumber: sample.SubNumber,
-      Revision: sample.Revision,
-      Active: sample.Active,
-      Received: sample.Received,
-      Finalized: sample.Finalized,
-      Published: sample.Published,
-      Reviewed: sample.Reviewed,
-      TakenDateTime: sample.TakenDateTime,
-      ReceivedTime: sample.ReceivedTime,
-      FinalizedTime: sample.FinalizedTime,
-      PublishedTime: sample.PublishedTime,
-      ReviewedTime: sample.ReviewedTime,
-      ServiceCenter: sample.ServiceCenter.Identification,
-      SampleConclusion:
-        sample.SampleConclusion && sample.SampleConclusion.Identification,
-      SampleReason: sample.SampleReason.Identification,
-      CurrentSampleStatus: sample.CurrentStatus.SampleStatus.Identification,
-      CurrentSampleEditionUser: sample.CurrentStatus.EditionUser.Identification,
-      CurrentSampleEditionDate: sample.CurrentStatus.EditionDateTime,
-      SampleType: sample.SampleType.Identification,
-      CollectionPoint: sample.CollectionPoint.Identification,
-    };
 
     return response.status(200).json(samplesCQ);
   }

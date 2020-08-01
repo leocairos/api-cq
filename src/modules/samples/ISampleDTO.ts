@@ -29,7 +29,7 @@ export interface ISample {
   PublishedTime: Date;
   ReviewedTime: Date;
   ServiceCenter: IServiceCenter;
-  SampleConclusion: ISampleConclusion;
+  SampleConclusion?: ISampleConclusion;
   SampleReason: ISampleReason;
   CurrentStatus: {
     Id: number;

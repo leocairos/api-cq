@@ -8,14 +8,24 @@ export default class CreateSampleConclusions1596290029597
         name: 'sample_conclusions',
         columns: [
           {
-            name: 'Id',
+            name: 'id',
             type: 'integer',
             isPrimary: true,
           },
           {
-            name: 'Identification',
+            name: 'identification',
             type: 'varchar',
             isNullable: false,
+          },
+          {
+            name: 'created_at',
+            type: 'timestamp',
+            default: 'now()',
+          },
+          {
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'now()',
           },
         ],
       }),

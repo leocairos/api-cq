@@ -8,14 +8,24 @@ export default class CreateUsersMyLIMS1596290577104
         name: 'mylims_users',
         columns: [
           {
-            name: 'Id',
+            name: 'id',
             type: 'integer',
             isPrimary: true,
           },
           {
-            name: 'Identification',
+            name: 'identification',
             type: 'varchar',
             isNullable: false,
+          },
+          {
+            name: 'created_at',
+            type: 'timestamp',
+            default: 'now()',
+          },
+          {
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'now()',
           },
         ],
       }),

@@ -4,7 +4,7 @@ import usersRouter from '@modules/users/infra/http/routes/users.routes';
 import sessionsRouter from '@modules/users/infra/http/routes/sessions.routes';
 import passwordRouter from '@modules/users/infra/http/routes/password.routes';
 
-import sampleRouter from '@modules/myLIMS/samples/infra/routes/samples.routes';
+import sampleRouter from '@modules/samples/infra/routes/samples.routes';
 
 const routes = Router();
 

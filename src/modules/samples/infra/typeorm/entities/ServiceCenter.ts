@@ -9,10 +9,10 @@ import {
 @Entity('service_centers')
 class ServiceCenter {
   @PrimaryColumn()
-  Id: number;
+  id: number;
 
   @Column()
-  Identification: string;
+  identification: string;
 
   @CreateDateColumn()
   created_at: Date;
