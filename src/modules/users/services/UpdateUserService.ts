@@ -29,7 +29,7 @@ class UpdateUserService {
     user.name = name || user.name;
     user.email = email || user.email;
 
-    const roles = ['admin', 'life', 'cacc', 'member'];
+    const roles = ['admin', 'member'];
     if (role && roles.indexOf(role) >= 0) {
       user.role = role;
     }

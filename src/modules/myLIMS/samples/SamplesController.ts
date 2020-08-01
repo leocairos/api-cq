@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import apiMYLIMS from '../services/api';
+import { ISample } from './ISampleDTO';
 
 const getAnalyses = async (sampleId: number): Promise<IAnalysesCQ[]> => {
   const analyses = await apiMYLIMS.get(`/samples/${sampleId}/analyses`);
@@ -93,6 +94,7 @@ export default class Samples {
         SubNumber: sample.SubNumber,
         Revision: sample.Revision,
         Active: sample.Active,
+        SyncPortal: sample.SyncPortal,
         Received: sample.Received,
         Finalized: sample.Finalized,
         Published: sample.Published,
@@ -102,25 +104,28 @@ export default class Samples {
         FinalizedTime: sample.FinalizedTime,
         PublishedTime: sample.PublishedTime,
         ReviewedTime: sample.ReviewedTime,
-        ReferenceSample: sample.ReferenceSample,
         ServiceCenter: {
-          Id: sample.ServiceCenter.Id,
-          Identification: sample.ServiceCenter.Identification,
+          Id: sample.ServiceCenter?.Id,
+          Identification: sample.ServiceCenter?.Identification,
         },
-        SampleConclusion: sample.SampleConclusion?.Identification,
+        SampleConclusion: {
+          Id: sample.SampleConclusion?.Id,
+          Identification: sample.SampleConclusion?.Identification,
+        },
         SampleReason: {
-          Id: sample.SampleReason.Id,
-          Identification: sample.SampleReason.Identification,
+          Id: sample.SampleReason?.Id,
+          Identification: sample.SampleReason?.Identification,
         },
         CurrentStatus: {
-          Id: sample.CurrentStatus.Id,
+          Id: sample.CurrentStatus?.Id,
           SampleStatus: {
-            Id: sample.CurrentStatus.SampleStatus.Id,
-            Identification: sample.CurrentStatus.SampleStatus.Identification,
+            Id: sample.CurrentStatus?.SampleStatus?.Id,
+            Identification: sample.CurrentStatus?.SampleStatus?.Identification,
           },
           EditionUser: {
-            Id: sample.CurrentStatus.EditionUser.Id,
-            Identification: sample.CurrentStatus.EditionUser.Identification,
+            Id: sample.CurrentStatus?.EditionUser?.Id,
+            Identification:
+              sample.CurrentStatus?.EditionUser?.Identification.trim,
           },
           EditionDate: sample.CurrentStatus?.EditionDateTime,
         },
@@ -132,13 +137,13 @@ export default class Samples {
           Id: sample.CollectionPoint?.Id,
           Identification: sample.CollectionPoint?.Identification,
         },
-        Infos: [],
+        /* Infos: [],
         Methods: [],
-        Analyses: [],
+        Analyses: [], */
       };
     });
 
-    for (let s = 0; s < samplesCQ.length; s += 1) {
+    /* for (let s = 0; s < samplesCQ.length; s += 1) {
       const infos = await getInfos(samplesCQ[s].Id);
       samplesCQ[s].Infos = infos;
 
@@ -147,7 +152,7 @@ export default class Samples {
 
       const methods = await getMethods(samplesCQ[s].Id);
       samplesCQ[s].Methods = methods;
-    }
+    } */
 
     return response.status(200).json(samplesCQ);
   }
@@ -177,7 +182,6 @@ export default class Samples {
       FinalizedTime: sample.FinalizedTime,
       PublishedTime: sample.PublishedTime,
       ReviewedTime: sample.ReviewedTime,
-      ReferenceSample: sample.ReferenceSample,
       ServiceCenter: sample.ServiceCenter.Identification,
       SampleConclusion:
         sample.SampleConclusion && sample.SampleConclusion.Identification,

@@ -51,7 +51,6 @@ export interface ISample {
     Id: number;
     Identification: string;
   };
-  IInfos?: IInfo[];
 }
 
 // api/v2/{sampleId}/infos

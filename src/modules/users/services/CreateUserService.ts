@@ -43,7 +43,7 @@ class CreateUserService {
       name,
       email,
       password: hashedPassword,
-      role: role || 'talco',
+      role: role || 'user',
     });
 
     return user;

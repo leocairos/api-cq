@@ -15,21 +15,6 @@ class UsersRepository implements IUsersRepository {
     this.ormRepository = getRepository(User);
   }
 
-  public async list(skip: number, take: number): Promise<IListReturn> {
-    const count = await this.ormRepository.count();
-
-    const users = await this.ormRepository.find({
-      select: ['id', 'name', 'email', 'role'],
-      order: {
-        id: 'ASC',
-      },
-      skip,
-      take,
-      cache: false,
-    });
-    return { users, count };
-  }
-
   public async findById(id: string): Promise<User | undefined> {
     const findUser = await this.ormRepository.findOne(id);
     return findUser;
