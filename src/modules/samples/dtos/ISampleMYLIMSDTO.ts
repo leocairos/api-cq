@@ -33,6 +33,11 @@ export interface ICollectionPoint {
   Identification: string;
 }
 
+export interface IInfo {
+  Id: number;
+  Identification: string;
+}
+
 // api/v2/samples
 export interface ISample {
   Id: number;
@@ -53,22 +58,23 @@ export interface ISample {
   FinalizedTime: Date;
   PublishedTime: Date;
   ReviewedTime: Date;
+
   ServiceCenter: IServiceCenter;
-  SampleConclusion?: ISampleConclusion;
+  SampleConclusion: ISampleConclusion;
   SampleReason: ISampleReason;
+  SampleType: ISampleType;
+  CollectionPoint: ICollectionPoint;
+
   CurrentStatus: {
     Id: number;
     SampleStatus: ISampleStatus;
     EditionUser: IMyLIMSUser;
     EditionDateTime: Date;
   };
-  SampleType: ISampleType;
-
-  CollectionPoint: ICollectionPoint;
 }
 
 // api/v2/{sampleId}/infos
-export interface IInfo {
+export interface ISampleInfo {
   Id: number;
   Order: number;
   Info: {
@@ -79,7 +85,7 @@ export interface IInfo {
 }
 
 // api/v2/{sampleId}/methods
-interface IMethod {
+interface ISampleMethod {
   Id: number;
   Method: {
     MasterId: number;
@@ -120,7 +126,7 @@ interface IMethod {
 }
 
 // api/v2/{sampleId}/Analyses
-interface IAnalyse {
+interface ISampleAnalyse {
   Id: number;
   Method: {
     Id: number;

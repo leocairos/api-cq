@@ -3,6 +3,9 @@ import { container } from 'tsyringe';
 
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 import CreateSampleService from '@modules/samples/services/CreateSampleService';
+
+import sampleInfos from './SampleInfosController';
+
 import { ISample } from '../../dtos/ISampleMYLIMSDTO';
 
 import updAuxiliaries from './AuxiliariesController';
@@ -97,57 +100,58 @@ export default class Samples {
       const sampleSaved = await createSample.execute({
         id: sample.Id,
         identification: sample.Identification,
+        controlNumber: sample.ControlNumber,
+        number: sample.Number,
+        year: sample.Year,
+        subNumber: sample.SubNumber,
+        revision: sample.Revision,
+        active: sample.Active,
+        syncPortal: sample.SyncPortal,
+        received: sample.Received,
+        finalized: sample.Finalized,
+        published: sample.Published,
+        reviewed: sample.Reviewed,
+        takenDateTime: sample.TakenDateTime,
+        receivedTime: sample.ReceivedTime,
+        finalizedTime: sample.FinalizedTime,
+        publishedTime: sample.PublishedTime,
+        reviewedTime: sample.ReviewedTime,
 
-        serviceCenter: {
+        sampleServiceCenter: {
           id: sample.ServiceCenter?.Id,
           identification: sample.ServiceCenter?.Identification,
         },
 
-        sampleConclusion: sample.SampleConclusion?.Id
-          ? {
-              id: sample.SampleConclusion?.Id,
-              identification: sample.SampleConclusion?.Identification,
-            }
-          : undefined,
+        sampleConclusion: {
+          id: sample.SampleConclusion?.Id,
+          identification: sample.SampleConclusion?.Identification,
+        },
+
+        sampleReason: {
+          id: sample.SampleReason?.Id,
+          identification: sample.SampleReason?.Identification,
+        },
+
+        sampleType: {
+          id: sample.SampleType?.Id,
+          identification: sample.SampleType?.Identification,
+        },
+
+        sampleCollectionPoint: {
+          id: sample.CollectionPoint?.Id,
+          identification: sample.CollectionPoint?.Identification,
+        },
       });
 
       // console.log(sampleSaved);
+      await sampleInfos(sampleSaved.id);
       return sampleSaved;
     });
 
     const samplesCQ = await Promise.all(samplesPromises);
     return response.status(200).json(samplesCQ);
     /* return {
-        Id: sample.Id,
-        Identification: sample.Identification,
-        ControlNumber: sample.ControlNumber,
-        Number: sample.Number,
-        Year: sample.Year,
-        SubNumber: sample.SubNumber,
-        Revision: sample.Revision,
-        Active: sample.Active,
-        SyncPortal: sample.SyncPortal,
-        Received: sample.Received,
-        Finalized: sample.Finalized,
-        Published: sample.Published,
-        Reviewed: sample.Reviewed,
-        TakenDateTime: sample.TakenDateTime,
-        ReceivedTime: sample.ReceivedTime,
-        FinalizedTime: sample.FinalizedTime,
-        PublishedTime: sample.PublishedTime,
-        ReviewedTime: sample.ReviewedTime,
-        ServiceCenter: {
-          Id: sample.ServiceCenter?.Id,
-          Identification: sample.ServiceCenter?.Identification,
-        },
-        SampleConclusion: {
-          Id: sample.SampleConclusion?.Id,
-          Identification: sample.SampleConclusion?.Identification,
-        },
-        SampleReason: {
-          Id: sample.SampleReason?.Id,
-          Identification: sample.SampleReason?.Identification,
-        },
+
         CurrentStatus: {
           Id: sample.CurrentStatus?.Id,
           SampleStatus: {
@@ -160,15 +164,7 @@ export default class Samples {
           },
           EditionDate: sample.CurrentStatus?.EditionDateTime,
         },
-        SampleType: {
-          Id: sample.SampleType?.Id,
-          Identification: sample.SampleType?.Identification,
-        },
-        CollectionPoint: {
-          Id: sample.CollectionPoint?.Id,
-          Identification: sample.CollectionPoint?.Identification,
-        },
-         Infos: [],
+        Infos: [],
         Methods: [],
         Analyses: [],
       }; */

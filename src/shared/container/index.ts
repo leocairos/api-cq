@@ -14,6 +14,9 @@ import SamplesRepository from '@modules/samples/infra/typeorm/repositories/Sampl
 import IAuxiliariesRepository from '@modules/samples/repositories/IAuxiliariesRepository';
 import AuxiliariesRepository from '@modules/samples/infra/typeorm/repositories/AuxiliariesRepository';
 
+import ISampleInfosRepository from '@modules/samples/repositories/ISampleInfosRepository';
+import SampleInfosRepository from '@modules/samples/infra/typeorm/repositories/SampleInfosRepository';
+
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
@@ -32,4 +35,9 @@ container.registerSingleton<ISamplesRepository>(
 container.registerSingleton<IAuxiliariesRepository>(
   'AuxiliariesRepository',
   AuxiliariesRepository,
+);
+
+container.registerSingleton<ISampleInfosRepository>(
+  'SampleInfosRepository',
+  SampleInfosRepository,
 );

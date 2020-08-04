@@ -15,26 +15,58 @@ class SamplesRepository implements ISamplesRepository {
   public async create({
     id,
     identification,
-    serviceCenter,
+    controlNumber,
+    number,
+    subNumber,
+    year,
+    revision,
+    active,
+    syncPortal,
+    received,
+    finalized,
+    published,
+    reviewed,
+    takenDateTime,
+    receivedTime,
+    finalizedTime,
+    publishedTime,
+    reviewedTime,
+    sampleServiceCenter,
     sampleConclusion,
+    sampleReason,
+    sampleType,
+    sampleCollectionPoint,
   }: ICreateSampleDTO): Promise<Sample> {
     const createdSample = this.ormRepository.create({
       id,
       identification,
-      serviceCenter,
+      controlNumber,
+      number,
+      subNumber,
+      year,
+      revision,
+      active,
+      syncPortal,
+      received,
+      finalized,
+      published,
+      reviewed,
+      takenDateTime,
+      receivedTime,
+      finalizedTime,
+      publishedTime,
+      reviewedTime,
+      sampleServiceCenter,
       sampleConclusion,
+      sampleReason,
+      sampleType,
+      sampleCollectionPoint,
     });
 
     // console.log('>>>sample>>>', createdSample);
     await this.ormRepository.save(createdSample);
 
     return createdSample;
-  }
-
-  public async findById(id: string): Promise<Sample | undefined> {
-    const findSample = await this.ormRepository.findOne(id);
-
-    return findSample;
   }
 }
 

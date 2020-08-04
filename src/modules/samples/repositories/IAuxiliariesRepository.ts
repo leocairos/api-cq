@@ -5,6 +5,7 @@ import SampleStatus from '../infra/typeorm/entities/SampleStatus';
 import SampleType from '../infra/typeorm/entities/SampleType';
 import MyLIMSUser from '../infra/typeorm/entities/MyLIMSUser';
 import CollectionPoint from '../infra/typeorm/entities/CollectionPoint';
+import Info from '../infra/typeorm/entities/Info';
 
 import {
   ISampleConclusionDTO,
@@ -14,6 +15,7 @@ import {
   ISampleTypeDTO,
   IMyLIMSUserDTO,
   ICollectionPointDTO,
+  IInfoDTO,
 } from '../dtos/IAuxiliariesDTO';
 
 export default interface IAuxiliariesRepository {
@@ -24,4 +26,5 @@ export default interface IAuxiliariesRepository {
   saveSampleType(data: ISampleTypeDTO): Promise<SampleType>;
   saveMyLIMSUser(data: IMyLIMSUserDTO): Promise<MyLIMSUser>;
   saveCollectionPoint(data: ICollectionPointDTO): Promise<CollectionPoint>;
+  saveInfo(data: IInfoDTO): Promise<Info>;
 }

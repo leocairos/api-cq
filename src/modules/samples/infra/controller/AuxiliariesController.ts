@@ -11,6 +11,7 @@ import {
   ISampleType,
   IMyLIMSUser,
   ICollectionPoint,
+  IInfo,
 } from '../../dtos/ISampleMYLIMSDTO';
 
 const queryParms = '?$inlinecount=allpages&$orderby=Id desc&$top=10000&$skip=0';
@@ -148,14 +149,34 @@ const updateCollectionPoint = async () => {
   // console.log('Service Centers:', auxiliarPromises);
 };
 
+const updateInfo = async () => {
+  const auxiliar = await apiMYLIMS.get(`/infos${queryParms}`);
+
+  const auxiliarData = auxiliar.data.Result as IInfo[];
+  const update = container.resolve(UpdateAuxiliariesService);
+
+  const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
+    const auxiliarsaved = await update.executeInfo({
+      id: auxiliarItem.Id,
+      identification: auxiliarItem.Identification,
+    });
+
+    return auxiliarsaved;
+  });
+
+  await Promise.all(auxiliarPromises);
+  // console.log('Service Centers:', auxiliarPromises);
+};
+
 const updAuxiliaries = async () => {
-  // await updateSampleReasons();
+  await updateSampleReasons();
   // await updateSampleConclusion();
   // await updateServiceCenter();
   // await updateSampleStatus();
   // await updateSampleType();
   // await updateMyLIMSUser();
-  await updateCollectionPoint();
+  // await updateCollectionPoint();
+  // await updateInfo();
 };
 
 export default updAuxiliaries;

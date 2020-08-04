@@ -1,0 +1,32 @@
+import { container } from 'tsyringe';
+
+import apiMYLIMS from '@shared/services/apiMYLIMS';
+import CreateSampleInfoService from '@modules/samples/services/CreateSampleInfoService';
+import ICreateSampleInfoDTO from '@modules/samples/dtos/ICreateSampleInfoDTO';
+import { ISampleInfo } from '../../dtos/ISampleMYLIMSDTO';
+
+const SampleInfos = async (
+  sampleId: number,
+): Promise<ICreateSampleInfoDTO[]> => {
+  const infos = await apiMYLIMS.get(`/samples/${sampleId}/infos`);
+
+  const sampleInfosData = infos.data.Result as ISampleInfo[];
+
+  const createSampleInfo = container.resolve(CreateSampleInfoService);
+
+  const sampleInfosPromises = sampleInfosData.map(async info => {
+    const sampleInfoSaved = await createSampleInfo.execute({
+      id: info.Id,
+      order: info.Order,
+      displayValue: info.DisplayValue,
+      infoId: info.Info.Id,
+      sampleId,
+    });
+    return sampleInfoSaved;
+  });
+
+  const sampleInfosCQ = await Promise.all(sampleInfosPromises);
+  return sampleInfosCQ;
+};
+
+export default SampleInfos;

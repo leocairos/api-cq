@@ -7,13 +7,36 @@ import Sample from '../infra/typeorm/entities/Sample';
 import {
   IServiceCenterDTO,
   ISampleConclusionDTO,
+  ISampleReasonDTO,
+  ISampleTypeDTO,
+  ICollectionPointDTO,
 } from '../dtos/IAuxiliariesDTO';
 
 interface IRequest {
   id: number;
   identification: string;
-  serviceCenter: IServiceCenterDTO;
+  controlNumber: string;
+  number: number;
+  year: number;
+  subNumber: number;
+  revision: number;
+  active: boolean;
+  syncPortal: boolean;
+  received: boolean;
+  finalized: boolean;
+  published: boolean;
+  reviewed: boolean;
+  takenDateTime: Date;
+  receivedTime: Date;
+  finalizedTime: Date;
+  publishedTime: Date;
+  reviewedTime: Date;
+
+  sampleServiceCenter?: IServiceCenterDTO;
   sampleConclusion?: ISampleConclusionDTO;
+  sampleReason?: ISampleReasonDTO;
+  sampleType?: ISampleTypeDTO;
+  sampleCollectionPoint?: ICollectionPointDTO;
 }
 
 @injectable()
@@ -28,14 +51,56 @@ class CreateSampleService {
   public async execute({
     id,
     identification,
-    serviceCenter,
+    controlNumber,
+    number,
+    subNumber,
+    year,
+    revision,
+    active,
+    syncPortal,
+    received,
+    finalized,
+    published,
+    reviewed,
+    takenDateTime,
+    receivedTime,
+    finalizedTime,
+    publishedTime,
+    reviewedTime,
+    sampleServiceCenter,
     sampleConclusion,
+    sampleReason,
+    sampleType,
+    sampleCollectionPoint,
   }: IRequest): Promise<Sample> {
     const sample = await this.samplesRepository.create({
       id,
       identification,
-      serviceCenter,
+      controlNumber,
+      number,
+      subNumber,
+      year,
+      revision,
+      active,
+      syncPortal,
+      received,
+      finalized,
+      published,
+      reviewed,
+      takenDateTime,
+      receivedTime,
+      finalizedTime,
+      publishedTime,
+      reviewedTime,
+      sampleServiceCenter: sampleServiceCenter?.id
+        ? sampleServiceCenter
+        : undefined,
       sampleConclusion: sampleConclusion?.id ? sampleConclusion : undefined,
+      sampleReason: sampleReason?.id ? sampleReason : undefined,
+      sampleType: sampleType?.id ? sampleType : undefined,
+      sampleCollectionPoint: sampleCollectionPoint?.id
+        ? sampleCollectionPoint
+        : undefined,
     });
 
     return sample;
