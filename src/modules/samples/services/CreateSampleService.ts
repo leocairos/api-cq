@@ -4,8 +4,10 @@ import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICa
 import ISamplesRepository from '../repositories/ISamplesRepository';
 
 import Sample from '../infra/typeorm/entities/Sample';
-import IServiceCenterDTO from '../dtos/IServiceCenterDTO';
-import ISampleConclusionDTO from '../dtos/ISampleConclusionDTO';
+import {
+  IServiceCenterDTO,
+  ISampleConclusionDTO,
+} from '../dtos/IAuxiliariesDTO';
 
 interface IRequest {
   id: number;

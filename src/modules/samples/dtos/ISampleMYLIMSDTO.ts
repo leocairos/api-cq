@@ -1,12 +1,37 @@
-import {
-  IServiceCenter,
-  ISampleConclusion,
-  ISampleReason,
-  ISampleStatus,
-  IMyLIMSUser,
-  ISampleType,
-  ICollectionPoint,
-} from './IAuxiliariesDTO';
+export interface IServiceCenter {
+  Id: number;
+  Identification: string;
+}
+
+export interface ISampleConclusion {
+  Id: number;
+  Identification: string;
+}
+
+export interface ISampleReason {
+  Id: number;
+  Identification: string;
+}
+
+export interface ISampleStatus {
+  Id: number;
+  Identification: string;
+}
+
+export interface IMyLIMSUser {
+  Id: number;
+  Identification: string;
+}
+
+export interface ISampleType {
+  Id: number;
+  Identification: string;
+}
+
+export interface ICollectionPoint {
+  Id: number;
+  Identification: string;
+}
 
 // api/v2/samples
 export interface ISample {

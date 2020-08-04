@@ -3,7 +3,9 @@ import { container } from 'tsyringe';
 
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 import CreateSampleService from '@modules/samples/services/CreateSampleService';
-import { ISample } from '../../ISampleDTO';
+import { ISample } from '../../dtos/ISampleMYLIMSDTO';
+
+import updAuxiliaries from './AuxiliariesController';
 
 /*
 const getAnalyses = async (sampleId: number): Promise<IAnalysesCQ[]> => {
@@ -75,9 +77,12 @@ const getInfos = async (sampleId: number): Promise<IInfosCQ[]> => {
   return infosData;
 };
 */
+
 export default class Samples {
   public async list(request: Request, response: Response): Promise<Response> {
     const { skip = 0, top = 50, filter = '' } = request.query;
+
+    await updAuxiliaries();
 
     const defaultRoute = `/samples?$inlinecount=allpages&$top=${top}&$skip=${skip}&$orderby=Id desc`;
 
@@ -88,7 +93,7 @@ export default class Samples {
     const samplesData = samples.data.Result as ISample[];
     const createSample = container.resolve(CreateSampleService);
 
-    const samplesCQ = samplesData.map(async sample => {
+    const samplesPromises = samplesData.map(async sample => {
       const sampleSaved = await createSample.execute({
         id: sample.Id,
         identification: sample.Identification,
@@ -108,7 +113,11 @@ export default class Samples {
 
       // console.log(sampleSaved);
       return sampleSaved;
-      /* return {
+    });
+
+    const samplesCQ = await Promise.all(samplesPromises);
+    return response.status(200).json(samplesCQ);
+    /* return {
         Id: sample.Id,
         Identification: sample.Identification,
         ControlNumber: sample.ControlNumber,
@@ -163,7 +172,6 @@ export default class Samples {
         Methods: [],
         Analyses: [],
       }; */
-    });
 
     /* for (let s = 0; s < samplesCQ.length; s += 1) {
       const infos = await getInfos(samplesCQ[s].Id);
@@ -175,7 +183,5 @@ export default class Samples {
       const methods = await getMethods(samplesCQ[s].Id);
       samplesCQ[s].Methods = methods;
     } */
-
-    return response.status(200).json(samplesCQ);
   }
 }

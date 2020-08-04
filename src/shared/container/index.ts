@@ -11,6 +11,9 @@ import UserTokensRepository from '@modules/users/infra/typeorm/repositories/User
 import ISamplesRepository from '@modules/samples/repositories/ISamplesRepository';
 import SamplesRepository from '@modules/samples/infra/typeorm/repositories/SamplesRepository';
 
+import IAuxiliariesRepository from '@modules/samples/repositories/IAuxiliariesRepository';
+import AuxiliariesRepository from '@modules/samples/infra/typeorm/repositories/AuxiliariesRepository';
+
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
@@ -24,4 +27,9 @@ container.registerSingleton<IUserTokensRepository>(
 container.registerSingleton<ISamplesRepository>(
   'SamplesRepository',
   SamplesRepository,
+);
+
+container.registerSingleton<IAuxiliariesRepository>(
+  'AuxiliariesRepository',
+  AuxiliariesRepository,
 );

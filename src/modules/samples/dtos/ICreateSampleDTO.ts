@@ -1,5 +1,4 @@
-import IServiceCenterDTO from './IServiceCenterDTO';
-import ISampleConclusionDTO from './ISampleConclusionDTO';
+import { IServiceCenterDTO, ISampleConclusionDTO } from './IAuxiliariesDTO';
 
 export default interface ICreateSampleDTO {
   id: number;
