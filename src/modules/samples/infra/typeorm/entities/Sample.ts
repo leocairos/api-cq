@@ -4,8 +4,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryColumn,
-  OneToOne,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import ServiceCenter from './ServiceCenter';
 import SampleConclusion from './SampleConclusion';
@@ -72,35 +72,35 @@ class Sample {
   @Column()
   service_center_id: number;
 
-  @OneToOne(() => ServiceCenter, { eager: true, cascade: true })
+  @ManyToOne(() => ServiceCenter, { eager: true, cascade: true })
   @JoinColumn({ name: 'service_center_id' })
   sampleServiceCenter: ServiceCenter;
 
   @Column()
   sample_conclusion_id: number;
 
-  @OneToOne(() => SampleConclusion, { eager: true, cascade: true })
+  @ManyToOne(() => SampleConclusion, { eager: true, cascade: true })
   @JoinColumn({ name: 'sample_conclusion_id' })
   sampleConclusion: SampleConclusion;
 
   @Column()
   sample_reason_id: number;
 
-  @OneToOne(() => SampleReason, { eager: true, cascade: true })
+  @ManyToOne(() => SampleReason, { eager: true, cascade: true })
   @JoinColumn({ name: 'sample_reason_id' })
   sampleReason: SampleReason;
 
   @Column()
   sample_type_id: number;
 
-  @OneToOne(() => SampleType, { eager: true, cascade: true })
+  @ManyToOne(() => SampleType, { eager: true, cascade: true })
   @JoinColumn({ name: 'sample_type_id' })
   sampleType: SampleType;
 
   @Column()
   sample_collection_point_id: number;
 
-  @OneToOne(() => CollectionPoint, { eager: true, cascade: true })
+  @ManyToOne(() => CollectionPoint, { eager: true, cascade: true })
   @JoinColumn({ name: 'sample_collection_point_id' })
   sampleCollectionPoint: CollectionPoint;
 

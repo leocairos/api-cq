@@ -12,6 +12,10 @@ import {
   IMyLIMSUser,
   ICollectionPoint,
   IInfo,
+  IServiceArea,
+  IMethodType,
+  IMethodStatus,
+  IMethod,
 } from '../../dtos/ISampleMYLIMSDTO';
 
 const queryParms = '?$inlinecount=allpages&$orderby=Id desc&$top=10000&$skip=0';
@@ -167,6 +171,86 @@ const updateInfo = async () => {
   await Promise.all(auxiliarPromises);
   // console.log('Service Centers:', auxiliarPromises);
 };
+const updateServiceArea = async () => {
+  const auxiliar = await apiMYLIMS.get(`/serviceareas${queryParms}`);
+
+  const auxiliarData = auxiliar.data.Result as IServiceArea[];
+  const update = container.resolve(UpdateAuxiliariesService);
+
+  const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
+    const auxiliarsaved = await update.executeServiceArea({
+      id: auxiliarItem.Id,
+      identification: auxiliarItem.Identification,
+      serviceCenter: {
+        id: auxiliarItem.ServiceCenter.Id,
+        identification: auxiliarItem.ServiceCenter.Identification,
+      },
+    });
+
+    return auxiliarsaved;
+  });
+
+  await Promise.all(auxiliarPromises);
+  // console.log('Service Centers:', auxiliarPromises);
+};
+const updateMethodType = async () => {
+  const auxiliar = await apiMYLIMS.get(`/MethodTypes${queryParms}`);
+
+  const auxiliarData = auxiliar.data.Result as IMethodType[];
+  const update = container.resolve(UpdateAuxiliariesService);
+
+  const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
+    const auxiliarsaved = await update.executeMethodType({
+      id: auxiliarItem.Id,
+      identification: auxiliarItem.Identification,
+    });
+
+    return auxiliarsaved;
+  });
+
+  await Promise.all(auxiliarPromises);
+  // console.log('Service Centers:', auxiliarPromises);
+};
+const updateMethodStatus = async () => {
+  const auxiliar = await apiMYLIMS.get(`/MethodStatus${queryParms}`);
+
+  const auxiliarData = auxiliar.data.Result as IMethodStatus[];
+  const update = container.resolve(UpdateAuxiliariesService);
+
+  const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
+    const auxiliarsaved = await update.executeMethodStatus({
+      id: auxiliarItem.Id,
+      identification: auxiliarItem.Identification,
+    });
+
+    return auxiliarsaved;
+  });
+
+  await Promise.all(auxiliarPromises);
+  // console.log('Service Centers:', auxiliarPromises);
+};
+const updateMethod = async () => {
+  const auxiliar = await apiMYLIMS.get(`/methods${queryParms}`);
+
+  const auxiliarData = auxiliar.data.Result as IMethod[];
+  const update = container.resolve(UpdateAuxiliariesService);
+
+  const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
+    const auxiliarsaved = await update.executeMethod({
+      id: auxiliarItem.Id,
+      identification: auxiliarItem.Identification,
+      methodType: {
+        id: auxiliarItem.MethodType.Id,
+        identification: auxiliarItem.MethodType.Identification,
+      },
+    });
+
+    return auxiliarsaved;
+  });
+
+  await Promise.all(auxiliarPromises);
+  // console.log('Service Centers:', auxiliarPromises);
+};
 
 const updAuxiliaries = async () => {
   await updateSampleReasons();
@@ -177,6 +261,10 @@ const updAuxiliaries = async () => {
   // await updateMyLIMSUser();
   // await updateCollectionPoint();
   // await updateInfo();
+  await updateServiceArea();
+  await updateMethodType();
+  await updateMethodStatus();
+  await updateMethod();
 };
 
 export default updAuxiliaries;

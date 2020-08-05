@@ -5,12 +5,12 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export default class CreateSampleInfos1596569739091
+export default class CreateServiceAreas1596645747747
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'sample_infos',
+        name: 'service_areas',
         columns: [
           {
             name: 'id',
@@ -18,20 +18,12 @@ export default class CreateSampleInfos1596569739091
             isPrimary: true,
           },
           {
-            name: 'order',
-            type: 'integer',
-          },
-          {
-            name: 'display_value',
+            name: 'identification',
             type: 'varchar',
             isNullable: true,
           },
           {
-            name: 'info_id',
-            type: 'integer',
-          },
-          {
-            name: 'sample_id',
+            name: 'service_center_id',
             type: 'integer',
           },
           {
@@ -49,31 +41,22 @@ export default class CreateSampleInfos1596569739091
     );
 
     await queryRunner.createForeignKey(
-      'sample_infos',
+      'service_areas',
       new TableForeignKey({
-        name: 'SampleInfoInfo',
-        columnNames: ['info_id'],
+        name: 'ServiceAreaServiceCenter',
+        columnNames: ['service_center_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'infos',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      'sample_infos',
-      new TableForeignKey({
-        name: 'SampleInfoSample',
-        columnNames: ['sample_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'samples',
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        referencedTableName: 'service_centers',
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('sample_infos', 'SampleInfoInfo');
-    await queryRunner.dropForeignKey('sample_infos', 'SampleInfoSample');
-    await queryRunner.dropTable('sample_infos');
+    await queryRunner.dropForeignKey(
+      'service_areas',
+      'ServiceAreaServiceCenter',
+    );
+
+    await queryRunner.dropTable('service_areas');
   }
 }

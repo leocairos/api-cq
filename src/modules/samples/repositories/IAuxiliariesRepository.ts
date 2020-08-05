@@ -6,6 +6,10 @@ import SampleType from '../infra/typeorm/entities/SampleType';
 import MyLIMSUser from '../infra/typeorm/entities/MyLIMSUser';
 import CollectionPoint from '../infra/typeorm/entities/CollectionPoint';
 import Info from '../infra/typeorm/entities/Info';
+import ServiceArea from '../infra/typeorm/entities/ServiceArea';
+import MethodType from '../infra/typeorm/entities/MethodType';
+import MethodStatus from '../infra/typeorm/entities/MethodStatus';
+import Method from '../infra/typeorm/entities/Method';
 
 import {
   ISampleConclusionDTO,
@@ -16,6 +20,10 @@ import {
   IMyLIMSUserDTO,
   ICollectionPointDTO,
   IInfoDTO,
+  IMethodTypeDTO,
+  IServiceAreaDTO,
+  IMethodStatusDTO,
+  IMethodDTO,
 } from '../dtos/IAuxiliariesDTO';
 
 export default interface IAuxiliariesRepository {
@@ -27,4 +35,8 @@ export default interface IAuxiliariesRepository {
   saveMyLIMSUser(data: IMyLIMSUserDTO): Promise<MyLIMSUser>;
   saveCollectionPoint(data: ICollectionPointDTO): Promise<CollectionPoint>;
   saveInfo(data: IInfoDTO): Promise<Info>;
+  saveServiceArea(data: IServiceAreaDTO): Promise<ServiceArea>;
+  saveMethodType(data: IMethodTypeDTO): Promise<MethodType>;
+  saveMethodStatus(data: IMethodStatusDTO): Promise<MethodStatus>;
+  saveMethod(data: IMethodDTO): Promise<Method>;
 }

@@ -11,6 +11,10 @@ import {
   IMyLIMSUserDTO,
   ICollectionPointDTO,
   IInfoDTO,
+  IMethodTypeDTO,
+  IServiceAreaDTO,
+  IMethodStatusDTO,
+  IMethodDTO,
 } from '@modules/samples/dtos/IAuxiliariesDTO';
 
 import SampleConclusion from '../entities/SampleConclusion';
@@ -21,6 +25,10 @@ import SampleType from '../entities/SampleType';
 import MyLIMSUser from '../entities/MyLIMSUser';
 import CollectionPoint from '../entities/CollectionPoint';
 import Info from '../entities/Info';
+import ServiceArea from '../entities/ServiceArea';
+import MethodType from '../entities/MethodType';
+import MethodStatus from '../entities/MethodStatus';
+import Method from '../entities/Method';
 
 class AuxiliariesRepository implements IAuxiliariesRepository {
   private ormRepositorySampleConclusion: Repository<SampleConclusion>;
@@ -39,6 +47,14 @@ class AuxiliariesRepository implements IAuxiliariesRepository {
 
   private ormRepositoryInfo: Repository<Info>;
 
+  private ormRepositoryServiceArea: Repository<ServiceArea>;
+
+  private ormRepositoryMethodType: Repository<MethodType>;
+
+  private ormRepositoryMethodStatus: Repository<MethodStatus>;
+
+  private ormRepositoryMethod: Repository<Method>;
+
   constructor() {
     this.ormRepositorySampleConclusion = getRepository(SampleConclusion);
     this.ormRepositorySampleReason = getRepository(SampleReason);
@@ -48,6 +64,10 @@ class AuxiliariesRepository implements IAuxiliariesRepository {
     this.ormRepositoryMyLIMSUser = getRepository(MyLIMSUser);
     this.ormRepositoryCollectionPoint = getRepository(CollectionPoint);
     this.ormRepositoryInfo = getRepository(Info);
+    this.ormRepositoryServiceArea = getRepository(ServiceArea);
+    this.ormRepositoryMethodType = getRepository(MethodType);
+    this.ormRepositoryMethodStatus = getRepository(MethodStatus);
+    this.ormRepositoryMethod = getRepository(Method);
   }
 
   public async saveSampleConclusion({
@@ -157,6 +177,66 @@ class AuxiliariesRepository implements IAuxiliariesRepository {
     await this.ormRepositoryInfo.save(createdInfo);
 
     return createdInfo;
+  }
+
+  public async saveServiceArea({
+    id,
+    identification,
+    serviceCenter,
+  }: IServiceAreaDTO): Promise<ServiceArea> {
+    const createdServiceArea = this.ormRepositoryServiceArea.create({
+      id,
+      identification,
+      sampleServiceCenter: serviceCenter,
+    });
+
+    await this.ormRepositoryServiceArea.save(createdServiceArea);
+
+    return createdServiceArea;
+  }
+
+  public async saveMethodType({
+    id,
+    identification,
+  }: IMethodTypeDTO): Promise<MethodType> {
+    const createdMethodType = this.ormRepositoryMethodType.create({
+      id,
+      identification,
+    });
+
+    await this.ormRepositoryMethodType.save(createdMethodType);
+
+    return createdMethodType;
+  }
+
+  public async saveMethodStatus({
+    id,
+    identification,
+  }: IMethodStatusDTO): Promise<MethodStatus> {
+    const createdMethodStatus = this.ormRepositoryMethodStatus.create({
+      id,
+      identification,
+    });
+
+    await this.ormRepositoryMethodStatus.save(createdMethodStatus);
+
+    return createdMethodStatus;
+  }
+
+  public async saveMethod({
+    id,
+    identification,
+    methodType,
+  }: IMethodDTO): Promise<Method> {
+    const createdMethod = this.ormRepositoryMethod.create({
+      id,
+      identification,
+      methodMethodType: methodType,
+    });
+
+    await this.ormRepositoryMethod.save(createdMethod);
+
+    return createdMethod;
   }
 }
 

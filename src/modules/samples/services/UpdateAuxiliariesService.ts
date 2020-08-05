@@ -12,10 +12,17 @@ import SampleType from '../infra/typeorm/entities/SampleType';
 import MyLIMSUser from '../infra/typeorm/entities/MyLIMSUser';
 import CollectionPoint from '../infra/typeorm/entities/CollectionPoint';
 import Info from '../infra/typeorm/entities/Info';
+import ServiceArea from '../infra/typeorm/entities/ServiceArea';
+import MethodType from '../infra/typeorm/entities/MethodType';
+import MethodStatus from '../infra/typeorm/entities/MethodStatus';
+import Method from '../infra/typeorm/entities/Method';
+import { IServiceCenterDTO, IMethodTypeDTO } from '../dtos/IAuxiliariesDTO';
 
 interface IRequest {
   id: number;
   identification: string;
+  serviceCenter?: IServiceCenterDTO;
+  methodType?: IMethodTypeDTO;
 }
 
 @injectable()
@@ -115,6 +122,58 @@ class UpdateAuxiliariesService {
     const auxiliar = await this.auxiliariesRepository.saveInfo({
       id,
       identification,
+    });
+
+    return auxiliar;
+  }
+
+  public async executeServiceArea({
+    id,
+    identification,
+    serviceCenter,
+  }: IRequest): Promise<ServiceArea> {
+    const auxiliar = await this.auxiliariesRepository.saveServiceArea({
+      id,
+      identification,
+      serviceCenter,
+    });
+
+    return auxiliar;
+  }
+
+  public async executeMethodType({
+    id,
+    identification,
+  }: IRequest): Promise<MethodType> {
+    const auxiliar = await this.auxiliariesRepository.saveMethodType({
+      id,
+      identification,
+    });
+
+    return auxiliar;
+  }
+
+  public async executeMethodStatus({
+    id,
+    identification,
+  }: IRequest): Promise<MethodStatus> {
+    const auxiliar = await this.auxiliariesRepository.saveMethodStatus({
+      id,
+      identification,
+    });
+
+    return auxiliar;
+  }
+
+  public async executeMethod({
+    id,
+    identification,
+    methodType,
+  }: IRequest): Promise<Method> {
+    const auxiliar = await this.auxiliariesRepository.saveMethod({
+      id,
+      identification,
+      methodType,
     });
 
     return auxiliar;

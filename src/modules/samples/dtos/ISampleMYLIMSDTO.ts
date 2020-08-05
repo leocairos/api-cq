@@ -38,6 +38,28 @@ export interface IInfo {
   Identification: string;
 }
 
+export interface IMethodType {
+  Id: number;
+  Identification: string;
+}
+
+export interface IServiceArea {
+  Id: number;
+  Identification: string;
+  ServiceCenter: IServiceCenter;
+}
+
+export interface IMethod {
+  Id: number;
+  Identification: string;
+  MethodType: IMethodType;
+}
+
+export interface IMethodStatus {
+  Id: number;
+  Identification: string;
+}
+
 // api/v2/samples
 export interface ISample {
   Id: number;
