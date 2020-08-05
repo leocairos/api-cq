@@ -59,3 +59,8 @@ export interface IMethodStatusDTO {
   id: number;
   identification: string;
 }
+
+export interface IAnalysisGroupDTO {
+  id: number;
+  identification: string;
+}

@@ -16,6 +16,7 @@ import ServiceArea from '../infra/typeorm/entities/ServiceArea';
 import MethodType from '../infra/typeorm/entities/MethodType';
 import MethodStatus from '../infra/typeorm/entities/MethodStatus';
 import Method from '../infra/typeorm/entities/Method';
+import AnalysisGroup from '../infra/typeorm/entities/AnalysisGroup';
 import { IServiceCenterDTO, IMethodTypeDTO } from '../dtos/IAuxiliariesDTO';
 
 interface IRequest {
@@ -174,6 +175,18 @@ class UpdateAuxiliariesService {
       id,
       identification,
       methodType,
+    });
+
+    return auxiliar;
+  }
+
+  public async executeAnalysisGroup({
+    id,
+    identification,
+  }: IRequest): Promise<AnalysisGroup> {
+    const auxiliar = await this.auxiliariesRepository.saveAnalysisGroup({
+      id,
+      identification,
     });
 
     return auxiliar;

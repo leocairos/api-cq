@@ -60,6 +60,11 @@ export interface IMethodStatus {
   Identification: string;
 }
 
+export interface IAnalysisGroup {
+  Id: number;
+  Identification: string;
+}
+
 // api/v2/samples
 export interface ISample {
   Id: number;

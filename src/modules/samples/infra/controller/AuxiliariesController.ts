@@ -16,6 +16,7 @@ import {
   IMethodType,
   IMethodStatus,
   IMethod,
+  IAnalysisGroup,
 } from '../../dtos/ISampleMYLIMSDTO';
 
 const queryParms = '?$inlinecount=allpages&$orderby=Id desc&$top=10000&$skip=0';
@@ -171,6 +172,7 @@ const updateInfo = async () => {
   await Promise.all(auxiliarPromises);
   // console.log('Service Centers:', auxiliarPromises);
 };
+
 const updateServiceArea = async () => {
   const auxiliar = await apiMYLIMS.get(`/serviceareas${queryParms}`);
 
@@ -193,6 +195,7 @@ const updateServiceArea = async () => {
   await Promise.all(auxiliarPromises);
   // console.log('Service Centers:', auxiliarPromises);
 };
+
 const updateMethodType = async () => {
   const auxiliar = await apiMYLIMS.get(`/MethodTypes${queryParms}`);
 
@@ -211,6 +214,7 @@ const updateMethodType = async () => {
   await Promise.all(auxiliarPromises);
   // console.log('Service Centers:', auxiliarPromises);
 };
+
 const updateMethodStatus = async () => {
   const auxiliar = await apiMYLIMS.get(`/MethodStatus${queryParms}`);
 
@@ -229,6 +233,7 @@ const updateMethodStatus = async () => {
   await Promise.all(auxiliarPromises);
   // console.log('Service Centers:', auxiliarPromises);
 };
+
 const updateMethod = async () => {
   const auxiliar = await apiMYLIMS.get(`/methods${queryParms}`);
 
@@ -252,6 +257,25 @@ const updateMethod = async () => {
   // console.log('Service Centers:', auxiliarPromises);
 };
 
+const updateAnalysisGroup = async () => {
+  const auxiliar = await apiMYLIMS.get(`/AnalysisGroups${queryParms}`);
+
+  const auxiliarData = auxiliar.data.Result as IAnalysisGroup[];
+  const update = container.resolve(UpdateAuxiliariesService);
+
+  const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
+    const auxiliarsaved = await update.executeAnalysisGroup({
+      id: auxiliarItem.Id,
+      identification: auxiliarItem.Identification,
+    });
+
+    return auxiliarsaved;
+  });
+
+  await Promise.all(auxiliarPromises);
+  // console.log('Service Centers:', auxiliarPromises);
+};
+
 const updAuxiliaries = async () => {
   await updateSampleReasons();
   // await updateSampleConclusion();
@@ -261,10 +285,11 @@ const updAuxiliaries = async () => {
   // await updateMyLIMSUser();
   // await updateCollectionPoint();
   // await updateInfo();
-  await updateServiceArea();
-  await updateMethodType();
-  await updateMethodStatus();
-  await updateMethod();
+  // await updateServiceArea();
+  // await updateMethodType();
+  // await updateMethodStatus();
+  // await updateMethod();
+  // await updateAnalysisGroup();
 };
 
 export default updAuxiliaries;

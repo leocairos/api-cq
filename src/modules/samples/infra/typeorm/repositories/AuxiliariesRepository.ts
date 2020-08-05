@@ -15,6 +15,7 @@ import {
   IServiceAreaDTO,
   IMethodStatusDTO,
   IMethodDTO,
+  IAnalysisGroupDTO,
 } from '@modules/samples/dtos/IAuxiliariesDTO';
 
 import SampleConclusion from '../entities/SampleConclusion';
@@ -29,6 +30,7 @@ import ServiceArea from '../entities/ServiceArea';
 import MethodType from '../entities/MethodType';
 import MethodStatus from '../entities/MethodStatus';
 import Method from '../entities/Method';
+import AnalysisGroup from '../entities/AnalysisGroup';
 
 class AuxiliariesRepository implements IAuxiliariesRepository {
   private ormRepositorySampleConclusion: Repository<SampleConclusion>;
@@ -55,6 +57,8 @@ class AuxiliariesRepository implements IAuxiliariesRepository {
 
   private ormRepositoryMethod: Repository<Method>;
 
+  private ormRepositoryAnalysisGroup: Repository<AnalysisGroup>;
+
   constructor() {
     this.ormRepositorySampleConclusion = getRepository(SampleConclusion);
     this.ormRepositorySampleReason = getRepository(SampleReason);
@@ -68,6 +72,7 @@ class AuxiliariesRepository implements IAuxiliariesRepository {
     this.ormRepositoryMethodType = getRepository(MethodType);
     this.ormRepositoryMethodStatus = getRepository(MethodStatus);
     this.ormRepositoryMethod = getRepository(Method);
+    this.ormRepositoryAnalysisGroup = getRepository(AnalysisGroup);
   }
 
   public async saveSampleConclusion({
@@ -237,6 +242,20 @@ class AuxiliariesRepository implements IAuxiliariesRepository {
     await this.ormRepositoryMethod.save(createdMethod);
 
     return createdMethod;
+  }
+
+  public async saveAnalysisGroup({
+    id,
+    identification,
+  }: IAnalysisGroupDTO): Promise<AnalysisGroup> {
+    const createdAnalysisGroup = this.ormRepositoryAnalysisGroup.create({
+      id,
+      identification,
+    });
+
+    await this.ormRepositoryAnalysisGroup.save(createdAnalysisGroup);
+
+    return createdAnalysisGroup;
   }
 }
 

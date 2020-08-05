@@ -10,6 +10,7 @@ import ServiceArea from '../infra/typeorm/entities/ServiceArea';
 import MethodType from '../infra/typeorm/entities/MethodType';
 import MethodStatus from '../infra/typeorm/entities/MethodStatus';
 import Method from '../infra/typeorm/entities/Method';
+import AnalysisGroup from '../infra/typeorm/entities/AnalysisGroup';
 
 import {
   ISampleConclusionDTO,
@@ -24,6 +25,7 @@ import {
   IServiceAreaDTO,
   IMethodStatusDTO,
   IMethodDTO,
+  IAnalysisGroupDTO,
 } from '../dtos/IAuxiliariesDTO';
 
 export default interface IAuxiliariesRepository {
@@ -39,4 +41,5 @@ export default interface IAuxiliariesRepository {
   saveMethodType(data: IMethodTypeDTO): Promise<MethodType>;
   saveMethodStatus(data: IMethodStatusDTO): Promise<MethodStatus>;
   saveMethod(data: IMethodDTO): Promise<Method>;
+  saveAnalysisGroup(data: IAnalysisGroupDTO): Promise<AnalysisGroup>;
 }
