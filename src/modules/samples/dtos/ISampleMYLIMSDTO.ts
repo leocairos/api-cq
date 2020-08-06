@@ -153,7 +153,7 @@ export interface ISampleMethod {
 }
 
 // api/v2/{sampleId}/Analyses
-interface ISampleAnalyse {
+export interface ISampleAnalyse {
   Id: number;
   Method: {
     Id: number;

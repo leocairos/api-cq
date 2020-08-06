@@ -4,6 +4,7 @@ import apiMYLIMS from '@shared/services/apiMYLIMS';
 import CreateSampleInfoService from '@modules/samples/services/CreateSampleInfoService';
 import ICreateSampleInfoDTO from '@modules/samples/dtos/ICreateSampleInfoDTO';
 import { ISampleInfo } from '../../dtos/ISampleMYLIMSDTO';
+import SampleInfo from '../typeorm/entities/SampleInfo';
 
 const SampleInfos = async (
   sampleId: number,
@@ -26,6 +27,7 @@ const SampleInfos = async (
   });
 
   const sampleInfosCQ = await Promise.all(sampleInfosPromises);
+  console.log('  Infos:', sampleInfosPromises.length);
   return sampleInfosCQ;
 };
 

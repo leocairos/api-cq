@@ -6,38 +6,11 @@ import CreateSampleService from '@modules/samples/services/CreateSampleService';
 
 import sampleInfos from './SampleInfosController';
 import sampleMethods from './SampleMethodsController';
+import sampleAnalyses from './SampleAnalysesController';
 
 import { ISample } from '../../dtos/ISampleMYLIMSDTO';
 
 import updAuxiliaries from './AuxiliariesController';
-
-/*
-const getAnalyses = async (sampleId: number): Promise<IAnalysesCQ[]> => {
-  const analyses = await apiMYLIMS.get(`/samples/${sampleId}/analyses`);
-
-  const analysesSample = analyses.data.Result as IAnalysesMyLIMS[];
-
-  const analysesData = analysesSample.map(analyse => {
-    return {
-      Id: analyse.Id,
-      Method: analyse.Method?.Id,
-      AnalysisGroup: analyse.AnalysisGroup?.Identification,
-      Info: analyse.Info.Identification,
-      MeasurementUnit: analyse.MeasurementUnit?.Identification,
-      Conclusion: analyse.Conclusion?.Identification,
-      MethodAnalysisType: analyse.MethodAnalysisType.Identification,
-      DisplayValue: analyse.DisplayValue,
-      ForceScale: analyse.ForceScale,
-      ValueFloat: analyse.ValueFloat,
-      Order: analyse.Order,
-      K: analyse.K,
-      Veff: analyse.Veff,
-    };
-  });
-
-  return analysesData;
-};
-*/
 
 export default class Samples {
   public async list(request: Request, response: Response): Promise<Response> {
@@ -101,13 +74,14 @@ export default class Samples {
         },
       });
 
-      // console.log(sampleSaved);
+      console.log('sampleSaved:', sampleSaved.id);
       await sampleInfos(sampleSaved.id);
       await sampleMethods(sampleSaved.id);
+      await sampleAnalyses(sampleSaved.id);
       return sampleSaved;
     });
 
     const samplesCQ = await Promise.all(samplesPromises);
-    return response.status(200).json(samplesCQ);
+    return response.status(200).json({ samplesSaved: samplesCQ.length });
   }
 }
