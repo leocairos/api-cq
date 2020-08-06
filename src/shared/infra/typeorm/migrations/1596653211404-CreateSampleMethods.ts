@@ -37,26 +37,32 @@ export default class CreateSampleMethods1596653211404
           {
             name: 'edition_user_id',
             type: 'integer',
+            isNullable: true,
           },
           {
-            name: 'edition_date_time',
+            name: 'edition_data_time',
             type: 'timestamp',
+            isNullable: true,
           },
           {
             name: 'execute_user_id',
             type: 'integer',
+            isNullable: true,
           },
           {
-            name: 'execute_date_time',
+            name: 'execute_data_time',
             type: 'timestamp',
+            isNullable: true,
           },
           {
             name: 'start_user_id',
             type: 'integer',
+            isNullable: true,
           },
           {
-            name: 'start_date_time',
+            name: 'start_data_time',
             type: 'timestamp',
+            isNullable: true,
           },
           // End CurrentStatus
           {

@@ -20,13 +20,13 @@ const SampleMethods = async (
       sampleId,
       methodId: method.Method.Id,
       serviceAreaId: method.ServiceArea.Id,
-      methodStatusId: method.CurrentStatus.MethodStatus.Id,
-      editionUserId: method.CurrentStatus.EditionUser.Id,
-      editionDateTime: method.CurrentStatus.EditionDateTime,
-      executeUserId: method.CurrentStatus.ExecuteUser.Id,
-      executeDateTime: method.CurrentStatus.ExecuteDateTime,
-      startUserId: method.CurrentStatus.StartUser.Id,
-      startDateTime: method.CurrentStatus.StartDateTime,
+      methodStatusId: method.CurrentStatus?.MethodStatus?.Id,
+      editionUserId: method.CurrentStatus?.EditionUser?.Id,
+      editionDateTime: method.CurrentStatus?.EditionDateTime,
+      executeUserId: method.CurrentStatus?.ExecuteUser?.Id,
+      executeDateTime: method.CurrentStatus?.ExecuteDateTime,
+      startUserId: method.CurrentStatus?.StartUser?.Id,
+      startDateTime: method.CurrentStatus?.StartDateTime,
     });
     return sampleMethodSaved;
   });
