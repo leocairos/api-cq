@@ -112,7 +112,7 @@ export interface ISampleInfo {
 }
 
 // api/v2/{sampleId}/methods
-interface ISampleMethod {
+export interface ISampleMethod {
   Id: number;
   Method: {
     MasterId: number;

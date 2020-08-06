@@ -5,6 +5,7 @@ import apiMYLIMS from '@shared/services/apiMYLIMS';
 import CreateSampleService from '@modules/samples/services/CreateSampleService';
 
 import sampleInfos from './SampleInfosController';
+import sampleMethods from './SampleMethodsController';
 
 import { ISample } from '../../dtos/ISampleMYLIMSDTO';
 
@@ -35,49 +36,6 @@ const getAnalyses = async (sampleId: number): Promise<IAnalysesCQ[]> => {
   });
 
   return analysesData;
-};
-
-const getMethods = async (sampleId: number): Promise<IMethodCQ[]> => {
-  const methods = await apiMYLIMS.get(`/samples/${sampleId}/methods`);
-
-  const methodsSample = methods.data.Result as IMethodMyLIMS[];
-
-  const methodsData = methodsSample.map(method => {
-    return {
-      Id: method.Id,
-      MethodId: method.Method.Id,
-      MethodType: method.Method.MethodType.Identification,
-      MethodIdentification: method.Method.Identification,
-      ServiceArea: method.ServiceArea.Identification,
-      CurrentMethodStatus: method.CurrentStatus.MethodStatus.Identification,
-      CurrentEditionUser: method.CurrentStatus.EditionUser.Identification,
-      CurrentEditionDateTime: method.CurrentStatus.EditionDateTime,
-      CurrentExecuteUser: method.CurrentStatus.ExecuteUser?.Identification,
-      CurrentExecuteDateTime: method.CurrentStatus.ExecuteDateTime,
-      CurrentStartUser: method.CurrentStatus.StartUser?.Identification,
-      CurrentStartDateTime: method.CurrentStatus.StartDateTime,
-    };
-  });
-
-  return methodsData;
-};
-
-const getInfos = async (sampleId: number): Promise<IInfosCQ[]> => {
-  const infos = await apiMYLIMS.get(`/samples/${sampleId}/infos`);
-
-  const infosSample = infos.data.Result as IInfosMyLIS[];
-
-  const infosData = infosSample.map(info => {
-    return {
-      SampleId: sampleId,
-      Id: info.Id,
-      Order: info.Order,
-      Info: info.Info.Identification,
-      Value: info.DisplayValue,
-    };
-  });
-
-  return infosData;
 };
 */
 
@@ -145,39 +103,11 @@ export default class Samples {
 
       // console.log(sampleSaved);
       await sampleInfos(sampleSaved.id);
+      await sampleMethods(sampleSaved.id);
       return sampleSaved;
     });
 
     const samplesCQ = await Promise.all(samplesPromises);
     return response.status(200).json(samplesCQ);
-    /* return {
-
-        CurrentStatus: {
-          Id: sample.CurrentStatus?.Id,
-          SampleStatus: {
-            Id: sample.CurrentStatus?.SampleStatus?.Id,
-            Identification: sample.CurrentStatus?.SampleStatus?.Identification,
-          },
-          EditionUser: {
-            Id: sample.CurrentStatus?.EditionUser?.Id,
-            Identification: sample.CurrentStatus?.EditionUser?.Identification.trim(),
-          },
-          EditionDate: sample.CurrentStatus?.EditionDateTime,
-        },
-        Infos: [],
-        Methods: [],
-        Analyses: [],
-      }; */
-
-    /* for (let s = 0; s < samplesCQ.length; s += 1) {
-      const infos = await getInfos(samplesCQ[s].Id);
-      samplesCQ[s].Infos = infos;
-
-      const analyses = await getAnalyses(samplesCQ[s].Id);
-      samplesCQ[s].Analyses = analyses;
-
-      const methods = await getMethods(samplesCQ[s].Id);
-      samplesCQ[s].Methods = methods;
-    } */
   }
 }

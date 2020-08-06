@@ -29,6 +29,7 @@ export default class CreateSampleMethods1596653211404
             name: 'service_area_id',
             type: 'integer',
           },
+          // Begin CurrentStatus
           {
             name: 'method_status_id',
             type: 'integer',
@@ -46,10 +47,18 @@ export default class CreateSampleMethods1596653211404
             type: 'integer',
           },
           {
+            name: 'execute_date_time',
+            type: 'timestamp',
+          },
+          {
             name: 'start_user_id',
             type: 'integer',
           },
-
+          {
+            name: 'start_date_time',
+            type: 'timestamp',
+          },
+          // End CurrentStatus
           {
             name: 'created_at',
             type: 'timestamp',
@@ -67,17 +76,7 @@ export default class CreateSampleMethods1596653211404
     await queryRunner.createForeignKey(
       'sample_methods',
       new TableForeignKey({
-        name: 'SampleInfoInfo',
-        columnNames: ['info_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'infos',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      'sample_methods',
-      new TableForeignKey({
-        name: 'SampleInfoSample',
+        name: 'SampleMethodSample',
         columnNames: ['sample_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'samples',
@@ -85,11 +84,88 @@ export default class CreateSampleMethods1596653211404
         onUpdate: 'CASCADE',
       }),
     );
+
+    await queryRunner.createForeignKey(
+      'sample_methods',
+      new TableForeignKey({
+        name: 'SampleMethodMethod',
+        columnNames: ['method_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'methods',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'sample_methods',
+      new TableForeignKey({
+        name: 'SampleMethodServiceArea',
+        columnNames: ['service_area_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'service_areas',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'sample_methods',
+      new TableForeignKey({
+        name: 'SampleMethodMethodStatus',
+        columnNames: ['method_status_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'method_status',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'sample_methods',
+      new TableForeignKey({
+        name: 'SampleMethodEditionUser',
+        columnNames: ['edition_user_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'mylims_users',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'sample_methods',
+      new TableForeignKey({
+        name: 'SampleMethodExecuteUser',
+        columnNames: ['execute_user_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'mylims_users',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'sample_methods',
+      new TableForeignKey({
+        name: 'SampleMethodStartUser',
+        columnNames: ['start_user_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'mylims_users',
+      }),
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('sample_methods', 'SampleInfoInfo');
-    await queryRunner.dropForeignKey('sample_methods', 'SampleInfoSample');
+    await queryRunner.dropForeignKey('sample_methods', 'SampleMethodSample');
+    await queryRunner.dropForeignKey('sample_methods', 'SampleMethodMethod');
+    await queryRunner.dropForeignKey(
+      'sample_methods',
+      'SampleMethodServiceArea',
+    );
+    await queryRunner.dropForeignKey(
+      'sample_methods',
+      'SampleMethodMethodStatus',
+    );
+    await queryRunner.dropForeignKey(
+      'sample_methods',
+      'SampleMethodEditionUser',
+    );
+    await queryRunner.dropForeignKey(
+      'sample_methods',
+      'SampleMethodExecuteUser',
+    );
+    await queryRunner.dropForeignKey('sample_methods', 'SampleMethodStartUser');
     await queryRunner.dropTable('sample_methods');
   }
 }
