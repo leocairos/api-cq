@@ -15,6 +15,8 @@ const SampleMethods = async (
   const createSampleMethod = container.resolve(CreateSampleMethodService);
 
   const sampleMethodsPromises = sampleMethodsData.map(async method => {
+    // const sampleMethodsPromises: ICreateSampleMethodDTO[] = [];
+    // sampleMethodsData.forEach(async method => {
     const sampleMethodSaved = await createSampleMethod.execute({
       id: method.Id,
       sampleId,
@@ -29,6 +31,7 @@ const SampleMethods = async (
       startDateTime: method.CurrentStatus?.StartDateTime,
     });
     return sampleMethodSaved;
+    // sampleMethodsPromises.push(sampleMethodSaved);
   });
 
   const sampleMethodsCQ = await Promise.all(sampleMethodsPromises);

@@ -10,6 +10,8 @@ import {
   ISampleReasonDTO,
   ISampleTypeDTO,
   ICollectionPointDTO,
+  ISampleStatusDTO,
+  IMyLIMSUserDTO,
 } from '../dtos/IAuxiliariesDTO';
 
 interface IRequest {
@@ -31,6 +33,10 @@ interface IRequest {
   finalizedTime: Date;
   publishedTime: Date;
   reviewedTime: Date;
+
+  sampleStatus?: ISampleStatusDTO;
+  currentStatusUser?: IMyLIMSUserDTO;
+  currentStatusEditionDateTime?: Date;
 
   sampleServiceCenter?: IServiceCenterDTO;
   sampleConclusion?: ISampleConclusionDTO;
@@ -62,6 +68,9 @@ class CreateSampleService {
     finalized,
     published,
     reviewed,
+    sampleStatus,
+    currentStatusUser,
+    currentStatusEditionDateTime,
     takenDateTime,
     receivedTime,
     finalizedTime,
@@ -87,6 +96,9 @@ class CreateSampleService {
       finalized,
       published,
       reviewed,
+      sampleStatus: sampleStatus?.id ? sampleStatus : undefined,
+      currentStatusUser: currentStatusUser?.id ? currentStatusUser : undefined,
+      currentStatusEditionDateTime,
       takenDateTime,
       receivedTime,
       finalizedTime,

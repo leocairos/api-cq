@@ -4,6 +4,8 @@ import {
   ISampleReasonDTO,
   ISampleTypeDTO,
   ICollectionPointDTO,
+  ISampleStatusDTO,
+  IMyLIMSUserDTO,
 } from './IAuxiliariesDTO';
 
 export default interface ICreateSampleDTO {
@@ -25,6 +27,10 @@ export default interface ICreateSampleDTO {
   finalizedTime: Date;
   publishedTime: Date;
   reviewedTime: Date;
+
+  sampleStatus?: ISampleStatusDTO;
+  currentStatusUser?: IMyLIMSUserDTO;
+  currentStatusEditionDateTime?: Date;
 
   sampleServiceCenter?: IServiceCenterDTO;
   sampleConclusion?: ISampleConclusionDTO;

@@ -38,6 +38,7 @@ export default class Samples {
     const createSample = container.resolve(CreateSampleService);
 
     const samplesPromises = samplesData.map(async sample => {
+      // const samplesPromises = samplesData.forEach(async sample => {
       const sampleSaved = await createSample.execute({
         id: sample.Id,
         identification: sample.Identification,
@@ -52,6 +53,17 @@ export default class Samples {
         finalized: sample.Finalized,
         published: sample.Published,
         reviewed: sample.Reviewed,
+
+        sampleStatus: {
+          id: sample.CurrentStatus?.SampleStatus?.Id,
+          identification: sample.CurrentStatus?.SampleStatus?.Identification,
+        },
+        currentStatusUser: {
+          id: sample.CurrentStatus?.EditionUser?.Id,
+          identification: sample.CurrentStatus?.EditionUser?.Identification,
+        },
+        currentStatusEditionDateTime: sample.CurrentStatus?.EditionDateTime,
+
         takenDateTime: sample.TakenDateTime,
         receivedTime: sample.ReceivedTime,
         finalizedTime: sample.FinalizedTime,
@@ -87,6 +99,7 @@ export default class Samples {
       // console.log('sampleSaved:', sampleSaved.id);
       // console.log('   ', '|- ', 'savedSample:', sampleSaved.id);
       const infoInSample = await sampleInfos(sampleSaved.id);
+
       /* console.log(
         '     ',
         '|- ',
@@ -125,7 +138,7 @@ export default class Samples {
       return sampleSaved;
     });
 
-    console.log('  ', '>> Total Samples find: ', samplesData.length);
+    console.log('  ', '>> Total Samples found:  ', samplesData.length);
     const samplesCQ = await Promise.all(samplesPromises);
     console.log(new Date(), 'end of synchronization with myLIMs');
 

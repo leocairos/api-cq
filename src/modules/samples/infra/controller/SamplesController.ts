@@ -25,7 +25,7 @@ export default class Samples {
 
     console.log(new Date(), 'starting synchronization with myLIMs');
 
-    await updAuxiliaries();
+    // await updAuxiliaries();
 
     const defaultRoute = `/samples?$inlinecount=allpages&$top=${top}&$skip=${skip}&$orderby=Id desc`;
 
@@ -57,6 +57,16 @@ export default class Samples {
         finalizedTime: sample.FinalizedTime,
         publishedTime: sample.PublishedTime,
         reviewedTime: sample.ReviewedTime,
+
+        sampleStatus: {
+          id: sample.CurrentStatus?.SampleStatus?.Id,
+          identification: sample.CurrentStatus?.SampleStatus?.Identification,
+        },
+        currentStatusUser: {
+          id: sample.CurrentStatus?.EditionUser?.Id,
+          identification: sample.CurrentStatus?.EditionUser?.Identification,
+        },
+        currentStatusEditionDateTime: sample.CurrentStatus?.EditionDateTime,
 
         sampleServiceCenter: {
           id: sample.ServiceCenter?.Id,
@@ -125,7 +135,7 @@ export default class Samples {
       return sampleSaved;
     });
 
-    console.log('  ', '>> Total Samples find: ', samplesData.length);
+    console.log('  ', '>> Total Samples found:  ', samplesData.length);
     const samplesCQ = await Promise.all(samplesPromises);
     console.log(new Date(), 'end of synchronization with myLIMs');
 

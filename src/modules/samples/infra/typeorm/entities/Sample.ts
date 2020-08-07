@@ -12,6 +12,8 @@ import SampleConclusion from './SampleConclusion';
 import SampleReason from './SampleReason';
 import SampleType from './SampleType';
 import CollectionPoint from './CollectionPoint';
+import SampleStatus from './SampleStatus';
+import MyLIMSUser from './MyLIMSUser';
 
 @Entity('samples')
 class Sample {
@@ -69,6 +71,9 @@ class Sample {
   @Column({ name: 'reviewed_time' })
   reviewedTime: Date;
 
+  @Column({ name: 'current_status_edition_date_time' })
+  currentStatusEditionDateTime: Date;
+
   @Column()
   service_center_id: number;
 
@@ -103,6 +108,20 @@ class Sample {
   @ManyToOne(() => CollectionPoint, { eager: true, cascade: true })
   @JoinColumn({ name: 'sample_collection_point_id' })
   sampleCollectionPoint: CollectionPoint;
+
+  @Column()
+  sample_status_id: number;
+
+  @ManyToOne(() => SampleStatus, { eager: true, cascade: true })
+  @JoinColumn({ name: 'sample_status_id' })
+  sampleStatus: SampleStatus;
+
+  @Column()
+  current_status_user_id: number;
+
+  @ManyToOne(() => MyLIMSUser, { eager: true, cascade: true })
+  @JoinColumn({ name: 'current_status_user_id' })
+  currentStatusUser: MyLIMSUser;
 
   @CreateDateColumn()
   created_at: Date;

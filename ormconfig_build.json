@@ -1,0 +1,20 @@
+[
+  {
+    "name": "default",
+    "type": "postgres",
+    "host": "192.168.20.254",
+    "port": 45432,
+    "username": "postgres",
+    "password": "SecretPSpsswrd@2020c",
+    "database": "xilolite-api-cq",
+    "entities": [
+      "./dist/modules/**/infra/typeorm/entities/*.js"
+    ],
+    "migrations": [
+      "./dist/shared/infra/typeorm/migrations/*.js"
+    ],
+    "cli": {
+      "migrationsDir": "./dist/shared/infra/typeorm/migrations"
+    }
+  }
+]

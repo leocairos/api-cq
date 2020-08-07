@@ -15,6 +15,8 @@ const SampleInfos = async (
   const createSampleInfo = container.resolve(CreateSampleInfoService);
 
   const sampleInfosPromises = sampleInfosData.map(async info => {
+    // const sampleInfosPromises: ICreateSampleInfoDTO[] = [];
+    // sampleInfosData.forEach(async info => {
     const sampleInfoSaved = await createSampleInfo.execute({
       id: info.Id,
       order: info.Order,
@@ -23,6 +25,7 @@ const SampleInfos = async (
       sampleId,
     });
     return sampleInfoSaved;
+    // sampleInfosPromises.push(sampleInfoSaved);
   });
 
   const sampleInfosCQ = await Promise.all(sampleInfosPromises);

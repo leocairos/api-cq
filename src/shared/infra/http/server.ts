@@ -63,9 +63,9 @@ const importAll = async () => {
   const totalCount = samples.data.TotalCount as number;
   const samplesController = new SamplesController();
 
-  await updAuxiliaries();
+  // await updAuxiliaries();
   // const skip = 0;
-  const top = process.env.COUNT_SINC_AT_TIME;
+  const top = Number(process.env.COUNT_SINC_AT_TIME);
   let skip = 0;
   const filter = '';
   while (skip < totalCount) {
@@ -74,7 +74,24 @@ const importAll = async () => {
   }
 };
 
-app.listen(process.env.APP_PORT, async () => {
+/* const importNews = async () => {
+
+  const samples = await apiMYLIMS.get('/samples?$inlinecount=allpages&$orderby=Id desc&$top=50&$skip=0&$filter=TakenDateTime ge DATETIME'2020-08-07' or ReceivedTime ge DATETIME'2020-08-07' or FinalizedTime ge DATETIME'2020-08-07' or PublishedTime ge DATETIME'2020-08-07' or ReviewedTime ge DATETIME'2020-08-07' or TakenDateTime eq null');
+  const totalCount = samples.data.TotalCount as number;
+  const samplesController = new SamplesController();
+
+  // await updAuxiliaries();
+  // const skip = 0;
+  const top = Number(process.env.COUNT_SINC_AT_TIME);
+  let skip = 0;
+  const filter = '';
+  while (skip < totalCount) {
+    await samplesController.list(skip, top, filter);
+    skip += top;
+  }
+};
+*/
+app.listen(process.env.APP_PORT, () => {
   // console.log('API Server started on port', process.env.APP_PORT);
 
   console.log(
@@ -87,5 +104,5 @@ app.listen(process.env.APP_PORT, async () => {
 
   // schedule(SyncMyLIMS);
 
-  importAll();
+  // importAll();
 });
