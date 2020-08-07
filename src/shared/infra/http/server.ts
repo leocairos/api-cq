@@ -69,7 +69,7 @@ const importAll = async (): Promise<void> => {
   let skip = 0;
   const filter = '';
   while (skip < totalCount) {
-    samplesController.list(skip, top, filter);
+    await samplesController.list(skip, top, filter);
     skip += top;
   }
 };
