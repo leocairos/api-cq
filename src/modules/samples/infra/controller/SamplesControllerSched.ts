@@ -9,8 +9,6 @@ import sampleAnalyses from './SampleAnalysesController';
 
 import { ISample } from '../../dtos/ISampleMYLIMSDTO';
 
-import updAuxiliaries from './AuxiliariesController';
-
 /* interface ISampleSummary {
   idSample: number;
   countInfo: number;
@@ -28,8 +26,6 @@ export default class Samples {
       new Date(),
       `starting synchronization with myLIMs (records at time: ${process.env.COUNT_SINC_AT_TIME})`,
     );
-
-    await updAuxiliaries();
 
     const defaultRoute = `/samples?$inlinecount=allpages&$top=${top}&$skip=${skip}&$orderby=Id desc`;
 

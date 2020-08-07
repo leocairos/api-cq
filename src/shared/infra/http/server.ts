@@ -14,13 +14,14 @@ import schedule from '@shared/services/schedule';
 import SyncMyLIMS from '@shared/services/SyncMyLIMS';
 
 import SamplesController from '@modules/samples/infra/controller/SamplesControllerSched';
+import updAuxiliaries from '@modules/samples/infra/controller/AuxiliariesController';
+import apiMYLIMS from '@shared/services/apiMYLIMS';
 
 import routes from './routes';
 import rateLimiter from './middlewares/rateLimiter';
 
 import '@shared/infra/typeorm';
 import '@shared/container';
-import apiMYLIMS from '@shared/services/apiMYLIMS';
 
 const app = express();
 
@@ -61,6 +62,8 @@ const importAll = async () => {
   const samples = await apiMYLIMS.get('/samples?$inlinecount=allpages&$top=5');
   const totalCount = samples.data.TotalCount as number;
   const samplesController = new SamplesController();
+
+  await updAuxiliaries();
   // const skip = 0;
   const top = process.env.COUNT_SINC_AT_TIME;
   let skip = 0;
@@ -83,5 +86,6 @@ app.listen(process.env.APP_PORT, async () => {
   );
 
   // schedule(SyncMyLIMS);
+
   importAll();
 });

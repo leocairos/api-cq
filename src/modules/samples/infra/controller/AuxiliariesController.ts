@@ -37,7 +37,12 @@ const updateSampleReasons = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Sample Reasons:', auxiliarPromises);
+  console.log(
+    '  ',
+    'Updated Sample Reasons:',
+    auxiliarPromises.length,
+    ' records',
+  );
 };
 
 const updateSampleConclusion = async () => {
@@ -56,7 +61,13 @@ const updateSampleConclusion = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Sample Conclusions:', auxiliarPromises);
+
+  console.log(
+    '  ',
+    'Updated Sample Conclusions:',
+    auxiliarPromises.length,
+    ' records',
+  );
 };
 
 const updateServiceCenter = async () => {
@@ -75,7 +86,12 @@ const updateServiceCenter = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Service Centers:', auxiliarPromises);
+  console.log(
+    '  ',
+    'Updated Service Center:',
+    auxiliarPromises.length,
+    ' records',
+  );
 };
 
 const updateSampleStatus = async () => {
@@ -94,7 +110,12 @@ const updateSampleStatus = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Service Centers:', auxiliarPromises);
+  console.log(
+    '  ',
+    'Updated Sample Status:',
+    auxiliarPromises.length,
+    ' records',
+  );
 };
 
 const updateSampleType = async () => {
@@ -113,7 +134,12 @@ const updateSampleType = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Service Centers:', auxiliarPromises);
+  console.log(
+    '  ',
+    'Updated Sample Type:',
+    auxiliarPromises.length,
+    ' records',
+  );
 };
 
 const updateMyLIMSUser = async () => {
@@ -132,7 +158,12 @@ const updateMyLIMSUser = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Service Centers:', auxiliarPromises);
+  console.log(
+    '  ',
+    'Updated MyLIMS Users:',
+    auxiliarPromises.length,
+    ' records',
+  );
 };
 
 const updateCollectionPoint = async () => {
@@ -151,7 +182,12 @@ const updateCollectionPoint = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Service Centers:', auxiliarPromises);
+  console.log(
+    '  ',
+    'Updated Collection Points:',
+    auxiliarPromises.length,
+    ' records',
+  );
 };
 
 const updateInfo = async () => {
@@ -170,7 +206,7 @@ const updateInfo = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Service Centers:', auxiliarPromises);
+  console.log('  ', 'Updated Infos:', auxiliarPromises.length, ' records');
 };
 
 const updateServiceArea = async () => {
@@ -193,7 +229,12 @@ const updateServiceArea = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Service Centers:', auxiliarPromises);
+  console.log(
+    '  ',
+    'Updated Service Areas:',
+    auxiliarPromises.length,
+    ' records',
+  );
 };
 
 const updateMethodType = async () => {
@@ -212,7 +253,12 @@ const updateMethodType = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Service Centers:', auxiliarPromises);
+  console.log(
+    '  ',
+    'Updated Method Types:',
+    auxiliarPromises.length,
+    ' records',
+  );
 };
 
 const updateMethodStatus = async () => {
@@ -231,7 +277,12 @@ const updateMethodStatus = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Service Centers:', auxiliarPromises);
+  console.log(
+    '  ',
+    'Updated Method Status:',
+    auxiliarPromises.length,
+    ' records',
+  );
 };
 
 const updateMethod = async () => {
@@ -254,7 +305,7 @@ const updateMethod = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Service Centers:', auxiliarPromises);
+  console.log('  ', 'Updated Methods:', auxiliarPromises.length, ' records');
 };
 
 const updateAnalysisGroup = async () => {
@@ -273,23 +324,29 @@ const updateAnalysisGroup = async () => {
   });
 
   await Promise.all(auxiliarPromises);
-  // console.log('Service Centers:', auxiliarPromises);
+  console.log(
+    '  ',
+    'Updated Analysis Groups:',
+    auxiliarPromises.length,
+    ' records',
+  );
 };
 
 const updAuxiliaries = async () => {
+  console.log('Updating auxiliary...');
   await updateSampleReasons();
-  // await updateSampleConclusion();
-  // await updateServiceCenter();
-  // await updateSampleStatus();
-  // await updateSampleType();
-  // await updateMyLIMSUser();
-  // await updateCollectionPoint();
-  // await updateInfo();
-  // await updateServiceArea();
-  // await updateMethodType();
-  // await updateMethodStatus();
-  // await updateMethod();
-  // await updateAnalysisGroup();
+  await updateSampleConclusion();
+  await updateServiceCenter();
+  await updateSampleStatus();
+  await updateSampleType();
+  await updateMyLIMSUser();
+  await updateCollectionPoint();
+  await updateInfo();
+  await updateServiceArea();
+  await updateMethodType();
+  await updateMethodStatus();
+  await updateMethod();
+  await updateAnalysisGroup();
 };
 
 export default updAuxiliaries;
