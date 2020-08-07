@@ -1,4 +1,3 @@
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import apiMYLIMS from '@shared/services/apiMYLIMS';
@@ -12,6 +11,13 @@ import { ISample } from '../../dtos/ISampleMYLIMSDTO';
 
 import updAuxiliaries from './AuxiliariesController';
 
+interface ISampleSummary {
+  idSample: number;
+  countInfo: number;
+  countMethod: number;
+  countAnalyses: number;
+}
+
 export default class Samples {
   public async list(
     skip: number,
@@ -22,14 +28,14 @@ export default class Samples {
 
     await updAuxiliaries();
 
-    const defaultRoute = `/samples?$inlinecount=allpages&$top=${top}&$skip=${skip}`; // &$orderby=Id desc`;
+    const defaultRoute = `/samples?$inlinecount=allpages&$top=${top}&$skip=${skip}&$orderby=Id desc`;
 
     const samples = await apiMYLIMS.get(
       filter === '' ? defaultRoute : `${defaultRoute}&$filter=${filter}`,
     );
 
     const samplesData = samples.data.Result as ISample[];
-    // const sampleSummary: ISampleSummary[] = [];
+    const sampleSummary: ISampleSummary[] = [];
     const createSample = container.resolve(CreateSampleService);
 
     const samplesPromises = samplesData.map(async sample => {
@@ -82,41 +88,41 @@ export default class Samples {
       // console.log('sampleSaved:', sampleSaved.id);
       console.log('   ', '|- ', 'savedSample:', sampleSaved.id);
       const infoInSample = await sampleInfos(sampleSaved.id);
-      console.log(
+      /* console.log(
         '     ',
         '|- ',
         'savedInfos:',
         infoInSample.length,
         'bySample:',
         sampleSaved.id,
-      );
+      ); */
       const methodInSample = await sampleMethods(sampleSaved.id);
-      console.log(
+      /* console.log(
         '     ',
         '|- ',
         'savedMethods:',
         methodInSample.length,
         'bySample:',
         sampleSaved.id,
-      );
+      ); */
       const analysesInSample = await sampleAnalyses(sampleSaved.id);
-      console.log(
+      /* console.log(
         '     ',
         '|- ',
         'savedAnalyses:',
         analysesInSample.length,
         'bySample:',
         sampleSaved.id,
-      );
+      ); */
 
-      /* const sumaryAux = {
+      const sumaryAux = {
         idSample: sampleSaved.id,
         countInfo: infoInSample.length,
         countMethod: methodInSample.length,
         countAnalyses: analysesInSample.length,
       };
       sampleSummary.push(sumaryAux);
-      console.log('   ', '|- ', sumaryAux); */
+      console.log('   ', '|- ', sumaryAux);
       return sampleSaved;
     });
 

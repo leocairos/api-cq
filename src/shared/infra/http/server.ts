@@ -57,7 +57,7 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   });
 });
 
-const importAll = async (): Promise<number> => {
+const importAll = async () => {
   const samples = await apiMYLIMS.get('/samples?$inlinecount=allpages&$top=5');
   const totalCount = samples.data.TotalCount as number;
   const samplesController = new SamplesController();
@@ -69,8 +69,6 @@ const importAll = async (): Promise<number> => {
     await samplesController.list(skip, top, filter);
     skip += top;
   }
-
-  return totalCount;
 };
 
 app.listen(process.env.APP_PORT, async () => {
