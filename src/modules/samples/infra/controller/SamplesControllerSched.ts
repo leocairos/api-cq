@@ -24,7 +24,10 @@ export default class Samples {
     top: number,
     filter: string,
   ): Promise<number> {
-    console.log(new Date(), 'starting synchronization with myLIMs');
+    console.log(
+      new Date(),
+      `starting synchronization with myLIMs (records at time: ${process.env.COUNT_SINC_AT_TIME})`,
+    );
 
     await updAuxiliaries();
 
