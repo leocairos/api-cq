@@ -26,7 +26,7 @@ export default class Samples {
 
     console.log(new Date(), 'starting synchronization with myLIMs');
 
-    // await updAuxiliaries();
+    await updAuxiliaries();
 
     const defaultRoute = `/samples?$inlinecount=allpages&$top=${top}&$skip=${skip}&$orderby=Id desc`;
 

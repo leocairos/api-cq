@@ -63,14 +63,16 @@ const importAll = async (): Promise<void> => {
   const totalCount = samples.data.TotalCount as number;
   const samplesController = new SamplesController();
 
-  // await updAuxiliaries();
+  await updAuxiliaries();
   // const skip = 0;
   const top = Number(process.env.COUNT_SINC_AT_TIME);
   let skip = 0;
   const filter = '';
   while (skip < totalCount) {
+    // eslint-disable-next-line no-await-in-loop
     await samplesController.list(skip, top, filter);
     skip += top;
+    console.log('\n\nSkip ', skip, '\n\n');
   }
 };
 
@@ -100,6 +102,6 @@ app.listen(process.env.APP_PORT, () => {
       `\n${'#'.repeat(80)}\n`,
   );
 
-  // schedule(SyncMyLIMS);
+  schedule(SyncMyLIMS);
   importAll();
 });
