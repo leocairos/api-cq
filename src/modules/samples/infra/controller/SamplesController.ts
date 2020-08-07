@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
@@ -37,7 +38,10 @@ export default class Samples {
     // const sampleSummary: ISampleSummary[] = [];
     const createSample = container.resolve(CreateSampleService);
 
-    const samplesPromises = samplesData.map(async sample => {
+    const samplesPromises: number[] = [];
+    // samplesData.map(async (sample, index) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const sample of samplesData) {
       const sampleSaved = await createSample.execute({
         id: sample.Id,
         identification: sample.Identification,
@@ -94,46 +98,13 @@ export default class Samples {
         },
       });
 
-      // console.log('sampleSaved:', sampleSaved.id);
-      console.log('   ', '|- ', 'savedSample:', sampleSaved.id);
-      const infoInSample = await sampleInfos(sampleSaved.id);
-      console.log(
-        '     ',
-        '|- ',
-        'savedInfos:',
-        infoInSample.length,
-        'bySample:',
-        sampleSaved.id,
-      );
-      const methodInSample = await sampleMethods(sampleSaved.id);
-      console.log(
-        '     ',
-        '|- ',
-        'savedMethods:',
-        methodInSample.length,
-        'bySample:',
-        sampleSaved.id,
-      );
-      const analysesInSample = await sampleAnalyses(sampleSaved.id);
-      console.log(
-        '     ',
-        '|- ',
-        'savedAnalyses:',
-        analysesInSample.length,
-        'bySample:',
-        sampleSaved.id,
-      );
+      console.log('sampleSaved:', sampleSaved.id);
+      await sampleInfos(sampleSaved.id);
+      await sampleMethods(sampleSaved.id);
+      await sampleAnalyses(sampleSaved.id);
 
-      /* const sumaryAux = {
-        idSample: sampleSaved.id,
-        countInfo: infoInSample.length,
-        countMethod: methodInSample.length,
-        countAnalyses: analysesInSample.length,
-      };
-      sampleSummary.push(sumaryAux);
-      console.log('   ', '|- ', sumaryAux); */
-      return sampleSaved;
-    });
+      samplesPromises.push(sampleSaved.id);
+    }
 
     console.log('  ', '>> Total Samples found:  ', samplesData.length);
     const samplesCQ = await Promise.all(samplesPromises);

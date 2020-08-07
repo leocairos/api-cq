@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-const schedule = exec => {
+const schedule = (exec: () => {}): void => {
   const lockFile = `lock.lck`;
 
   console.log(
@@ -17,7 +17,7 @@ const schedule = exec => {
     } catch (err) {
       console.error(lockFile);
     }
-  }, process.env.INTERVAL_SINC_MYLIMS * 1000);
+  }, Number(process.env.INTERVAL_SINC_MYLIMS) * 1000);
 };
 
 export default schedule;

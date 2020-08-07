@@ -92,8 +92,6 @@ const importAll = async () => {
 };
 */
 app.listen(process.env.APP_PORT, () => {
-  // console.log('API Server started on port', process.env.APP_PORT);
-
   console.log(
     `\n${'#'.repeat(80)}` +
       `\n#${' '.repeat(21)} Service now running on port '${
@@ -102,7 +100,6 @@ app.listen(process.env.APP_PORT, () => {
       `\n${'#'.repeat(80)}\n`,
   );
 
-  // schedule(SyncMyLIMS);
-
+  schedule(SyncMyLIMS);
   // importAll();
 });

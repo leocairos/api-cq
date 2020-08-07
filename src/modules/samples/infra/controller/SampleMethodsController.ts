@@ -2,12 +2,10 @@ import { container } from 'tsyringe';
 
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 import CreateSampleMethodService from '@modules/samples/services/CreateSampleMethodService';
-import ICreateSampleMethodDTO from '@modules/samples/dtos/ICreateSampleMethodDTO';
+// import ICreateSampleMethodDTO from '@modules/samples/dtos/ICreateSampleMethodDTO';
 import { ISampleMethod } from '../../dtos/ISampleMYLIMSDTO';
 
-const SampleMethods = async (
-  sampleId: number,
-): Promise<ICreateSampleMethodDTO[]> => {
+const SampleMethods = async (sampleId: number): Promise<number[]> => {
   const methods = await apiMYLIMS.get(`/samples/${sampleId}/methods`);
 
   const sampleMethodsData = methods.data.Result as ISampleMethod[];
@@ -30,11 +28,12 @@ const SampleMethods = async (
       startUserId: method.CurrentStatus?.StartUser?.Id,
       startDateTime: method.CurrentStatus?.StartDateTime,
     });
-    return sampleMethodSaved;
+    return sampleMethodSaved.id;
     // sampleMethodsPromises.push(sampleMethodSaved);
   });
 
   const sampleMethodsCQ = await Promise.all(sampleMethodsPromises);
+  console.log('  ', sampleId, ' Methods:', sampleMethodsPromises.length);
   return sampleMethodsCQ;
 };
 
