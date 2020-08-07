@@ -100,6 +100,6 @@ app.listen(process.env.APP_PORT, () => {
       `\n${'#'.repeat(80)}\n`,
   );
 
-  schedule(SyncMyLIMS);
+  // schedule(SyncMyLIMS);
   importAll();
 });
