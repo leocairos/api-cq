@@ -62,7 +62,7 @@ const importAll = async () => {
   const totalCount = samples.data.TotalCount as number;
   const samplesController = new SamplesController();
   // const skip = 0;
-  const top = 100;
+  const top = process.env.COUNT_SINC_AT_TIME;
   let skip = 0;
   const filter = '';
   while (skip < totalCount) {
