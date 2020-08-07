@@ -12,17 +12,12 @@ import { ISample } from '../../dtos/ISampleMYLIMSDTO';
 
 import updAuxiliaries from './AuxiliariesController';
 
-interface ISampleSummary {
-  idSample: number;
-  countInfo: number;
-  countMethod: number;
-  countAnalyses: number;
-}
-
 export default class Samples {
-  public async list(request: Request, response: Response): Promise<Response> {
-    const { skip = 0, top = 50, filter = '' } = request.query;
-
+  public async list(
+    skip: number,
+    top: number,
+    filter: string,
+  ): Promise<number> {
     console.log(new Date(), 'starting synchronization with myLIMs');
 
     await updAuxiliaries();
@@ -129,6 +124,6 @@ export default class Samples {
     const samplesCQ = await Promise.all(samplesPromises);
     console.log(new Date(), 'end of synchronization with myLIMs');
 
-    return response.status(200).json({ samplesSaved: samplesCQ.length });
+    return samplesCQ.length;
   }
 }

@@ -10,11 +10,17 @@ import helmet from 'helmet';
 
 import AppError from '@shared/errors/AppError';
 
+import schedule from '@shared/services/schedule';
+import SyncMyLIMS from '@shared/services/SyncMyLIMS';
+
+import SamplesController from '@modules/samples/infra/controller/SamplesControllerSched';
+
 import routes from './routes';
 import rateLimiter from './middlewares/rateLimiter';
 
 import '@shared/infra/typeorm';
 import '@shared/container';
+import apiMYLIMS from '@shared/services/apiMYLIMS';
 
 const app = express();
 
@@ -51,6 +57,33 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   });
 });
 
-app.listen(process.env.APP_PORT, () => {
-  console.log('API Server started on port', process.env.APP_PORT);
+const importAll = async (): Promise<number> => {
+  const samples = await apiMYLIMS.get('/samples?$inlinecount=allpages&$top=5');
+  const totalCount = samples.data.TotalCount as number;
+  const samplesController = new SamplesController();
+  // const skip = 0;
+  const top = 100;
+  let skip = 0;
+  const filter = '';
+  while (skip < totalCount) {
+    await samplesController.list(skip, top, filter);
+    skip += top;
+  }
+
+  return totalCount;
+};
+
+app.listen(process.env.APP_PORT, async () => {
+  // console.log('API Server started on port', process.env.APP_PORT);
+
+  console.log(
+    `\n${'#'.repeat(80)}` +
+      `\n#${' '.repeat(21)} Service now running on port '${
+        process.env.APP_PORT
+      }' ${' '.repeat(21)}#` +
+      `\n${'#'.repeat(80)}\n`,
+  );
+
+  // schedule(SyncMyLIMS);
+  importAll();
 });

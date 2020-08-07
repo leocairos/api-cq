@@ -33,7 +33,7 @@ const SampleAnalyses = async (
   });
 
   const sampleAnalysesCQ = await Promise.all(sampleAnalysesPromises);
-  console.log('  Analyses:', sampleAnalysesPromises.length);
+  //  console.log('  Analyses:', sampleAnalysesPromises.length);
   return sampleAnalysesCQ;
 };
 
