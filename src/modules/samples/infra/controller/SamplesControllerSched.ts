@@ -22,7 +22,7 @@ export default class Samples {
 
     await updAuxiliaries();
 
-    const defaultRoute = `/samples?$inlinecount=allpages&$top=${top}&$skip=${skip}&$orderby=Id desc`;
+    const defaultRoute = `/samples?$inlinecount=allpages&$top=${top}&$skip=${skip}`; // &$orderby=Id desc`;
 
     const samples = await apiMYLIMS.get(
       filter === '' ? defaultRoute : `${defaultRoute}&$filter=${filter}`,
