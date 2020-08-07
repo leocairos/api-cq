@@ -11,12 +11,12 @@ import { ISample } from '../../dtos/ISampleMYLIMSDTO';
 
 import updAuxiliaries from './AuxiliariesController';
 
-interface ISampleSummary {
+/* interface ISampleSummary {
   idSample: number;
   countInfo: number;
   countMethod: number;
   countAnalyses: number;
-}
+} */
 
 export default class Samples {
   public async list(
@@ -38,7 +38,7 @@ export default class Samples {
     );
 
     const samplesData = samples.data.Result as ISample[];
-    const sampleSummary: ISampleSummary[] = [];
+    // const sampleSummary: ISampleSummary[] = [];
     const createSample = container.resolve(CreateSampleService);
 
     const samplesPromises = samplesData.map(async sample => {
@@ -89,7 +89,7 @@ export default class Samples {
       });
 
       // console.log('sampleSaved:', sampleSaved.id);
-      console.log('   ', '|- ', 'savedSample:', sampleSaved.id);
+      // console.log('   ', '|- ', 'savedSample:', sampleSaved.id);
       const infoInSample = await sampleInfos(sampleSaved.id);
       /* console.log(
         '     ',
@@ -118,14 +118,14 @@ export default class Samples {
         sampleSaved.id,
       ); */
 
-      const sumaryAux = {
+      /* const sumaryAux = {
         idSample: sampleSaved.id,
         countInfo: infoInSample.length,
         countMethod: methodInSample.length,
         countAnalyses: analysesInSample.length,
       };
       sampleSummary.push(sumaryAux);
-      console.log('   ', '|- ', sumaryAux);
+      console.log('   ', '|- ', sumaryAux); */
       return sampleSaved;
     });
 
