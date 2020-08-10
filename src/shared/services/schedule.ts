@@ -8,7 +8,10 @@ const schedule = (exec: () => {}): void => {
     `Execution of function '${exec.name}' every ${process.env.INTERVAL_SINC_MYLIMS} seconds`,
   );
 
-  fs.unlinkSync(lockFile);
+  if (fs.existsSync(lockFile)) {
+    fs.unlinkSync(lockFile);
+  }
+
   setInterval(() => {
     try {
       if (!fs.existsSync(lockFile)) {
