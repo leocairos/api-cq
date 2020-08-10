@@ -1,21 +1,21 @@
 import fs from 'fs';
+import logger from '@config/logger';
 
 const schedule = (exec: () => {}): void => {
   const lockFile = `lock.lck`;
 
-  console.log(
-    `\r${new Date().toLocaleString()} Execution of function '${
-      exec.name
-    }' every ${process.env.INTERVAL_SINC_MYLIMS} seconds`,
+  logger.info(
+    `Execution of function '${exec.name}' every ${process.env.INTERVAL_SINC_MYLIMS} seconds`,
   );
 
+  fs.unlinkSync(lockFile);
   setInterval(() => {
     try {
       if (!fs.existsSync(lockFile)) {
         exec();
       }
     } catch (err) {
-      console.error(lockFile);
+      logger.error(lockFile);
     }
   }, Number(process.env.INTERVAL_SINC_MYLIMS) * 1000);
 };

@@ -15,3 +15,5 @@ tmp/uploads/*
 
 !tmp/uploads/.gitkeep
 !tmp/.gitkeep
+
+app.log

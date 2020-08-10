@@ -4,6 +4,7 @@ import { container } from 'tsyringe';
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 import CreateSampleService from '@modules/samples/services/CreateSampleService';
 
+import logger from '@config/logger';
 import sampleInfos from './SampleInfosController';
 import sampleMethods from './SampleMethodsController';
 import sampleAnalyses from './SampleAnalysesController';
@@ -23,8 +24,7 @@ export default class Samples {
     top: number,
     filter: string,
   ): Promise<number> {
-    console.log(
-      new Date(),
+    logger.info(
       `starting synchronization with myLIMs (records at time: ${process.env.COUNT_SINC_AT_TIME})`,
     );
 
@@ -36,6 +36,7 @@ export default class Samples {
 
     const samplesData = samples.data.Result as ISample[];
     // const sampleSummary: ISampleSummary[] = [];
+
     const createSample = container.resolve(CreateSampleService);
 
     const samplesPromises: number[] = [];
@@ -98,17 +99,20 @@ export default class Samples {
         },
       });
 
-      console.log('sampleSaved:', sampleSaved.id);
-      await sampleInfos(sampleSaved.id);
-      await sampleMethods(sampleSaved.id);
-      await sampleAnalyses(sampleSaved.id);
+      const countInfo = await sampleInfos(sampleSaved.id);
+      const countMethod = await sampleMethods(sampleSaved.id);
+      const countAnalyses = await sampleAnalyses(sampleSaved.id);
+
+      logger.info(
+        `sampleSaved: ${sampleSaved.id} with ${countInfo.length} Infos, ${countMethod.length} Methods and ${countAnalyses.length} Analyses.`,
+      );
 
       samplesPromises.push(sampleSaved.id);
     }
 
-    console.log('  ', '>> Total Samples found:  ', samplesData.length);
+    logger.info(`Total Samples found:  ${samplesData.length}`);
     const samplesCQ = await Promise.all(samplesPromises);
-    console.log(new Date(), 'end of synchronization with myLIMs');
+    logger.info('end of synchronization with myLIMs');
 
     return samplesCQ.length;
   }

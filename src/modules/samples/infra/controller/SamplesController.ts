@@ -5,6 +5,7 @@ import { container } from 'tsyringe';
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 import CreateSampleService from '@modules/samples/services/CreateSampleService';
 
+import logger from '@config/logger';
 import sampleInfos from './SampleInfosController';
 import sampleMethods from './SampleMethodsController';
 import sampleAnalyses from './SampleAnalysesController';
@@ -24,7 +25,7 @@ export default class Samples {
   public async list(request: Request, response: Response): Promise<Response> {
     const { skip = 0, top = 50, filter = '' } = request.query;
 
-    console.log(new Date(), 'starting synchronization with myLIMs');
+    logger.info('starting synchronization with myLIMs');
 
     await updAuxiliaries();
 
@@ -98,7 +99,7 @@ export default class Samples {
         },
       });
 
-      console.log('sampleSaved:', sampleSaved.id);
+      logger.info('sampleSaved:', sampleSaved.id);
       await sampleInfos(sampleSaved.id);
       await sampleMethods(sampleSaved.id);
       await sampleAnalyses(sampleSaved.id);
@@ -106,9 +107,9 @@ export default class Samples {
       samplesPromises.push(sampleSaved.id);
     }
 
-    console.log('  ', '>> Total Samples found:  ', samplesData.length);
+    logger.info(`Total Samples found: ${samplesData.length}`);
     const samplesCQ = await Promise.all(samplesPromises);
-    console.log(new Date(), 'end of synchronization with myLIMs');
+    logger.info('end of synchronization with myLIMs');
 
     return response.status(200).json({ samplesSaved: samplesCQ.length });
   }

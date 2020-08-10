@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import 'dotenv/config';
 import 'express-async-errors';
+import logger from '@config/logger';
 
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
@@ -43,13 +44,12 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
       message: err.message,
     });
   }
-  console.error(
-    '\n******************************************************************\n',
-    'ERROR:',
-    err.name,
-    err.message,
-    '\n******************************************************************\n',
-    err,
+  logger.error(
+    // console.error(
+    `\n******************************************************************\n
+    ERROR: ${err.name} ${err.message}
+    \n******************************************************************\n
+    ${err}`,
   );
 
   return response.status(500).json({
@@ -72,36 +72,18 @@ const importAll = async (): Promise<void> => {
     // eslint-disable-next-line no-await-in-loop
     await samplesController.list(skip, top, filter);
     skip += top;
-    console.log('\n\nSkip ', skip, '\n\n');
+    // console.log('\n\nSkip ', skip, '\n\n');
+    logger.info(`Skip ${skip}`);
   }
 };
 
-/* const importNews = async () => {
-
-  const samples = await apiMYLIMS.get('/samples?$inlinecount=allpages&$orderby=Id desc&$top=50&$skip=0&$filter=TakenDateTime ge DATETIME'2020-08-07' or ReceivedTime ge DATETIME'2020-08-07' or FinalizedTime ge DATETIME'2020-08-07' or PublishedTime ge DATETIME'2020-08-07' or ReviewedTime ge DATETIME'2020-08-07' or TakenDateTime eq null');
-  const totalCount = samples.data.TotalCount as number;
-  const samplesController = new SamplesController();
-
-  // await updAuxiliaries();
-  // const skip = 0;
-  const top = Number(process.env.COUNT_SINC_AT_TIME);
-  let skip = 0;
-  const filter = '';
-  while (skip < totalCount) {
-    await samplesController.list(skip, top, filter);
-    skip += top;
-  }
-};
-*/
 app.listen(process.env.APP_PORT, () => {
-  console.log(
-    `\n${'#'.repeat(80)}` +
-      `\n#${' '.repeat(21)} Service now running on port '${
-        process.env.APP_PORT
-      }' ${' '.repeat(21)}#` +
-      `\n${'#'.repeat(80)}\n`,
+  logger.info(
+    `\n${'#'.repeat(80)}\n#${' '.repeat(21)} Service now running on port '${
+      process.env.APP_PORT
+    }' ${' '.repeat(21)}# \n${'#'.repeat(80)}\n`,
   );
 
   schedule(SyncMyLIMS);
-  importAll();
+  // importAll();
 });

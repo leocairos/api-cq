@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 import CreateSampleAnalyseService from '@modules/samples/services/CreateSampleAnalyseService';
 // import ICreateSampleAnalyseDTO from '@modules/samples/dtos/ICreateSampleAnalyseDTO';
+import logger from '@config/logger';
 import { ISampleAnalyse } from '../../dtos/ISampleMYLIMSDTO';
 
 const SampleAnalyses = async (sampleId: number): Promise<number[]> => {
@@ -34,7 +35,7 @@ const SampleAnalyses = async (sampleId: number): Promise<number[]> => {
   });
 
   const sampleAnalysesCQ = await Promise.all(sampleAnalysesPromises);
-  console.log('  ', sampleId, ' Analyses:', sampleAnalysesPromises.length);
+  // logger.info(` ${sampleId},  Analyses: ${sampleAnalysesPromises.length}`);
   return sampleAnalysesCQ;
 };
 
