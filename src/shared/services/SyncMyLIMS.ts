@@ -6,22 +6,11 @@ import apiMYLIMS from './apiMYLIMS';
 
 const lockFile = 'lock.lck';
 
-const formatDate = (date: Date): string => {
-  const d = new Date(date);
-  let month = `${d.getMonth() + 1}`;
-  let day = `${d.getDate()}`;
-  const year = d.getFullYear();
-
-  if (month.length < 2) month = `0${month}`;
-  if (day.length < 2) day = `0${day}`;
-
-  return [year, month, day].join('-');
-};
-
-const importNews = async () => {
+const importNews = async (): Promise<void> => {
   const samplesController = new SamplesController();
   const lastDate = await samplesController.getLastEditionStored();
-  const formatedDate = formatDate(lastDate);
+  lastDate.setHours(lastDate.getHours() - 2);
+  const formatedDate = lastDate.toISOString();
   const baseURL = '/samples?$inlinecount=allpages&$top=5&$skip=0';
   const filter = `CurrentStatus/EditionDateTime ge DATETIME'${formatedDate}'`;
 

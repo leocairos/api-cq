@@ -22,7 +22,7 @@ export default class Samples {
       `starting synchronization with myLIMs (records at time: ${process.env.COUNT_SINC_AT_TIME})`,
     );
 
-    const defaultRoute = `/samples?$inlinecount=allpages&$top=${top}&$skip=${skip}&$orderby=Id desc`;
+    const defaultRoute = `/samples?$inlinecount=allpages&$top=${top}&$skip=${skip}&$orderby=CurrentStatus/EditionDateTime`;
 
     const samples = await apiMYLIMS.get(
       filter === '' ? defaultRoute : `${defaultRoute}&$filter=${filter}`,
