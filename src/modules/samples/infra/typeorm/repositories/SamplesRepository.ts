@@ -3,6 +3,7 @@ import { getRepository, Repository } from 'typeorm';
 import ISamplesRepository from '@modules/samples/repositories/ISamplesRepository';
 
 import ICreateSampleDTO from '@modules/samples/dtos/ICreateSampleDTO';
+
 import Sample from '../entities/Sample';
 
 class SamplesRepository implements ISamplesRepository {
@@ -73,6 +74,15 @@ class SamplesRepository implements ISamplesRepository {
     await this.ormRepository.save(createdSample);
 
     return createdSample;
+  }
+
+  public async findLastEdition(): Promise<Date> {
+    const findLastDate = await this.ormRepository.findOne({
+      order: { currentStatusEditionDateTime: 'DESC' },
+    });
+    return findLastDate
+      ? findLastDate.currentStatusEditionDateTime
+      : new Date();
   }
 }
 

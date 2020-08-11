@@ -5,18 +5,12 @@ import apiMYLIMS from '@shared/services/apiMYLIMS';
 import CreateSampleService from '@modules/samples/services/CreateSampleService';
 
 import logger from '@config/logger';
+import LastEditionSampleService from '@modules/samples/services/LastEditionSampleService';
 import sampleInfos from './SampleInfosController';
 import sampleMethods from './SampleMethodsController';
 import sampleAnalyses from './SampleAnalysesController';
 
 import { ISample } from '../../dtos/ISampleMYLIMSDTO';
-
-/* interface ISampleSummary {
-  idSample: number;
-  countInfo: number;
-  countMethod: number;
-  countAnalyses: number;
-} */
 
 export default class Samples {
   public async list(
@@ -35,12 +29,11 @@ export default class Samples {
     );
 
     const samplesData = samples.data.Result as ISample[];
-    // const sampleSummary: ISampleSummary[] = [];
 
     const createSample = container.resolve(CreateSampleService);
 
     const samplesPromises: number[] = [];
-    // samplesData.map(async (sample, index) => {
+
     // eslint-disable-next-line no-restricted-syntax
     for (const sample of samplesData) {
       const sampleSaved = await createSample.execute({
@@ -115,5 +108,14 @@ export default class Samples {
     logger.info('end of synchronization with myLIMs');
 
     return samplesCQ.length;
+  }
+
+  public async getLastEditionStored(): Promise<Date> {
+    logger.info(`getting last edition date stored`);
+    const lastEditionService = container.resolve(LastEditionSampleService);
+
+    const lastEditionDate = await lastEditionService.execute();
+
+    return lastEditionDate;
   }
 }

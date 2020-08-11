@@ -19,6 +19,9 @@ const schedule = (exec: () => {}): void => {
       }
     } catch (err) {
       logger.error(lockFile);
+      if (fs.existsSync(lockFile)) {
+        fs.unlinkSync(lockFile);
+      }
     }
   }, Number(process.env.INTERVAL_SINC_MYLIMS) * 1000);
 };

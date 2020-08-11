@@ -6,14 +6,30 @@ import apiMYLIMS from './apiMYLIMS';
 
 const lockFile = 'lock.lck';
 
+const formatDate = (date: Date): string => {
+  const d = new Date(date);
+  let month = `${d.getMonth() + 1}`;
+  let day = `${d.getDate()}`;
+  const year = d.getFullYear();
+
+  if (month.length < 2) month = `0${month}`;
+  if (day.length < 2) day = `0${day}`;
+
+  return [year, month, day].join('-');
+};
+
 const importNews = async () => {
+  const samplesController = new SamplesController();
+  const lastDate = await samplesController.getLastEditionStored();
+  const formatedDate = formatDate(lastDate);
   const baseURL = '/samples?$inlinecount=allpages&$top=5&$skip=0';
-  const filter = `CurrentStatus/EditionDateTime ge DATETIME'2020-08-07'`;
+  const filter = `CurrentStatus/EditionDateTime ge DATETIME'${formatedDate}'`;
+
   const samples = await apiMYLIMS.get(`${baseURL}&$filter=${filter}`);
 
   const totalCount = samples.data.TotalCount as number;
-  const samplesController = new SamplesController();
 
+  logger.info(`${totalCount} records until ${formatedDate}`);
   await updAuxiliaries();
   // const skip = 0;
   const top = Number(process.env.COUNT_SINC_AT_TIME);
@@ -42,6 +58,9 @@ const SyncRecords = async (): Promise<void> => {
     }
   } catch (err) {
     logger.error(lockFile);
+    if (fs.existsSync(lockFile)) {
+      fs.unlinkSync(lockFile);
+    }
   }
 };
 
