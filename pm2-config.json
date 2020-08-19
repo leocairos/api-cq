@@ -1,0 +1,14 @@
+{
+  "apps" : [
+    {
+      "name": "api-cq-sync",
+      "script": "dist/shared/infra/http/server.js",
+      "args":["sync"]
+    },
+    {
+      "name": "api-cq-import",
+      "script": "dist/shared/infra/http/server.js",
+      "args":["importAll"]
+    }
+  ]
+}
