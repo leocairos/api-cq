@@ -15,4 +15,5 @@ left join analysis_groups ag
 left join infos i2 
 	on sa.info_id = i2.id
 left join vw_samples_methods vsm 
-	on sa.sample_id + sa.method_id = vsm.sample_id + vsm.method_id 
+	on sa.sample_id = vsm.sample_id and  sa.method_id = vsm.method_id
+--order by sa.sample_id ;

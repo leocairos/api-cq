@@ -63,7 +63,7 @@ const importAll = async (): Promise<void> => {
   const totalCount = samples.data.TotalCount as number;
   const samplesController = new SamplesController();
 
-  await updAuxiliaries();
+  // await updAuxiliaries();
   // const skip = 0;
   const top = Number(process.env.COUNT_SINC_AT_TIME);
   let skip = 0;
@@ -84,6 +84,22 @@ app.listen(process.env.APP_PORT, () => {
     }' ${' '.repeat(21)}# \n${'#'.repeat(80)}\n`,
   );
 
-  schedule(SyncMyLIMS);
-  // importAll();
+  try {
+    switch (process.argv[2].toUpperCase()) {
+      case 'IMPORTALL':
+        logger.info(process.argv[2]);
+        importAll();
+        break;
+      case 'SYNC':
+        logger.info(process.argv[2]);
+        schedule(SyncMyLIMS);
+        break;
+      default:
+        logger.warn('Sorry, that is not something I know how to do.');
+        process.exit(1);
+    }
+  } catch {
+    logger.error('Expected at least one argument!');
+    process.exit(1);
+  }
 });
