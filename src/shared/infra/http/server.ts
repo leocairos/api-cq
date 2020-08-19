@@ -84,6 +84,8 @@ app.listen(process.env.APP_PORT, () => {
     }' ${' '.repeat(21)}# \n${'#'.repeat(80)}\n`,
   );
 
+  schedule(SyncMyLIMS);
+  /*
   try {
     switch (process.argv[2].toUpperCase()) {
       case 'IMPORTALL':
@@ -101,5 +103,5 @@ app.listen(process.env.APP_PORT, () => {
   } catch {
     logger.error('Expected at least one argument!');
     process.exit(1);
-  }
+  } */
 });
