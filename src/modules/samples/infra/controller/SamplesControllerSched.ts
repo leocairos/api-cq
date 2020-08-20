@@ -97,7 +97,7 @@ export default class Samples {
       const countAnalyses = await sampleAnalyses(sampleSaved.id);
 
       logger.info(
-        `sampleSaved: ${sampleSaved.id} with ${countInfo.length} Infos, ${countMethod.length} Methods and ${countAnalyses.length} Analyses.`,
+        `sample: ${sampleSaved.id} (${sampleSaved.currentStatusEditionDateTime}) with ${countInfo.length} Infos, ${countMethod.length} Methods and ${countAnalyses.length} Analyses.`,
       );
 
       samplesPromises.push(sampleSaved.id);

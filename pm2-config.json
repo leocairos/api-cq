@@ -6,7 +6,7 @@
       "args":["sync"]
     },
     {
-      "name": "api-cq-import",
+      "name": "api-cq-impo",
       "script": "dist/shared/infra/http/server.js",
       "args":["importAll"]
     }
