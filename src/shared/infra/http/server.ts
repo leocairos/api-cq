@@ -77,7 +77,27 @@ const importAll = async (): Promise<void> => {
   }
 };
 
-app.listen(process.env.APP_PORT, () => {
+const appPort = process.env.APP_PORT || 3039;
+let appPortChange = appPort as number;
+try {
+  switch (process.argv[2].toUpperCase()) {
+    case 'IMPORTALL':
+      appPortChange += 0;
+      break;
+    case 'SYNC':
+      appPortChange += 1;
+      break;
+    default:
+      logger.warn('Sorry, that is not something I know how to do.');
+      process.exit(1);
+  }
+} catch {
+  logger.error('Expected at least one argument!');
+  process.exit(1);
+}
+
+// app.listen(process.env.APP_PORT, () => {
+app.listen(appPortChange, () => {
   logger.info(
     `\n${'#'.repeat(80)}\n#${' '.repeat(21)} Service now running on port '${
       process.env.APP_PORT
