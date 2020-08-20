@@ -4,7 +4,22 @@ import SamplesController from '@modules/samples/infra/controller/SamplesControll
 import updAuxiliaries from '@modules/samples/infra/controller/AuxiliariesController';
 import apiMYLIMS from './apiMYLIMS';
 
-const lockFile = 'lock.lck';
+let lockFile = '';
+try {
+  switch (process.argv[2].toUpperCase()) {
+    case 'IMPORTALL':
+      lockFile = `lock-import.lck`;
+      break;
+    case 'SYNC':
+      lockFile = `lock-sync.lck`;
+      break;
+    default:
+      lockFile = `lock.lck`;
+      process.exit(1);
+  }
+} catch {
+  process.exit(1);
+}
 
 const importNews = async (): Promise<void> => {
   const samplesController = new SamplesController();
