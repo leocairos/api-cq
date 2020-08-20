@@ -15,7 +15,7 @@ import schedule from '@shared/services/schedule';
 import SyncMyLIMS from '@shared/services/SyncMyLIMS';
 
 import SamplesController from '@modules/samples/infra/controller/SamplesControllerSched';
-import updAuxiliaries from '@modules/samples/infra/controller/AuxiliariesController';
+// import updAuxiliaries from '@modules/samples/infra/controller/AuxiliariesController';
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 
 import routes from './routes';
