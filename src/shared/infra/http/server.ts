@@ -66,7 +66,8 @@ const importAll = async (): Promise<void> => {
   // await updAuxiliaries();
   // const skip = 0;
   const top = Number(process.env.COUNT_SINC_AT_TIME);
-  let skip = 0;
+  const skipEnv = process.env.INTERVAL_SINC_MYLIMS_SKIP || 0;
+  let skip = skipEnv as number;
   const filter = '';
   while (skip < totalCount) {
     // eslint-disable-next-line no-await-in-loop
