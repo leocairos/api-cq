@@ -1,22 +1,20 @@
 import fs from 'fs';
 import logger from '@config/logger';
+import runMode from '@config/runMode';
 
 const schedule = (exec: () => {}): void => {
-  let lockFile = '';
-  try {
-    switch (process.argv[2].toUpperCase()) {
-      case 'IMPORTALL':
-        lockFile = `lock-import.lck`;
-        break;
-      case 'SYNC':
-        lockFile = `lock-sync.lck`;
-        break;
-      default:
-        lockFile = `lock.lck`;
-        process.exit(1);
-    }
-  } catch {
-    process.exit(1);
+  let lockFile = 'lock.lck';
+
+  switch (runMode()) {
+    case 'importAll':
+      lockFile = `lock-import.lck`;
+      break;
+    case 'sync':
+      lockFile = `lock-sync.lck`;
+      break;
+    default:
+      lockFile = `lock.lck`;
+      process.exit(1);
   }
 
   logger.info(

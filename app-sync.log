@@ -1,0 +1,115 @@
+2020-08-22T21:22:45.770Z  info: 
+################################################################################
+#                      Service now running on port '3535'                      # 
+################################################################################
+
+2020-08-22T21:22:45.772Z  info: sync
+2020-08-22T21:22:49.007Z  info: Updating auxiliary...
+2020-08-22T21:22:50.870Z  info: Updated Sample Conclusions: 4 records
+2020-08-22T21:22:52.087Z  info: Updated Sample Reasons: 3 records
+2020-08-22T21:22:53.303Z  info: Updated Service Center: 1 records
+2020-08-22T21:22:55.139Z  info: Updated Sample Status: 15 records
+2020-08-22T21:23:05.149Z  info: Updated Sample Type: 221 records
+2020-08-22T21:27:36.316Z  info: 
+################################################################################
+#                      Service now running on port '3535'                      # 
+################################################################################
+
+2020-08-22T21:27:36.319Z  info: sync
+2020-08-22T21:27:40.864Z  info: Updating auxiliary...
+2020-08-22T21:27:42.776Z  info: Updated Sample Conclusions: 4 records
+2020-08-22T21:27:43.953Z  info: Updated Sample Reasons: 3 records
+2020-08-22T21:27:45.166Z  info: Updated Service Center: 1 records
+2020-08-22T21:27:47.043Z  info: Updated Sample Status: 15 records
+2020-08-22T21:27:49.067Z  info: Updated Sample Type: 221 records
+2020-08-22T21:27:51.119Z  info: Updated MyLIMS Users: 28 records
+2020-08-22T21:29:49.324Z  info: 
+################################################################################
+#                      Service now running on port '3535'                      # 
+################################################################################
+
+2020-08-22T21:29:49.325Z  info: sync
+2020-08-22T21:29:53.788Z  info: Updating auxiliary...
+2020-08-22T21:29:55.634Z  info: Updated Sample Conclusions: 4 records
+2020-08-22T21:29:56.804Z  info: Updated Sample Reasons: 3 records
+2020-08-22T21:29:58.015Z  info: Updated Service Center: 1 records
+2020-08-22T21:29:59.795Z  info: Updated Sample Status: 15 records
+2020-08-22T21:30:02.839Z  info: Updated Sample Type: 221 records
+2020-08-22T21:30:05.008Z  info: Updated MyLIMS Users: 28 records
+2020-08-22T21:30:10.928Z  info: Updated Collection Points: 721 records
+2020-08-22T21:30:25.836Z  info: Updated Infos: 323 records
+2020-08-22T21:30:26.982Z  info: Updated Service Areas: 7 records
+2020-08-22T21:30:28.235Z  info: Updated Method Types: 5 records
+2020-08-22T21:30:29.406Z  info: Updated Method Status: 4 records
+2020-08-22T21:30:33.586Z  info: Updated Methods: 90 records
+2020-08-22T21:30:48.988Z  info: Updated Analysis Groups: 420 records
+2020-08-22T21:30:52.004Z  info: Updating auxiliary...
+2020-08-22T21:30:53.303Z  info: Updated Sample Conclusions: 4 records
+2020-08-22T21:38:41.034Z  info: 
+################################################################################
+#                      Service now running on port '3535'                      # 
+################################################################################
+
+2020-08-22T21:38:41.035Z  info: sync
+2020-08-22T21:38:45.450Z  info: Updating auxiliary...
+2020-08-22T21:38:47.143Z  info: Updated Sample Conclusions: 4 records
+2020-08-22T21:38:48.821Z  info: Updated Sample Reasons: 3 records
+2020-08-22T21:38:50.038Z  info: Updated Service Center: 1 records
+2020-08-22T21:38:51.913Z  info: Updated Sample Status: 15 records
+2020-08-22T21:38:54.988Z  info: Updated Sample Type: 221 records
+2020-08-22T21:38:56.479Z  info: Updated MyLIMS Users: 28 records
+2020-08-22T21:39:01.631Z  info: Updated Collection Points: 721 records
+2020-08-22T21:39:16.288Z  info: Updated Infos: 323 records
+2020-08-22T21:39:17.534Z  info: Updated Service Areas: 7 records
+2020-08-22T21:39:18.632Z  info: Updated Method Types: 5 records
+2020-08-22T21:39:19.812Z  info: Updated Method Status: 4 records
+2020-08-22T21:39:21.503Z  info: Updated Methods: 90 records
+2020-08-22T21:39:23.929Z  info: Updated Analysis Groups: 420 records
+2020-08-22T21:39:27.003Z  info: Updating auxiliary...
+2020-08-22T21:39:28.246Z  info: Updated Sample Conclusions: 4 records
+2020-08-22T21:39:29.419Z  info: Updated Sample Reasons: 3 records
+2020-08-22T21:39:30.626Z  info: Updated Service Center: 1 records
+2020-08-22T21:39:32.509Z  info: Updated Sample Status: 15 records
+2020-08-22T21:41:08.277Z  info: 
+################################################################################
+#                      Service now running on port '3535'                      # 
+################################################################################
+
+2020-08-22T21:41:08.279Z  info: sync
+2020-08-22T21:41:12.827Z  info: Updating auxiliary...
+2020-08-22T21:41:15.028Z  info: Updated Sample Conclusions: 4 records
+2020-08-22T21:41:17.672Z  info: Updated Sample Reasons: 3 records
+2020-08-22T21:41:19.642Z  info: Updated Service Center: 1 records
+2020-08-22T21:41:23.124Z  info: Updated Sample Status: 15 records
+2020-08-22T21:41:26.317Z  info: Updated Sample Type: 221 records
+2020-08-22T21:41:28.787Z  info: Updated MyLIMS Users: 28 records
+2020-08-22T21:41:34.158Z  info: Updated Collection Points: 721 records
+2020-08-22T21:42:15.593Z  info: Updated Infos: 323 records
+2020-08-22T21:42:17.553Z  info: Updated Service Areas: 7 records
+2020-08-22T21:42:20.137Z  info: Updated Method Types: 5 records
+2020-08-22T21:42:22.234Z  info: Updated Method Status: 4 records
+2020-08-22T21:42:24.744Z  info: Updated Methods: 90 records
+2020-08-22T21:42:27.724Z  info: Updated Analysis Groups: 420 records
+2020-08-22T21:42:31.001Z  info: Updating auxiliary...
+2020-08-22T21:42:32.260Z  info: Updated Sample Conclusions: 4 records
+2020-08-22T21:43:32.960Z  info: 
+################################################################################
+#                      Service now running on port '3535'                      # 
+################################################################################
+
+2020-08-22T21:43:32.962Z  info: sync
+2020-08-22T21:43:36.036Z  info: Updating auxiliary...
+2020-08-22T21:43:37.556Z  info: Updated Sample Conclusions: 4 records
+2020-08-22T21:43:39.189Z  info: Updated Sample Reasons: 3 records
+2020-08-22T21:43:40.396Z  info: Updated Service Center: 1 records
+2020-08-22T21:43:42.271Z  info: Updated Sample Status: 15 records
+2020-08-22T21:43:44.292Z  info: Updated Sample Type: 221 records
+2020-08-22T21:43:45.845Z  info: Updated MyLIMS Users: 28 records
+2020-08-22T21:43:49.100Z  info: Updated Collection Points: 721 records
+2020-08-22T21:43:51.478Z  info: Updated Infos: 323 records
+2020-08-22T21:43:52.855Z  info: Updated Service Areas: 7 records
+2020-08-22T21:43:54.451Z  info: Updated Method Types: 5 records
+2020-08-22T21:43:55.625Z  info: Updated Method Status: 4 records
+2020-08-22T21:43:57.080Z  info: Updated Methods: 90 records
+2020-08-22T21:43:59.238Z  info: Updated Analysis Groups: 420 records
+2020-08-22T21:44:03.005Z  info: Updating auxiliary...
