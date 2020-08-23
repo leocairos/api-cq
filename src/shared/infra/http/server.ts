@@ -23,7 +23,7 @@ import apiMYLIMS from '@shared/services/apiMYLIMS';
 
 import AuxiliariesControllerv2 from '@modules/samples/infra/controller/AuxiliariesControllerv2';
 import runMode from '@config/runMode';
-import routes from './routes';
+// import routes from './routes';
 import rateLimiter from './middlewares/rateLimiter';
 
 createConnection();
@@ -39,7 +39,7 @@ app.use(helmet());
 app.disable('x-powered-by');
 
 app.use(rateLimiter);
-app.use(routes);
+// app.use(routes);
 
 app.use(errors());
 

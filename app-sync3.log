@@ -18354,3 +18354,239 @@
 2020-08-23T01:23:37.380Z  info: End step (101 to 200) of synchronization with myLIMs
 2020-08-23T01:23:37.413Z  info: 200 records imported (of 125189)
 2020-08-23T01:23:37.413Z  info: starting synchronization with myLIMs (records at time: 100)
+2020-08-23T01:36:37.366Z  info: 
+################################################################################
+#                      Service now running on port '3535'                      # 
+################################################################################
+
+2020-08-23T01:36:37.369Z  info: sync
+2020-08-23T01:36:42.841Z  info: starting synchronization with myLIMs (records at time: 100)
+2020-08-23T01:36:47.518Z  info: Total Samples found:  100
+2020-08-23T01:36:47.526Z  info: Total Samples avaliable to save: 100
+2020-08-23T01:36:52.514Z  info: samples Saved: 100 
+2020-08-23T01:36:52.515Z  info: Sample: 1441 last edition in 2018-08-17T19:21:31.16Z
+2020-08-23T01:36:52.516Z  info: Sample: 1440 last edition in 2018-08-18T01:34:05.923Z
+2020-08-23T01:36:52.517Z  info: Sample: 1442 last edition in 2018-08-18T17:50:32.127Z
+2020-08-23T01:36:52.518Z  info: Sample: 1446 last edition in 2018-08-20T13:31:01.55Z
+2020-08-23T01:36:52.519Z  info: Sample: 1445 last edition in 2018-08-20T14:00:39.857Z
+2020-08-23T01:36:52.520Z  info: Sample: 1448 last edition in 2018-08-20T14:01:40.503Z
+2020-08-23T01:36:52.522Z  info: Sample: 1443 last edition in 2018-08-20T14:04:34.93Z
+2020-08-23T01:36:52.523Z  info: Sample: 1449 last edition in 2018-08-20T14:18:00.153Z
+2020-08-23T01:36:52.524Z  info: Sample: 1444 last edition in 2018-08-20T15:09:57.05Z
+2020-08-23T01:36:52.525Z  info: Sample: 1447 last edition in 2018-08-20T16:49:11.483Z
+2020-08-23T01:36:52.525Z  info: Sample: 1456 last edition in 2018-08-20T19:03:56.303Z
+2020-08-23T01:36:52.526Z  info: Sample: 1461 last edition in 2018-08-21T10:08:42.623Z
+2020-08-23T01:36:52.532Z  info: Sample: 1463 last edition in 2018-08-21T11:30:53.587Z
+2020-08-23T01:36:52.533Z  info: Sample: 1465 last edition in 2018-08-21T11:40:48.373Z
+2020-08-23T01:36:52.535Z  info: Sample: 1466 last edition in 2018-08-21T11:47:08.127Z
+2020-08-23T01:36:52.536Z  info: Sample: 1468 last edition in 2018-08-21T12:01:09.207Z
+2020-08-23T01:36:52.537Z  info: Sample: 1469 last edition in 2018-08-21T12:18:42.173Z
+2020-08-23T01:36:52.538Z  info: Sample: 1471 last edition in 2018-08-21T12:31:57.127Z
+2020-08-23T01:36:52.539Z  info: Sample: 1472 last edition in 2018-08-21T12:32:20.403Z
+2020-08-23T01:36:52.541Z  info: Sample: 1474 last edition in 2018-08-21T12:35:41.58Z
+2020-08-23T01:36:52.554Z  info: Sample: 1475 last edition in 2018-08-21T12:40:57.97Z
+2020-08-23T01:36:52.556Z  info: Sample: 1476 last edition in 2018-08-21T12:48:51.823Z
+2020-08-23T01:36:52.557Z  info: Sample: 1477 last edition in 2018-08-21T12:49:00.087Z
+2020-08-23T01:36:52.567Z  info: Sample: 1478 last edition in 2018-08-21T12:49:21.793Z
+2020-08-23T01:36:52.569Z  info: Sample: 1479 last edition in 2018-08-21T12:49:57.617Z
+2020-08-23T01:36:52.570Z  info: Sample: 1480 last edition in 2018-08-21T12:59:57.963Z
+2020-08-23T01:36:52.571Z  info: Sample: 1481 last edition in 2018-08-21T13:18:24.807Z
+2020-08-23T01:36:52.572Z  info: Sample: 1488 last edition in 2018-08-21T13:37:36.747Z
+2020-08-23T01:36:52.573Z  info: Sample: 1489 last edition in 2018-08-21T13:45:24.38Z
+2020-08-23T01:36:52.583Z  info: Sample: 1490 last edition in 2018-08-21T13:49:23.687Z
+2020-08-23T01:36:52.584Z  info: Sample: 1491 last edition in 2018-08-21T13:54:10.303Z
+2020-08-23T01:36:52.586Z  info: Sample: 1493 last edition in 2018-08-21T14:16:05.127Z
+2020-08-23T01:36:52.587Z  info: Sample: 1496 last edition in 2018-08-21T14:42:33.333Z
+2020-08-23T01:36:52.588Z  info: Sample: 1494 last edition in 2018-08-21T14:49:23.617Z
+2020-08-23T01:36:52.589Z  info: Sample: 1500 last edition in 2018-08-21T15:46:23.837Z
+2020-08-23T01:36:52.590Z  info: Sample: 1501 last edition in 2018-08-21T15:50:25.043Z
+2020-08-23T01:36:52.600Z  info: Sample: 1502 last edition in 2018-08-21T15:53:35.813Z
+2020-08-23T01:36:52.602Z  info: Sample: 1503 last edition in 2018-08-21T16:23:01.06Z
+2020-08-23T01:36:52.603Z  info: Sample: 1505 last edition in 2018-08-21T16:40:16.867Z
+2020-08-23T01:36:52.604Z  info: Sample: 1506 last edition in 2018-08-21T16:46:18.233Z
+2020-08-23T01:36:52.605Z  info: Sample: 1507 last edition in 2018-08-21T16:53:01.577Z
+2020-08-23T01:36:52.606Z  info: Sample: 1509 last edition in 2018-08-21T17:01:00.153Z
+2020-08-23T01:36:52.607Z  info: Sample: 1510 last edition in 2018-08-21T17:15:19.817Z
+2020-08-23T01:36:52.618Z  info: Sample: 1513 last edition in 2018-08-21T18:46:08.56Z
+2020-08-23T01:36:52.619Z  info: Sample: 1512 last edition in 2018-08-21T18:47:10.327Z
+2020-08-23T01:36:52.620Z  info: Sample: 1514 last edition in 2018-08-21T18:48:31.437Z
+2020-08-23T01:36:52.622Z  info: Sample: 1515 last edition in 2018-08-21T18:50:54.437Z
+2020-08-23T01:36:52.623Z  info: Sample: 1518 last edition in 2018-08-21T19:26:43.157Z
+2020-08-23T01:36:52.624Z  info: Sample: 1521 last edition in 2018-08-21T19:48:33.45Z
+2020-08-23T01:36:52.634Z  info: Sample: 1522 last edition in 2018-08-21T19:51:08.397Z
+2020-08-23T01:36:52.635Z  info: Sample: 1523 last edition in 2018-08-21T19:54:50.577Z
+2020-08-23T01:36:52.636Z  info: Sample: 1524 last edition in 2018-08-21T19:58:28.01Z
+2020-08-23T01:36:52.637Z  info: Sample: 1525 last edition in 2018-08-21T20:00:29.147Z
+2020-08-23T01:36:52.638Z  info: Sample: 1526 last edition in 2018-08-21T20:03:36.543Z
+2020-08-23T01:36:52.639Z  info: Sample: 1527 last edition in 2018-08-21T20:05:57.613Z
+2020-08-23T01:36:52.640Z  info: Sample: 1528 last edition in 2018-08-21T20:07:58.54Z
+2020-08-23T01:36:52.650Z  info: Sample: 1529 last edition in 2018-08-21T20:09:47.657Z
+2020-08-23T01:36:52.651Z  info: Sample: 1530 last edition in 2018-08-21T20:12:58.353Z
+2020-08-23T01:36:52.652Z  info: Sample: 1531 last edition in 2018-08-21T20:15:55.357Z
+2020-08-23T01:36:52.653Z  info: Sample: 1532 last edition in 2018-08-21T20:18:05.507Z
+2020-08-23T01:36:52.654Z  info: Sample: 1533 last edition in 2018-08-21T20:20:19.783Z
+2020-08-23T01:36:52.655Z  info: Sample: 1534 last edition in 2018-08-21T20:22:39.34Z
+2020-08-23T01:36:52.656Z  info: Sample: 1538 last edition in 2018-08-22T12:49:02.887Z
+2020-08-23T01:36:52.657Z  info: Sample: 1539 last edition in 2018-08-22T12:53:33.167Z
+2020-08-23T01:36:52.667Z  info: Sample: 1541 last edition in 2018-08-22T13:14:34.287Z
+2020-08-23T01:36:52.668Z  info: Sample: 1542 last edition in 2018-08-22T13:14:42.88Z
+2020-08-23T01:36:52.669Z  info: Sample: 1543 last edition in 2018-08-22T13:16:36.223Z
+2020-08-23T01:36:52.670Z  info: Sample: 1544 last edition in 2018-08-22T13:18:27.197Z
+2020-08-23T01:36:52.671Z  info: Sample: 1545 last edition in 2018-08-22T13:25:28.153Z
+2020-08-23T01:36:52.674Z  info: Sample: 1546 last edition in 2018-08-22T13:29:08.617Z
+2020-08-23T01:36:52.684Z  info: Sample: 1547 last edition in 2018-08-22T13:32:47.417Z
+2020-08-23T01:36:52.686Z  info: Sample: 1548 last edition in 2018-08-22T13:35:17.533Z
+2020-08-23T01:36:52.687Z  info: Sample: 1549 last edition in 2018-08-22T13:37:53.103Z
+2020-08-23T01:36:52.688Z  info: Sample: 1550 last edition in 2018-08-22T13:42:08.37Z
+2020-08-23T01:36:52.689Z  info: Sample: 1460 last edition in 2018-08-22T13:48:05.42Z
+2020-08-23T01:36:52.690Z  info: Sample: 1470 last edition in 2018-08-22T13:48:05.45Z
+2020-08-23T01:36:52.691Z  info: Sample: 1482 last edition in 2018-08-22T13:48:05.48Z
+2020-08-23T01:36:52.701Z  info: Sample: 1484 last edition in 2018-08-22T13:48:05.497Z
+2020-08-23T01:36:52.702Z  info: Sample: 1485 last edition in 2018-08-22T13:48:05.527Z
+2020-08-23T01:36:52.703Z  info: Sample: 1486 last edition in 2018-08-22T13:48:05.543Z
+2020-08-23T01:36:52.704Z  info: Sample: 1487 last edition in 2018-08-22T13:48:05.577Z
+2020-08-23T01:36:52.705Z  info: Sample: 1498 last edition in 2018-08-22T13:48:05.637Z
+2020-08-23T01:36:52.706Z  info: Sample: 1551 last edition in 2018-08-22T14:01:12.847Z
+2020-08-23T01:36:52.707Z  info: Sample: 1552 last edition in 2018-08-22T14:19:22.007Z
+2020-08-23T01:36:52.708Z  info: Sample: 1553 last edition in 2018-08-22T14:22:52.567Z
+2020-08-23T01:36:52.718Z  info: Sample: 1555 last edition in 2018-08-22T14:43:04.183Z
+2020-08-23T01:36:52.721Z  info: Sample: 1556 last edition in 2018-08-22T14:49:31.76Z
+2020-08-23T01:36:52.722Z  info: Sample: 1558 last edition in 2018-08-22T14:55:07.217Z
+2020-08-23T01:36:52.723Z  info: Sample: 1557 last edition in 2018-08-22T14:55:42Z
+2020-08-23T01:36:52.733Z  info: Sample: 1559 last edition in 2018-08-22T15:00:26.413Z
+2020-08-23T01:36:52.735Z  info: Sample: 1560 last edition in 2018-08-22T15:04:25.39Z
+2020-08-23T01:36:52.736Z  info: Sample: 1561 last edition in 2018-08-22T15:07:58.42Z
+2020-08-23T01:36:52.737Z  info: Sample: 1562 last edition in 2018-08-22T15:13:01.003Z
+2020-08-23T01:36:52.738Z  info: Sample: 1563 last edition in 2018-08-22T15:16:03.037Z
+2020-08-23T01:36:52.739Z  info: Sample: 1564 last edition in 2018-08-22T15:18:30.693Z
+2020-08-23T01:36:52.740Z  info: Sample: 1554 last edition in 2018-08-22T16:35:19.243Z
+2020-08-23T01:36:52.751Z  info: Sample: 1567 last edition in 2018-08-22T17:22:17.267Z
+2020-08-23T01:36:52.752Z  info: Sample: 1568 last edition in 2018-08-22T17:54:07.487Z
+2020-08-23T01:36:52.753Z  info: Sample: 1570 last edition in 2018-08-22T19:57:23.78Z
+2020-08-23T01:36:52.754Z  info: Sample: 1571 last edition in 2018-08-23T09:26:52.457Z
+2020-08-23T01:36:52.755Z  info: Getting samples details (infos, methods and amalysis)... 
+2020-08-23T01:37:08.775Z  info: Total SamplesInfos saved: 376
+2020-08-23T01:37:08.776Z  info: Total SamplesMethods saved: 1075
+2020-08-23T01:37:08.777Z  info: Total SamplesAnalyses saved: 1392
+2020-08-23T01:37:08.792Z  info: End step (1 to 100) of synchronization with myLIMs
+2020-08-23T01:37:08.793Z  info: 100 records imported (of 125190)
+2020-08-23T01:37:08.794Z  info: starting synchronization with myLIMs (records at time: 100)
+2020-08-23T01:41:38.429Z  info: 
+################################################################################
+#                      Service now running on port '3535'                      # 
+################################################################################
+
+2020-08-23T01:41:38.431Z  info: sync
+2020-08-23T01:41:43.888Z  info: starting synchronization with myLIMs (records at time: 100)
+2020-08-23T01:41:48.310Z  info: Total Samples found:  100
+2020-08-23T01:41:48.315Z  info: Total Samples avaliable to save: 100
+2020-08-23T01:41:52.691Z  info: samples Saved: 100 
+2020-08-23T01:41:52.691Z  info: Sample: 1441 last edition in 2018-08-17T19:21:31.16Z
+2020-08-23T01:41:52.693Z  info: Sample: 1440 last edition in 2018-08-18T01:34:05.923Z
+2020-08-23T01:41:52.694Z  info: Sample: 1442 last edition in 2018-08-18T17:50:32.127Z
+2020-08-23T01:41:52.695Z  info: Sample: 1446 last edition in 2018-08-20T13:31:01.55Z
+2020-08-23T01:41:52.696Z  info: Sample: 1445 last edition in 2018-08-20T14:00:39.857Z
+2020-08-23T01:41:52.697Z  info: Sample: 1448 last edition in 2018-08-20T14:01:40.503Z
+2020-08-23T01:41:52.697Z  info: Sample: 1443 last edition in 2018-08-20T14:04:34.93Z
+2020-08-23T01:41:52.698Z  info: Sample: 1449 last edition in 2018-08-20T14:18:00.153Z
+2020-08-23T01:41:52.699Z  info: Sample: 1444 last edition in 2018-08-20T15:09:57.05Z
+2020-08-23T01:41:52.700Z  info: Sample: 1447 last edition in 2018-08-20T16:49:11.483Z
+2020-08-23T01:41:52.701Z  info: Sample: 1456 last edition in 2018-08-20T19:03:56.303Z
+2020-08-23T01:41:52.702Z  info: Sample: 1461 last edition in 2018-08-21T10:08:42.623Z
+2020-08-23T01:41:52.702Z  info: Sample: 1463 last edition in 2018-08-21T11:30:53.587Z
+2020-08-23T01:41:52.704Z  info: Sample: 1465 last edition in 2018-08-21T11:40:48.373Z
+2020-08-23T01:41:52.709Z  info: Sample: 1466 last edition in 2018-08-21T11:47:08.127Z
+2020-08-23T01:41:52.711Z  info: Sample: 1468 last edition in 2018-08-21T12:01:09.207Z
+2020-08-23T01:41:52.712Z  info: Sample: 1469 last edition in 2018-08-21T12:18:42.173Z
+2020-08-23T01:41:52.713Z  info: Sample: 1471 last edition in 2018-08-21T12:31:57.127Z
+2020-08-23T01:41:52.714Z  info: Sample: 1472 last edition in 2018-08-21T12:32:20.403Z
+2020-08-23T01:41:52.715Z  info: Sample: 1474 last edition in 2018-08-21T12:35:41.58Z
+2020-08-23T01:41:52.716Z  info: Sample: 1475 last edition in 2018-08-21T12:40:57.97Z
+2020-08-23T01:41:52.716Z  info: Sample: 1476 last edition in 2018-08-21T12:48:51.823Z
+2020-08-23T01:41:52.717Z  info: Sample: 1477 last edition in 2018-08-21T12:49:00.087Z
+2020-08-23T01:41:52.718Z  info: Sample: 1478 last edition in 2018-08-21T12:49:21.793Z
+2020-08-23T01:41:52.720Z  info: Sample: 1479 last edition in 2018-08-21T12:49:57.617Z
+2020-08-23T01:41:52.734Z  info: Sample: 1480 last edition in 2018-08-21T12:59:57.963Z
+2020-08-23T01:41:52.735Z  info: Sample: 1481 last edition in 2018-08-21T13:18:24.807Z
+2020-08-23T01:41:52.736Z  info: Sample: 1488 last edition in 2018-08-21T13:37:36.747Z
+2020-08-23T01:41:52.746Z  info: Sample: 1489 last edition in 2018-08-21T13:45:24.38Z
+2020-08-23T01:41:52.747Z  info: Sample: 1490 last edition in 2018-08-21T13:49:23.687Z
+2020-08-23T01:41:52.749Z  info: Sample: 1491 last edition in 2018-08-21T13:54:10.303Z
+2020-08-23T01:41:52.750Z  info: Sample: 1493 last edition in 2018-08-21T14:16:05.127Z
+2020-08-23T01:41:52.751Z  info: Sample: 1496 last edition in 2018-08-21T14:42:33.333Z
+2020-08-23T01:41:52.752Z  info: Sample: 1494 last edition in 2018-08-21T14:49:23.617Z
+2020-08-23T01:41:52.754Z  info: Sample: 1500 last edition in 2018-08-21T15:46:23.837Z
+2020-08-23T01:41:52.764Z  info: Sample: 1501 last edition in 2018-08-21T15:50:25.043Z
+2020-08-23T01:41:52.766Z  info: Sample: 1502 last edition in 2018-08-21T15:53:35.813Z
+2020-08-23T01:41:52.767Z  info: Sample: 1503 last edition in 2018-08-21T16:23:01.06Z
+2020-08-23T01:41:52.768Z  info: Sample: 1505 last edition in 2018-08-21T16:40:16.867Z
+2020-08-23T01:41:52.769Z  info: Sample: 1506 last edition in 2018-08-21T16:46:18.233Z
+2020-08-23T01:41:52.780Z  info: Sample: 1507 last edition in 2018-08-21T16:53:01.577Z
+2020-08-23T01:41:52.782Z  info: Sample: 1509 last edition in 2018-08-21T17:01:00.153Z
+2020-08-23T01:41:52.783Z  info: Sample: 1510 last edition in 2018-08-21T17:15:19.817Z
+2020-08-23T01:41:52.784Z  info: Sample: 1513 last edition in 2018-08-21T18:46:08.56Z
+2020-08-23T01:41:52.785Z  info: Sample: 1512 last edition in 2018-08-21T18:47:10.327Z
+2020-08-23T01:41:52.786Z  info: Sample: 1514 last edition in 2018-08-21T18:48:31.437Z
+2020-08-23T01:41:52.796Z  info: Sample: 1515 last edition in 2018-08-21T18:50:54.437Z
+2020-08-23T01:41:52.797Z  info: Sample: 1518 last edition in 2018-08-21T19:26:43.157Z
+2020-08-23T01:41:52.798Z  info: Sample: 1521 last edition in 2018-08-21T19:48:33.45Z
+2020-08-23T01:41:52.799Z  info: Sample: 1522 last edition in 2018-08-21T19:51:08.397Z
+2020-08-23T01:41:52.800Z  info: Sample: 1523 last edition in 2018-08-21T19:54:50.577Z
+2020-08-23T01:41:52.801Z  info: Sample: 1524 last edition in 2018-08-21T19:58:28.01Z
+2020-08-23T01:41:52.802Z  info: Sample: 1525 last edition in 2018-08-21T20:00:29.147Z
+2020-08-23T01:41:52.803Z  info: Sample: 1526 last edition in 2018-08-21T20:03:36.543Z
+2020-08-23T01:41:52.814Z  info: Sample: 1527 last edition in 2018-08-21T20:05:57.613Z
+2020-08-23T01:41:52.815Z  info: Sample: 1528 last edition in 2018-08-21T20:07:58.54Z
+2020-08-23T01:41:52.816Z  info: Sample: 1529 last edition in 2018-08-21T20:09:47.657Z
+2020-08-23T01:41:52.817Z  info: Sample: 1530 last edition in 2018-08-21T20:12:58.353Z
+2020-08-23T01:41:52.818Z  info: Sample: 1531 last edition in 2018-08-21T20:15:55.357Z
+2020-08-23T01:41:52.819Z  info: Sample: 1532 last edition in 2018-08-21T20:18:05.507Z
+2020-08-23T01:41:52.820Z  info: Sample: 1533 last edition in 2018-08-21T20:20:19.783Z
+2020-08-23T01:41:52.830Z  info: Sample: 1534 last edition in 2018-08-21T20:22:39.34Z
+2020-08-23T01:41:52.832Z  info: Sample: 1538 last edition in 2018-08-22T12:49:02.887Z
+2020-08-23T01:41:52.833Z  info: Sample: 1539 last edition in 2018-08-22T12:53:33.167Z
+2020-08-23T01:41:52.834Z  info: Sample: 1541 last edition in 2018-08-22T13:14:34.287Z
+2020-08-23T01:41:52.835Z  info: Sample: 1542 last edition in 2018-08-22T13:14:42.88Z
+2020-08-23T01:41:52.836Z  info: Sample: 1543 last edition in 2018-08-22T13:16:36.223Z
+2020-08-23T01:41:52.846Z  info: Sample: 1544 last edition in 2018-08-22T13:18:27.197Z
+2020-08-23T01:41:52.848Z  info: Sample: 1545 last edition in 2018-08-22T13:25:28.153Z
+2020-08-23T01:41:52.849Z  info: Sample: 1546 last edition in 2018-08-22T13:29:08.617Z
+2020-08-23T01:41:52.850Z  info: Sample: 1547 last edition in 2018-08-22T13:32:47.417Z
+2020-08-23T01:41:52.851Z  info: Sample: 1548 last edition in 2018-08-22T13:35:17.533Z
+2020-08-23T01:41:52.852Z  info: Sample: 1549 last edition in 2018-08-22T13:37:53.103Z
+2020-08-23T01:41:52.853Z  info: Sample: 1550 last edition in 2018-08-22T13:42:08.37Z
+2020-08-23T01:41:52.854Z  info: Sample: 1460 last edition in 2018-08-22T13:48:05.42Z
+2020-08-23T01:41:52.865Z  info: Sample: 1470 last edition in 2018-08-22T13:48:05.45Z
+2020-08-23T01:41:52.866Z  info: Sample: 1482 last edition in 2018-08-22T13:48:05.48Z
+2020-08-23T01:41:52.867Z  info: Sample: 1484 last edition in 2018-08-22T13:48:05.497Z
+2020-08-23T01:41:52.868Z  info: Sample: 1485 last edition in 2018-08-22T13:48:05.527Z
+2020-08-23T01:41:52.870Z  info: Sample: 1486 last edition in 2018-08-22T13:48:05.543Z
+2020-08-23T01:41:52.880Z  info: Sample: 1487 last edition in 2018-08-22T13:48:05.577Z
+2020-08-23T01:41:52.881Z  info: Sample: 1498 last edition in 2018-08-22T13:48:05.637Z
+2020-08-23T01:41:52.882Z  info: Sample: 1551 last edition in 2018-08-22T14:01:12.847Z
+2020-08-23T01:41:52.883Z  info: Sample: 1552 last edition in 2018-08-22T14:19:22.007Z
+2020-08-23T01:41:52.884Z  info: Sample: 1553 last edition in 2018-08-22T14:22:52.567Z
+2020-08-23T01:41:52.885Z  info: Sample: 1555 last edition in 2018-08-22T14:43:04.183Z
+2020-08-23T01:41:52.886Z  info: Sample: 1556 last edition in 2018-08-22T14:49:31.76Z
+2020-08-23T01:41:52.887Z  info: Sample: 1558 last edition in 2018-08-22T14:55:07.217Z
+2020-08-23T01:41:52.897Z  info: Sample: 1557 last edition in 2018-08-22T14:55:42Z
+2020-08-23T01:41:52.898Z  info: Sample: 1559 last edition in 2018-08-22T15:00:26.413Z
+2020-08-23T01:41:52.899Z  info: Sample: 1560 last edition in 2018-08-22T15:04:25.39Z
+2020-08-23T01:41:52.900Z  info: Sample: 1561 last edition in 2018-08-22T15:07:58.42Z
+2020-08-23T01:41:52.901Z  info: Sample: 1562 last edition in 2018-08-22T15:13:01.003Z
+2020-08-23T01:41:52.902Z  info: Sample: 1563 last edition in 2018-08-22T15:16:03.037Z
+2020-08-23T01:41:52.904Z  info: Sample: 1564 last edition in 2018-08-22T15:18:30.693Z
+2020-08-23T01:41:52.914Z  info: Sample: 1554 last edition in 2018-08-22T16:35:19.243Z
+2020-08-23T01:41:52.915Z  info: Sample: 1567 last edition in 2018-08-22T17:22:17.267Z
+2020-08-23T01:41:52.916Z  info: Sample: 1568 last edition in 2018-08-22T17:54:07.487Z
+2020-08-23T01:41:52.917Z  info: Sample: 1570 last edition in 2018-08-22T19:57:23.78Z
+2020-08-23T01:41:52.918Z  info: Sample: 1571 last edition in 2018-08-23T09:26:52.457Z
+2020-08-23T01:41:52.919Z  info: Getting samples details (infos, methods and amalysis)... 
+2020-08-23T01:42:20.831Z  info: Total SamplesInfos saved: 376
+2020-08-23T01:42:20.834Z  info: Total SamplesMethods saved: 1075
+2020-08-23T01:42:20.834Z  info: Total SamplesAnalyses saved: 1392
+2020-08-23T01:42:20.835Z  info: End step (1 to 100) of synchronization with myLIMs
+2020-08-23T01:42:20.835Z  info: 100 records imported (of 125190)
+2020-08-23T01:42:20.845Z  info: starting synchronization with myLIMs (records at time: 100)
+2020-08-23T01:42:25.324Z  info: Total Samples found:  100
+2020-08-23T01:42:25.331Z  info: Total Samples avaliable to save: 100
