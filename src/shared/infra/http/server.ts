@@ -1,61 +1,20 @@
 /* eslint-disable no-case-declarations */
-import 'reflect-metadata';
 import 'dotenv/config';
-import 'express-async-errors';
 import logger from '@config/logger';
 
 import createConnection from '@shared/infra/typeorm';
 import { CronJob } from 'cron';
 
-import express, { Request, Response, NextFunction } from 'express';
-import cors from 'cors';
-import { errors } from 'celebrate';
-
-import helmet from 'helmet';
-
-import AppError from '@shared/errors/AppError';
+import express from 'express';
 
 import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesControllerv2';
-
 import apiMYLIMS from '@shared/services/apiMYLIMS';
-
 import AuxiliariesControllerv2 from '@modules/samples/infra/controller/AuxiliariesControllerv2';
 import runMode from '@config/runMode';
-import rateLimiter from './middlewares/rateLimiter';
 
 createConnection();
 
 const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.use(helmet());
-app.disable('x-powered-by');
-
-app.use(rateLimiter);
-app.use(errors());
-
-app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
-  if (err instanceof AppError) {
-    return response.status(err.statusCode).json({
-      status: 'error',
-      message: err.message,
-    });
-  }
-  logger.error(
-    // console.error(
-    `\n******************************************************************\n
-    ERROR: ${err.name} ${err.message}
-    \n******************************************************************\n
-    ${err}`,
-  );
-
-  return response.status(500).json({
-    status: 'error',
-    message: `Internal server error! ${err.name}: ${err.message} `,
-  });
-});
 
 const importAllSamples = async (): Promise<void> => {
   const samples = await apiMYLIMS.get('/samples?$inlinecount=allpages&$top=5');

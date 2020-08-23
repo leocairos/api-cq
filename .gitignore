@@ -17,3 +17,5 @@ tmp/uploads/*
 !tmp/.gitkeep
 
 app.log
+app-sync.log
+app-importAll.log

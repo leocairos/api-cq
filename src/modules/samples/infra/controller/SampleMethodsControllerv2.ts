@@ -19,7 +19,7 @@ const SampleMethodsController = async (sampleId: number): Promise<number> => {
       id: method.Id,
       sample_id: sampleId,
       method_id: method.Method.Id,
-      service_area_id: method.ServiceArea.Id,
+      service_area_id: method.ServiceArea?.Id,
       method_status_id: method.CurrentStatus?.MethodStatus?.Id,
       edition_user_id: method.CurrentStatus?.EditionUser?.Id,
       editionDateTime: method.CurrentStatus?.EditionDateTime,
