@@ -1,24 +1,17 @@
-/* eslint-disable no-await-in-loop */
-
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 
 import logger from '@config/logger';
-import { getRepository, Repository } from 'typeorm';
-import sampleInfos from './SampleInfosController';
-import sampleMethods from './SampleMethodsController';
-import sampleAnalyses from './SampleAnalysesController';
+// import LastEditionSampleService from '@modules/samples/services/LastEditionSampleService';
+import { getRepository, createConnection } from 'typeorm';
+import sampleInfosv2 from './SampleInfosControllerv2';
+import sampleMethodsv2 from './SampleMethodsControllerv2';
+import sampleAnalysesv2 from './SampleAnalysesControllerv2';
 
 import { ISample } from '../../dtos/ISampleMYLIMSDTO';
 import Sample from '../typeorm/entities/Sample';
 
-export default class SamplesController {
-  private ormRepository: Repository<Sample>;
-
-  constructor() {
-    this.ormRepository = getRepository(Sample);
-  }
-
-  public async list(
+export default class Samples {
+  public async update(
     skip: number,
     top: number,
     filter: string,
@@ -26,7 +19,12 @@ export default class SamplesController {
     logger.info(
       `starting synchronization with myLIMs (records at time: ${process.env.COUNT_SINC_AT_TIME})`,
     );
-
+    try {
+      await createConnection();
+    } catch {
+      //
+    }
+    const ormRepository = getRepository(Sample);
     const defaultRoute = `/samples?$inlinecount=allpages&$top=${top}&$skip=${skip}&$orderby=CurrentStatus/EditionDateTime`;
 
     const samples = await apiMYLIMS.get(
@@ -35,11 +33,10 @@ export default class SamplesController {
 
     const samplesData = samples.data.Result as ISample[];
 
-    const samplesPromises: number[] = [];
+    logger.info(`Total Samples found:  ${samplesData.length}`);
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const sample of samplesData) {
-      const sampleSaved = this.ormRepository.create({
+    const samplesToSave = samplesData.map(sample => {
+      const sampleCreated = ormRepository.create({
         id: sample.Id,
         identification: sample.Identification,
         controlNumber: sample.ControlNumber,
@@ -59,68 +56,112 @@ export default class SamplesController {
         publishedTime: sample.PublishedTime,
         reviewedTime: sample.ReviewedTime,
 
-        sampleStatus: {
-          id: sample.CurrentStatus?.SampleStatus?.Id,
-          identification: sample.CurrentStatus?.SampleStatus?.Identification,
-        },
-        currentStatusUser: {
-          id: sample.CurrentStatus?.EditionUser?.Id,
-          identification: sample.CurrentStatus?.EditionUser?.Identification,
-        },
+        sampleStatus: sample.CurrentStatus?.SampleStatus?.Id
+          ? {
+              id: sample.CurrentStatus?.SampleStatus?.Id,
+              identification:
+                sample.CurrentStatus?.SampleStatus?.Identification,
+            }
+          : undefined,
+        currentStatusUser: sample.CurrentStatus?.EditionUser?.Id
+          ? {
+              id: sample.CurrentStatus?.EditionUser?.Id,
+              identification: sample.CurrentStatus?.EditionUser?.Identification,
+            }
+          : undefined,
         currentStatusEditionDateTime: sample.CurrentStatus?.EditionDateTime,
 
-        sampleServiceCenter: {
-          id: sample.ServiceCenter?.Id,
-          identification: sample.ServiceCenter?.Identification,
-        },
+        sampleServiceCenter: sample.ServiceCenter?.Id
+          ? {
+              id: sample.ServiceCenter?.Id,
+              identification: sample.ServiceCenter?.Identification,
+            }
+          : undefined,
 
-        sampleConclusion: {
-          id: sample.SampleConclusion?.Id,
-          identification: sample.SampleConclusion?.Identification,
-        },
+        sampleConclusion: sample.SampleConclusion?.Id
+          ? {
+              id: sample.SampleConclusion?.Id,
+              identification: sample.SampleConclusion?.Identification,
+            }
+          : undefined,
 
-        sampleReason: {
-          id: sample.SampleReason?.Id,
-          identification: sample.SampleReason?.Identification,
-        },
+        sampleReason: sample.SampleReason?.Id
+          ? {
+              id: sample.SampleReason?.Id,
+              identification: sample.SampleReason?.Identification,
+            }
+          : undefined,
 
-        sampleType: {
-          id: sample.SampleType?.Id,
-          identification: sample.SampleType?.Identification,
-        },
+        sampleType: sample.SampleType?.Id
+          ? {
+              id: sample.SampleType?.Id,
+              identification: sample.SampleType?.Identification,
+            }
+          : undefined,
 
-        sampleCollectionPoint: {
-          id: sample.CollectionPoint?.Id,
-          identification: sample.CollectionPoint?.Identification,
-        },
+        sampleCollectionPoint: sample.CollectionPoint?.Id
+          ? {
+              id: sample.CollectionPoint?.Id,
+              identification: sample.CollectionPoint?.Identification,
+            }
+          : undefined,
       });
+      return sampleCreated;
+    });
 
-      const countInfo = await sampleInfos(sampleSaved.id);
-      const countMethod = await sampleMethods(sampleSaved.id);
-      const countAnalyses = await sampleAnalyses(sampleSaved.id);
+    const toSave = await Promise.all(samplesToSave);
+    logger.info(`Total Samples avaliable to save: ${toSave.length}`);
 
+    const samplesSaved = await ormRepository.save(toSave);
+
+    logger.info(`samples Saved: ${samplesSaved.length} `);
+    const samplesDataSaved = samplesSaved.map(async sample => {
       logger.info(
-        `sample: ${sampleSaved.id} (${sampleSaved.currentStatusEditionDateTime}) with ${countInfo.length} Infos, ${countMethod.length} Methods and ${countAnalyses.length} Analyses.`,
+        `Sample: ${sample.id} last edition in ${sample.currentStatusEditionDateTime}`,
       );
 
-      samplesPromises.push(sampleSaved.id);
-    }
+      const sampleInfoSaved = await sampleInfosv2(sample.id);
+      const sampleMethodSaved = await sampleMethodsv2(sample.id);
+      const sampleAnalysesSaved = await sampleAnalysesv2(sample.id);
 
-    logger.info(`Total Samples found:  ${samplesData.length}`);
-    const samplesCQ = await Promise.all(samplesPromises);
-    logger.info('end of synchronization with myLIMs');
-
-    return samplesCQ.length;
-  }
-
-  public async getLastEditionStored(): Promise<Date> {
-    logger.info(`getting last edition date stored`);
-
-    const findLastDate = await this.ormRepository.findOne({
-      order: { currentStatusEditionDateTime: 'DESC' },
+      return {
+        infosCount: sampleInfoSaved,
+        methodsCount: sampleMethodSaved,
+        analysesCount: sampleAnalysesSaved,
+      };
     });
-    return findLastDate
-      ? findLastDate.currentStatusEditionDateTime
-      : new Date();
+
+    logger.info(`Getting samples details (infos, methods and amalysis)... `);
+    const countData = await Promise.all(samplesDataSaved);
+
+    const totalInfo = countData.reduce((ac, info) => {
+      return ac + info.infosCount;
+    }, 0);
+    logger.info(`Total SamplesInfos saved: ${totalInfo}`);
+
+    const totalMethods = countData.reduce((ac, method) => {
+      return ac + method.methodsCount;
+    }, 0);
+    logger.info(`Total SamplesMethods saved: ${totalMethods}`);
+
+    const totalAnalyses = countData.reduce((ac, method) => {
+      return ac + method.analysesCount;
+    }, 0);
+    logger.info(`Total SamplesAnalyses saved: ${totalAnalyses}`);
+
+    logger.info(
+      `End step (${skip + 1} to ${skip + top}) of synchronization with myLIMs`,
+    );
+
+    return samplesSaved.length;
   }
+
+  /* public async getLastEditionStored(): Promise<Date> {
+    logger.info(`getting last edition date stored`);
+    const lastEditionService = container.resolve(LastEditionSampleService);
+
+    const lastEditionDate = await lastEditionService.execute();
+
+    return lastEditionDate;
+  } */
 }

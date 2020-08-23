@@ -14,12 +14,12 @@ import { errors } from 'celebrate';
 import helmet from 'helmet';
 
 import AppError from '@shared/errors/AppError';
-import schedule from '@shared/services/schedule';
+// import schedule from '@shared/services/schedule';
 // import SyncMyLIMS from '@shared/services/SyncMyLIMS';
 
-// import SamplesController from '@modules/samples/infra/controller/SamplesControllerSched';
+import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesControllerv2';
 // import updAuxiliaries from '@modules/samples/infra/controller/AuxiliariesController';
-// import apiMYLIMS from '@shared/services/apiMYLIMS';
+import apiMYLIMS from '@shared/services/apiMYLIMS';
 
 import AuxiliariesControllerv2 from '@modules/samples/infra/controller/AuxiliariesControllerv2';
 import runMode from '@config/runMode';
@@ -64,25 +64,27 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   });
 });
 
-/* const importAll = async (): Promise<void> => {
+const importAllSamples = async (): Promise<void> => {
   const samples = await apiMYLIMS.get('/samples?$inlinecount=allpages&$top=5');
   const totalCount = samples.data.TotalCount as number;
-  const samplesController = new SamplesController();
+  const samplesController = new SamplesControllerv2();
 
   // await updAuxiliaries();
   // const skip = 0;
   const top = Number(process.env.COUNT_SINC_AT_TIME);
-  const skipEnv = process.env.INTERVAL_SINC_MYLIMS_SKIP || 0;
-  let skip = skipEnv as number;
+  let skip = Number(process.env.INTERVAL_SINC_MYLIMS_SKIP || 0);
+  let recordsProcesseds = 0;
   const filter = '';
   while (skip < totalCount) {
     // eslint-disable-next-line no-await-in-loop
-    await samplesController.list(skip, top, filter);
+    const recordsProcNow = await samplesController.update(skip, top, filter);
     skip += top;
+    recordsProcesseds += recordsProcNow;
     // console.log('\n\nSkip ', skip, '\n\n');
-    logger.info(`Skip ${skip}`);
+    logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
   }
-}; */
+  logger.info(`Finished with ${totalCount} imported records`);
+};
 
 /* const importNews = async (): Promise<void> => {
   const samplesController = new SamplesController();
@@ -151,7 +153,8 @@ app.listen(appPortChange, () => {
         if (!isRunning) {
           isRunning = true;
           setTimeout(async () => {
-            await AuxiliariesControllerv2();
+            // await AuxiliariesControllerv2();
+            await importAllSamples();
             isRunning = false;
           }, 3000);
         }
