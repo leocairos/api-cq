@@ -156,12 +156,20 @@ export default class Samples {
     return samplesSaved.length;
   }
 
-  /* public async getLastEditionStored(): Promise<Date> {
+  public async getLastEditionStored(): Promise<Date> {
     logger.info(`getting last edition date stored`);
-    const lastEditionService = container.resolve(LastEditionSampleService);
+    try {
+      await createConnection();
+    } catch {
+      //
+    }
+    const ormRepository = getRepository(Sample);
 
-    const lastEditionDate = await lastEditionService.execute();
-
-    return lastEditionDate;
-  } */
+    const findLastDate = await ormRepository.findOne({
+      order: { currentStatusEditionDateTime: 'DESC' },
+    });
+    return findLastDate
+      ? findLastDate.currentStatusEditionDateTime
+      : new Date();
+  }
 }
