@@ -109,6 +109,7 @@ export default class Samples {
       return sampleCreated;
     });
 
+    let samplesCount = 0;
     await Promise.all(samplesToSave)
       .then(async toSave => {
         logger.info(`Total Samples avaliable to save: ${toSave.length}`);
@@ -159,7 +160,7 @@ export default class Samples {
               }) of synchronization with myLIMs`,
             );
 
-            return samplesSaved.length;
+            samplesCount = samplesSaved.length;
           })
           .catch(error => {
             logger.error(`[SamplesController A] Aborted with error: ${error}`);
@@ -170,7 +171,8 @@ export default class Samples {
         logger.error(`[SamplesController B] Aborted with error: ${error}`);
         // process.exit(1);
       });
-    return 0;
+
+    return samplesCount;
   }
 
   public async getLastEditionStored(): Promise<Date> {

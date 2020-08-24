@@ -24,17 +24,18 @@ const SampleInfosController = async (sampleId: number): Promise<number> => {
     return sampleInfoCreated;
   });
 
+  let sampleInfosCount = 0;
   await Promise.all(sampleInfosToSave)
     .then(async toSave => {
       const sampleInfosSaved = await ormRepository.save(toSave);
       // logger.info(` ${sampleId}, Infos: ${sampleInfosPromises.length}`);
-      return sampleInfosSaved.length;
+      sampleInfosCount = sampleInfosSaved.length;
     })
     .catch(error => {
       logger.error(`[SampleInfosController] Aborted with error: ${error}`);
       // process.exit(1);
     });
-  return 0;
+  return sampleInfosCount;
 };
 
 export default SampleInfosController;
