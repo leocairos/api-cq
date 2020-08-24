@@ -39,7 +39,7 @@ const importNews = async (): Promise<void> => {
   const samplesController = new SamplesControllerv2();
   const lastDate = await samplesController.getLastEditionStored();
   lastDate.setHours(
-    lastDate.getHours() - Number(process.env.COUNT_SINC_AT_TIME || 12),
+    lastDate.getHours() - Number(process.env.HOUR_TO_RETROCED_IMPORT || 12),
   );
   const formatedDate = lastDate.toISOString();
   const baseURL = '/samples?$inlinecount=allpages&$top=5&$skip=0';
