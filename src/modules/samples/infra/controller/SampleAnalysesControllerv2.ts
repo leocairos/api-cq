@@ -30,7 +30,7 @@ const SampleAnalysesController = async (sampleId: number): Promise<number> => {
     return sampleAnalyseSaved;
   });
 
-  Promise.all(sampleAnalysesToSave)
+  await Promise.all(sampleAnalysesToSave)
     .then(async toSave => {
       const sampleAnalysisSaved = await ormRepository.save(toSave);
       // logger.info(` ${sampleId}, Analysis: ${sampleAnalysisSaved.length}`);

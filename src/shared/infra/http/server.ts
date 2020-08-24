@@ -104,7 +104,9 @@ app.listen(appPort, () => {
       break;
 
     case 'sync':
-      logger.info(process.argv[2]);
+      logger.info(
+        `Importing updated records in the last ${process.env.HOUR_TO_RETROCED_IMPORT} hours`,
+      );
 
       let isRunning = false;
       try {

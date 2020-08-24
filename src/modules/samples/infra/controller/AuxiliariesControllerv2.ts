@@ -51,7 +51,7 @@ const updateSampleConclusion = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  Promise.all(auxiliarToSave)
+  await Promise.all(auxiliarToSave)
     .then(async toSave => {
       const auxiliarSaved = await ormRepository.save(toSave);
       logger.info(
@@ -80,7 +80,7 @@ const updateSampleReasons = async (): Promise<void> => {
     return auxiliarSaved;
   });
 
-  Promise.all(auxiliarPromises)
+  await Promise.all(auxiliarPromises)
     .then(() => {
       logger.info(`Updated Sample Reasons: ${auxiliarPromises.length} records`);
     })
@@ -106,7 +106,7 @@ const updateServiceCenter = async (): Promise<void> => {
     return auxiliarSaved;
   });
 
-  Promise.all(auxiliarPromises)
+  await Promise.all(auxiliarPromises)
     .then(() => {
       logger.info(`Updated Service Center: ${auxiliarPromises.length} records`);
     })
@@ -132,7 +132,7 @@ const updateSampleStatus = async (): Promise<void> => {
     return auxiliarSaved;
   });
 
-  Promise.all(auxiliarPromises)
+  await Promise.all(auxiliarPromises)
     .then(() => {
       logger.info(`Updated Sample Status: ${auxiliarPromises.length} records`);
     })
@@ -157,7 +157,7 @@ const updateSampleType = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  Promise.all(auxiliarToSave)
+  await Promise.all(auxiliarToSave)
     .then(async toSave => {
       const auxiliarSaved = await ormRepository.save(toSave);
       logger.info(`Updated Sample Type: ${auxiliarSaved.length} records`);
@@ -183,7 +183,7 @@ const updateMyLIMSUser = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  Promise.all(auxiliarToSave)
+  await Promise.all(auxiliarToSave)
     .then(async toSave => {
       const auxiliarSaved = await ormRepository.save(toSave);
       logger.info(`Updated MyLIMS Users: ${auxiliarSaved.length} records`);
@@ -209,7 +209,7 @@ const updateCollectionPoint = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  Promise.all(auxiliarToSave)
+  await Promise.all(auxiliarToSave)
     .then(async toSave => {
       const auxiliarSaved = await ormRepository.save(toSave);
       logger.info(`Updated Collection Points: ${auxiliarSaved.length} records`);
@@ -235,7 +235,7 @@ const updateInfo = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  Promise.all(auxiliarToSave)
+  await Promise.all(auxiliarToSave)
     .then(async toSave => {
       const auxiliarSaved = await ormRepository.save(toSave);
       logger.info(`Updated Infos: ${auxiliarSaved.length} records`);
@@ -262,7 +262,7 @@ const updateServiceArea = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  Promise.all(auxiliarToSave)
+  await Promise.all(auxiliarToSave)
     .then(async toSave => {
       const auxiliarSaved = await ormRepository.save(toSave);
       logger.info(`Updated Service Areas: ${auxiliarSaved.length} records`);
@@ -289,7 +289,7 @@ const updateMethodType = async (): Promise<void> => {
     return auxiliarSaved;
   });
 
-  Promise.all(auxiliarPromises)
+  await Promise.all(auxiliarPromises)
     .then(() => {
       logger.info(`Updated Method Types: ${auxiliarPromises.length} records`);
     })
@@ -315,7 +315,7 @@ const updateMethodStatus = async (): Promise<void> => {
     return auxiliarSaved;
   });
 
-  Promise.all(auxiliarPromises)
+  await Promise.all(auxiliarPromises)
     .then(() => {
       logger.info(`Updated Method Status: ${auxiliarPromises.length} records`);
     })
@@ -341,7 +341,7 @@ const updateMethod = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  Promise.all(auxiliarToSave)
+  await Promise.all(auxiliarToSave)
     .then(async toSave => {
       const auxiliarSaved = await ormRepository.save(toSave);
       logger.info(`Updated Methods: ${auxiliarSaved.length} records`);
@@ -367,7 +367,7 @@ const updateAnalysisGroup = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  Promise.all(auxiliarToSave)
+  await Promise.all(auxiliarToSave)
     .then(async toSave => {
       const auxiliarSaved = await ormRepository.save(toSave);
       logger.info(`Updated Analysis Groups: ${auxiliarSaved.length} records`);

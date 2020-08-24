@@ -24,7 +24,7 @@ const SampleInfosController = async (sampleId: number): Promise<number> => {
     return sampleInfoCreated;
   });
 
-  Promise.all(sampleInfosToSave)
+  await Promise.all(sampleInfosToSave)
     .then(async toSave => {
       const sampleInfosSaved = await ormRepository.save(toSave);
       // logger.info(` ${sampleId}, Infos: ${sampleInfosPromises.length}`);

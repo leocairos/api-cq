@@ -109,7 +109,7 @@ export default class Samples {
       return sampleCreated;
     });
 
-    Promise.all(samplesToSave)
+    await Promise.all(samplesToSave)
       .then(async toSave => {
         logger.info(`Total Samples avaliable to save: ${toSave.length}`);
 
@@ -136,7 +136,7 @@ export default class Samples {
         logger.info(
           `Getting samples details (infos, methods and analysis)... `,
         );
-        Promise.all(samplesDataSaved)
+        await Promise.all(samplesDataSaved)
           .then(countData => {
             const totalInfo = countData.reduce((ac, info) => {
               return ac + info.infosCount;
