@@ -38,7 +38,9 @@ const importAllSamples = async (): Promise<void> => {
 const importNews = async (): Promise<void> => {
   const samplesController = new SamplesControllerv2();
   const lastDate = await samplesController.getLastEditionStored();
-  lastDate.setHours(lastDate.getHours() - 12);
+  lastDate.setHours(
+    lastDate.getHours() - Number(process.env.COUNT_SINC_AT_TIME || 12),
+  );
   const formatedDate = lastDate.toISOString();
   const baseURL = '/samples?$inlinecount=allpages&$top=5&$skip=0';
   const filter = `CurrentStatus/EditionDateTime ge DATETIME'${formatedDate}'`;
