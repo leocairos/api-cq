@@ -109,52 +109,68 @@ export default class Samples {
       return sampleCreated;
     });
 
-    const toSave = await Promise.all(samplesToSave);
-    logger.info(`Total Samples avaliable to save: ${toSave.length}`);
+    Promise.all(samplesToSave)
+      .then(async toSave => {
+        logger.info(`Total Samples avaliable to save: ${toSave.length}`);
 
-    const samplesSaved = await ormRepository.save(toSave);
+        const samplesSaved = await ormRepository.save(toSave);
 
-    logger.info(`samples Saved: ${samplesSaved.length} `);
+        logger.info(`samples Saved: ${samplesSaved.length} `);
 
-    const samplesDataSaved = samplesSaved.map(async sample => {
-      logger.info(
-        `Sample: ${sample.id} last edition in ${sample.currentStatusEditionDateTime}`,
-      );
+        const samplesDataSaved = samplesSaved.map(async sample => {
+          logger.info(
+            `Sample: ${sample.id} last edition in ${sample.currentStatusEditionDateTime}`,
+          );
 
-      const sampleInfoSaved = await sampleInfosv2(sample.id);
-      const sampleMethodSaved = await sampleMethodsv2(sample.id);
-      const sampleAnalysesSaved = await sampleAnalysesv2(sample.id);
+          const sampleInfoSaved = await sampleInfosv2(sample.id);
+          const sampleMethodSaved = await sampleMethodsv2(sample.id);
+          const sampleAnalysesSaved = await sampleAnalysesv2(sample.id);
 
-      return {
-        infosCount: sampleInfoSaved,
-        methodsCount: sampleMethodSaved,
-        analysesCount: sampleAnalysesSaved,
-      };
-    });
+          return {
+            infosCount: sampleInfoSaved,
+            methodsCount: sampleMethodSaved,
+            analysesCount: sampleAnalysesSaved,
+          };
+        });
 
-    logger.info(`Getting samples details (infos, methods and analysis)... `);
-    const countData = await Promise.all(samplesDataSaved);
+        logger.info(
+          `Getting samples details (infos, methods and analysis)... `,
+        );
+        Promise.all(samplesDataSaved)
+          .then(countData => {
+            const totalInfo = countData.reduce((ac, info) => {
+              return ac + info.infosCount;
+            }, 0);
+            logger.info(`Total SamplesInfos saved: ${totalInfo}`);
 
-    const totalInfo = countData.reduce((ac, info) => {
-      return ac + info.infosCount;
-    }, 0);
-    logger.info(`Total SamplesInfos saved: ${totalInfo}`);
+            const totalMethods = countData.reduce((ac, method) => {
+              return ac + method.methodsCount;
+            }, 0);
+            logger.info(`Total SamplesMethods saved: ${totalMethods}`);
 
-    const totalMethods = countData.reduce((ac, method) => {
-      return ac + method.methodsCount;
-    }, 0);
-    logger.info(`Total SamplesMethods saved: ${totalMethods}`);
+            const totalAnalyses = countData.reduce((ac, method) => {
+              return ac + method.analysesCount;
+            }, 0);
+            logger.info(`Total SamplesAnalyses saved: ${totalAnalyses}`);
 
-    const totalAnalyses = countData.reduce((ac, method) => {
-      return ac + method.analysesCount;
-    }, 0);
-    logger.info(`Total SamplesAnalyses saved: ${totalAnalyses}`);
+            logger.info(
+              `End step (${skip + 1} to ${
+                skip + top
+              }) of synchronization with myLIMs`,
+            );
 
-    logger.info(
-      `End step (${skip + 1} to ${skip + top}) of synchronization with myLIMs`,
-    );
-
-    return samplesSaved.length;
+            return samplesSaved.length;
+          })
+          .catch(error => {
+            logger.error(`[SamplesController A] Finished with error: ${error}`);
+            process.exit(1);
+          });
+      })
+      .catch(error => {
+        logger.error(`[SamplesController B] Finished with error: ${error}`);
+        process.exit(1);
+      });
+    return 0;
   }
 
   public async getLastEditionStored(): Promise<Date> {
