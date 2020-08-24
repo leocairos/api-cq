@@ -26,6 +26,7 @@ const options = {
 
 // instantiate a new Winston Logger with the settings defined above
 const logger = createLogger({
+  level: 'info',
   format: combine(timestamp(), myFormat),
   transports: [
     new transports.File(options.file),

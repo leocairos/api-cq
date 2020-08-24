@@ -17,51 +17,61 @@ createConnection();
 const app = express();
 
 const importAllSamples = async (): Promise<void> => {
-  const samples = await apiMYLIMS.get('/samples?$inlinecount=allpages&$top=5');
-  const totalCount = samples.data.TotalCount as number;
-  const samplesController = new SamplesControllerv2();
+  try {
+    const samples = await apiMYLIMS.get(
+      '/samples?$inlinecount=allpages&$top=5',
+    );
+    const totalCount = samples.data.TotalCount as number;
+    const samplesController = new SamplesControllerv2();
 
-  const top = Number(process.env.COUNT_SINC_AT_TIME);
-  let skip = Number(process.env.INTERVAL_SINC_MYLIMS_SKIP || 0);
-  let recordsProcesseds = 0;
-  const filter = '';
-  while (skip < totalCount) {
-    // eslint-disable-next-line no-await-in-loop
-    const recordsProcNow = await samplesController.update(skip, top, filter);
-    skip += top;
-    recordsProcesseds += recordsProcNow;
-    logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
+    const top = Number(process.env.COUNT_SINC_AT_TIME);
+    let skip = Number(process.env.INTERVAL_SINC_MYLIMS_SKIP || 0);
+    let recordsProcesseds = 0;
+    const filter = '';
+    while (skip < totalCount) {
+      // eslint-disable-next-line no-await-in-loop
+      const recordsProcNow = await samplesController.update(skip, top, filter);
+      skip += top;
+      recordsProcesseds += recordsProcNow;
+      logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
+    }
+    logger.info(`Finished with ${totalCount} imported records`);
+  } catch (err) {
+    logger.error(`Finished with error: ${err}`);
   }
-  logger.info(`Finished with ${totalCount} imported records`);
 };
 
 const importNews = async (): Promise<void> => {
-  const samplesController = new SamplesControllerv2();
-  const lastDate = await samplesController.getLastEditionStored();
-  lastDate.setHours(
-    lastDate.getHours() - Number(process.env.HOUR_TO_RETROCED_IMPORT || 12),
-  );
-  const formatedDate = lastDate.toISOString();
-  const baseURL = '/samples?$inlinecount=allpages&$top=5&$skip=0';
-  const filter = `CurrentStatus/EditionDateTime ge DATETIME'${formatedDate}'`;
+  try {
+    const samplesController = new SamplesControllerv2();
+    const lastDate = await samplesController.getLastEditionStored();
+    lastDate.setHours(
+      lastDate.getHours() - Number(process.env.HOUR_TO_RETROCED_IMPORT || 12),
+    );
+    const formatedDate = lastDate.toISOString();
+    const baseURL = '/samples?$inlinecount=allpages&$top=5&$skip=0';
+    const filter = `CurrentStatus/EditionDateTime ge DATETIME'${formatedDate}'`;
 
-  const samples = await apiMYLIMS.get(`${baseURL}&$filter=${filter}`);
+    const samples = await apiMYLIMS.get(`${baseURL}&$filter=${filter}`);
 
-  const totalCount = samples.data.TotalCount as number;
+    const totalCount = samples.data.TotalCount as number;
 
-  logger.info(`${totalCount} records until ${formatedDate}`);
+    logger.info(`${totalCount} records until ${formatedDate}`);
 
-  const top = Number(process.env.COUNT_SINC_AT_TIME);
-  let skip = 0;
-  let recordsProcesseds = 0;
-  while (skip < totalCount) {
-    // eslint-disable-next-line no-await-in-loop
-    const recordsProcNow = await samplesController.update(skip, top, filter);
-    skip += top;
-    recordsProcesseds += recordsProcNow;
-    logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
+    const top = Number(process.env.COUNT_SINC_AT_TIME);
+    let skip = 0;
+    let recordsProcesseds = 0;
+    while (skip < totalCount) {
+      // eslint-disable-next-line no-await-in-loop
+      const recordsProcNow = await samplesController.update(skip, top, filter);
+      skip += top;
+      recordsProcesseds += recordsProcNow;
+      logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
+    }
+    logger.info(`Finished with ${totalCount} imported records`);
+  } catch (err) {
+    logger.error(`Finished with error: ${err}`);
   }
-  logger.info(`Finished with ${totalCount} imported records`);
 };
 
 const appPort = process.env.APP_PORT || 3039;

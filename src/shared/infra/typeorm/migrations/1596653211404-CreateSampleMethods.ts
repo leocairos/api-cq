@@ -28,6 +28,7 @@ export default class CreateSampleMethods1596653211404
           {
             name: 'service_area_id',
             type: 'integer',
+            isNullable: true,
           },
           // Begin CurrentStatus
           {

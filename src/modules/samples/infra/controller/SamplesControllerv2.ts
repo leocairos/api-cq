@@ -131,7 +131,7 @@ export default class Samples {
       };
     });
 
-    logger.info(`Getting samples details (infos, methods and amalysis)... `);
+    logger.info(`Getting samples details (infos, methods and analysis)... `);
     const countData = await Promise.all(samplesDataSaved);
 
     const totalInfo = countData.reduce((ac, info) => {

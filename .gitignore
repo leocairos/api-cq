@@ -5,8 +5,8 @@ dist/
 temp/
 coverage/
 .env
-ormconfig_prod.json
-ormconfig_dev.json
+ormconfig-prod.json
+ormconfig-dev.json
 ormconfig.json
 
 tmp/*
@@ -16,6 +16,4 @@ tmp/uploads/*
 !tmp/uploads/.gitkeep
 !tmp/.gitkeep
 
-app.log
-app-sync.log
-app-importAll.log
+*.log
