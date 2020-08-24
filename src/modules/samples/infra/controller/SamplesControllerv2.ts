@@ -116,38 +116,24 @@ export default class Samples {
 
     logger.info(`samples Saved: ${samplesSaved.length} `);
 
-    // const samplesDataSaved = samplesSaved.map(async sample => {
-    const samplesDataSaved = [];
-    // eslint-disable-next-line no-restricted-syntax
-    for (const sample of samplesSaved) {
+    const samplesDataSaved = samplesSaved.map(async sample => {
       logger.info(
         `Sample: ${sample.id} last edition in ${sample.currentStatusEditionDateTime}`,
       );
 
-      // eslint-disable-next-line no-await-in-loop
       const sampleInfoSaved = await sampleInfosv2(sample.id);
-      // eslint-disable-next-line no-await-in-loop
       const sampleMethodSaved = await sampleMethodsv2(sample.id);
-      // eslint-disable-next-line no-await-in-loop
       const sampleAnalysesSaved = await sampleAnalysesv2(sample.id);
 
-      samplesDataSaved.push({
+      return {
         infosCount: sampleInfoSaved,
         methodsCount: sampleMethodSaved,
         analysesCount: sampleAnalysesSaved,
-      });
-
-      /* return {
-        infosCount: sampleInfoSaved,
-        methodsCount: sampleMethodSaved,
-        analysesCount: sampleAnalysesSaved,
-      }; */
-    }
-    // );
+      };
+    });
 
     logger.info(`Getting samples details (infos, methods and analysis)... `);
-    // const countData = await Promise.all(samplesDataSaved);
-    const countData = samplesDataSaved;
+    const countData = await Promise.all(samplesDataSaved);
 
     const totalInfo = countData.reduce((ac, info) => {
       return ac + info.infosCount;

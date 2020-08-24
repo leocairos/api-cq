@@ -81,9 +81,11 @@ switch (runMode()) {
 
 app.listen(appPortChange, () => {
   logger.info(
-    `\n${'#'.repeat(80)}\n#${' '.repeat(21)} Service now running on port '${
-      process.env.APP_PORT
-    }' ${' '.repeat(21)}# \n${'#'.repeat(80)}\n`,
+    `\n${'#'.repeat(80)}\n#${' '.repeat(
+      21,
+    )} Service now running on port '${appPortChange}' ${' '.repeat(
+      21,
+    )}# \n${'#'.repeat(80)}\n`,
   );
 
   switch (runMode()) {
