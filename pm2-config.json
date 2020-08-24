@@ -4,7 +4,7 @@
       "name": "api-cq-sync",
       "script": "dist/shared/infra/http/server.js",
       "args":["sync"],
-      "watch": ["server", "client"],
+      "watch": true,
       "watch_delay": 1000,
       "ignore_watch" : ["node_modules", "app-sync.log*", "app-impo.log*"],
       "watch_options": {
@@ -15,7 +15,7 @@
       "name": "api-cq-impo",
       "script": "dist/shared/infra/http/server.js",
       "args":["importAll"],
-      "watch": ["server", "client"],
+      "watch": true,
       "watch_delay": 1000,
       "ignore_watch" : ["node_modules", "app-sync.log*", "app-impo.log*"],
       "watch_options": {
