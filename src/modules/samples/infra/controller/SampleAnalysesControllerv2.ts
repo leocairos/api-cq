@@ -37,8 +37,8 @@ const SampleAnalysesController = async (sampleId: number): Promise<number> => {
       return sampleAnalysisSaved.length;
     })
     .catch(error => {
-      logger.error(`[SampleAnalysesController] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[SampleAnalysesController] Aborted with error: ${error}`);
+      // process.exit(1);
     });
   return 0;
 };

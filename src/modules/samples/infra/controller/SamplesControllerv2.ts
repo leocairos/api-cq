@@ -162,13 +162,13 @@ export default class Samples {
             return samplesSaved.length;
           })
           .catch(error => {
-            logger.error(`[SamplesController A] Finished with error: ${error}`);
-            process.exit(1);
+            logger.error(`[SamplesController A] Aborted with error: ${error}`);
+            // process.exit(1);
           });
       })
       .catch(error => {
-        logger.error(`[SamplesController B] Finished with error: ${error}`);
-        process.exit(1);
+        logger.error(`[SamplesController B] Aborted with error: ${error}`);
+        // process.exit(1);
       });
     return 0;
   }

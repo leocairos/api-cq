@@ -31,8 +31,8 @@ const SampleInfosController = async (sampleId: number): Promise<number> => {
       return sampleInfosSaved.length;
     })
     .catch(error => {
-      logger.error(`[SampleInfosController] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[SampleInfosController] Aborted with error: ${error}`);
+      // process.exit(1);
     });
   return 0;
 };

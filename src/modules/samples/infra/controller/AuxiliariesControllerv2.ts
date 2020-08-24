@@ -59,8 +59,8 @@ const updateSampleConclusion = async (): Promise<void> => {
       );
     })
     .catch(error => {
-      logger.error(`[updateSampleConclusion] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateSampleConclusion] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
@@ -85,8 +85,8 @@ const updateSampleReasons = async (): Promise<void> => {
       logger.info(`Updated Sample Reasons: ${auxiliarPromises.length} records`);
     })
     .catch(error => {
-      logger.error(`[updateSampleReasons] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateSampleReasons] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
@@ -111,8 +111,8 @@ const updateServiceCenter = async (): Promise<void> => {
       logger.info(`Updated Service Center: ${auxiliarPromises.length} records`);
     })
     .catch(error => {
-      logger.error(`[updateServiceCenter] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateServiceCenter] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
@@ -137,8 +137,8 @@ const updateSampleStatus = async (): Promise<void> => {
       logger.info(`Updated Sample Status: ${auxiliarPromises.length} records`);
     })
     .catch(error => {
-      logger.error(`[updateSampleStatus] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateSampleStatus] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
@@ -163,8 +163,8 @@ const updateSampleType = async (): Promise<void> => {
       logger.info(`Updated Sample Type: ${auxiliarSaved.length} records`);
     })
     .catch(error => {
-      logger.error(`[updateSampleType] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateSampleType] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
@@ -189,8 +189,8 @@ const updateMyLIMSUser = async (): Promise<void> => {
       logger.info(`Updated MyLIMS Users: ${auxiliarSaved.length} records`);
     })
     .catch(error => {
-      logger.error(`[updateMyLIMSUser] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateMyLIMSUser] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
@@ -215,8 +215,8 @@ const updateCollectionPoint = async (): Promise<void> => {
       logger.info(`Updated Collection Points: ${auxiliarSaved.length} records`);
     })
     .catch(error => {
-      logger.error(`[updateCollectionPoint] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateCollectionPoint] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
@@ -241,8 +241,8 @@ const updateInfo = async (): Promise<void> => {
       logger.info(`Updated Infos: ${auxiliarSaved.length} records`);
     })
     .catch(error => {
-      logger.error(`[updateInfo] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateInfo] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
@@ -268,8 +268,8 @@ const updateServiceArea = async (): Promise<void> => {
       logger.info(`Updated Service Areas: ${auxiliarSaved.length} records`);
     })
     .catch(error => {
-      logger.error(`[updateServiceArea] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateServiceArea] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
@@ -294,8 +294,8 @@ const updateMethodType = async (): Promise<void> => {
       logger.info(`Updated Method Types: ${auxiliarPromises.length} records`);
     })
     .catch(error => {
-      logger.error(`[updateMethodType] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateMethodType] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
@@ -320,8 +320,8 @@ const updateMethodStatus = async (): Promise<void> => {
       logger.info(`Updated Method Status: ${auxiliarPromises.length} records`);
     })
     .catch(error => {
-      logger.error(`[updateMethodStatus] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateMethodStatus] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
@@ -347,8 +347,8 @@ const updateMethod = async (): Promise<void> => {
       logger.info(`Updated Methods: ${auxiliarSaved.length} records`);
     })
     .catch(error => {
-      logger.error(`[updateMethod] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateMethod] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
@@ -373,8 +373,8 @@ const updateAnalysisGroup = async (): Promise<void> => {
       logger.info(`Updated Analysis Groups: ${auxiliarSaved.length} records`);
     })
     .catch(error => {
-      logger.error(`[updateAnalysisGroup] Finished with error: ${error}`);
-      process.exit(1);
+      logger.error(`[updateAnalysisGroup] Aborted with error: ${error}`);
+      // process.exit(1);
     });
 };
 
