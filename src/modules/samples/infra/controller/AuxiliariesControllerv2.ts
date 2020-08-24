@@ -51,10 +51,17 @@ const updateSampleConclusion = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  const toSave = await Promise.all(auxiliarToSave);
-  const auxiliarSaved = await ormRepository.save(toSave);
-
-  logger.info(`Updated Sample Conclusions: ${auxiliarSaved.length} records`);
+  Promise.all(auxiliarToSave)
+    .then(async toSave => {
+      const auxiliarSaved = await ormRepository.save(toSave);
+      logger.info(
+        `Updated Sample Conclusions: ${auxiliarSaved.length} records`,
+      );
+    })
+    .catch(error => {
+      logger.error(`[updateSampleConclusion] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updateSampleReasons = async (): Promise<void> => {
@@ -73,8 +80,14 @@ const updateSampleReasons = async (): Promise<void> => {
     return auxiliarSaved;
   });
 
-  await Promise.all(auxiliarPromises);
-  logger.info(`Updated Sample Reasons: ${auxiliarPromises.length} records`);
+  Promise.all(auxiliarPromises)
+    .then(() => {
+      logger.info(`Updated Sample Reasons: ${auxiliarPromises.length} records`);
+    })
+    .catch(error => {
+      logger.error(`[updateSampleReasons] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updateServiceCenter = async (): Promise<void> => {
@@ -93,8 +106,14 @@ const updateServiceCenter = async (): Promise<void> => {
     return auxiliarSaved;
   });
 
-  await Promise.all(auxiliarPromises);
-  logger.info(`Updated Service Center: ${auxiliarPromises.length} records`);
+  Promise.all(auxiliarPromises)
+    .then(() => {
+      logger.info(`Updated Service Center: ${auxiliarPromises.length} records`);
+    })
+    .catch(error => {
+      logger.error(`[updateServiceCenter] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updateSampleStatus = async (): Promise<void> => {
@@ -113,8 +132,14 @@ const updateSampleStatus = async (): Promise<void> => {
     return auxiliarSaved;
   });
 
-  await Promise.all(auxiliarPromises);
-  logger.info(`Updated Sample Status: ${auxiliarPromises.length} records`);
+  Promise.all(auxiliarPromises)
+    .then(() => {
+      logger.info(`Updated Sample Status: ${auxiliarPromises.length} records`);
+    })
+    .catch(error => {
+      logger.error(`[updateSampleStatus] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updateSampleType = async (): Promise<void> => {
@@ -132,10 +157,15 @@ const updateSampleType = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  const toSave = await Promise.all(auxiliarToSave);
-  const auxiliarSaved = await ormRepository.save(toSave);
-  // await Promise.all(auxiliarPromises);
-  logger.info(`Updated Sample Type: ${auxiliarSaved.length} records`);
+  Promise.all(auxiliarToSave)
+    .then(async toSave => {
+      const auxiliarSaved = await ormRepository.save(toSave);
+      logger.info(`Updated Sample Type: ${auxiliarSaved.length} records`);
+    })
+    .catch(error => {
+      logger.error(`[updateSampleType] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updateMyLIMSUser = async (): Promise<void> => {
@@ -153,9 +183,15 @@ const updateMyLIMSUser = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  const toSave = await Promise.all(auxiliarToSave);
-  const auxiliarSaved = await ormRepository.save(toSave);
-  logger.info(`Updated MyLIMS Users: ${auxiliarSaved.length} records`);
+  Promise.all(auxiliarToSave)
+    .then(toSave => {
+      const auxiliarSaved = await ormRepository.save(toSave);
+      logger.info(`Updated MyLIMS Users: ${auxiliarSaved.length} records`);
+    })
+    .catch(error => {
+      logger.error(`[updateMyLIMSUser] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updateCollectionPoint = async (): Promise<void> => {
@@ -173,10 +209,15 @@ const updateCollectionPoint = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  const toSave = await Promise.all(auxiliarToSave);
-
-  const auxiliarSaved = await ormRepository.save(toSave);
-  logger.info(`Updated Collection Points: ${auxiliarSaved.length} records`);
+  Promise.all(auxiliarToSave)
+    .then(async toSave => {
+      const auxiliarSaved = await ormRepository.save(toSave);
+      logger.info(`Updated Collection Points: ${auxiliarSaved.length} records`);
+    })
+    .catch(error => {
+      logger.error(`[updateCollectionPoint] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updateInfo = async (): Promise<void> => {
@@ -194,9 +235,15 @@ const updateInfo = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  const toSave = await Promise.all(auxiliarToSave);
-  const auxiliarSaved = await ormRepository.save(toSave);
-  logger.info(`Updated Infos: ${auxiliarSaved.length} records`);
+  Promise.all(auxiliarToSave)
+    .then(async toSave => {
+      const auxiliarSaved = await ormRepository.save(toSave);
+      logger.info(`Updated Infos: ${auxiliarSaved.length} records`);
+    })
+    .catch(error => {
+      logger.error(`[updateInfo] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updateServiceArea = async (): Promise<void> => {
@@ -215,9 +262,15 @@ const updateServiceArea = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  const toSave = await Promise.all(auxiliarToSave);
-  const auxiliarSaved = await ormRepository.save(toSave);
-  logger.info(`Updated Service Areas: ${auxiliarSaved.length} records`);
+  Promise.all(auxiliarToSave)
+    .then(async toSave => {
+      const auxiliarSaved = await ormRepository.save(toSave);
+      logger.info(`Updated Service Areas: ${auxiliarSaved.length} records`);
+    })
+    .catch(error => {
+      logger.error(`[updateServiceArea] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updateMethodType = async (): Promise<void> => {
@@ -236,8 +289,14 @@ const updateMethodType = async (): Promise<void> => {
     return auxiliarSaved;
   });
 
-  await Promise.all(auxiliarPromises);
-  logger.info(`Updated Method Types: ${auxiliarPromises.length} records`);
+  Promise.all(auxiliarPromises)
+    .then(() => {
+      logger.info(`Updated Method Types: ${auxiliarPromises.length} records`);
+    })
+    .catch(error => {
+      logger.error(`[updateMethodType] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updateMethodStatus = async (): Promise<void> => {
@@ -256,8 +315,14 @@ const updateMethodStatus = async (): Promise<void> => {
     return auxiliarSaved;
   });
 
-  await Promise.all(auxiliarPromises);
-  logger.info(`Updated Method Status: ${auxiliarPromises.length} records`);
+  Promise.all(auxiliarPromises)
+    .then(() => {
+      logger.info(`Updated Method Status: ${auxiliarPromises.length} records`);
+    })
+    .catch(error => {
+      logger.error(`[updateMethodStatus] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updateMethod = async (): Promise<void> => {
@@ -276,9 +341,15 @@ const updateMethod = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  const toSave = await Promise.all(auxiliarToSave);
-  const auxiliarSaved = await ormRepository.save(toSave);
-  logger.info(`Updated Methods: ${auxiliarSaved.length} records`);
+  Promise.all(auxiliarToSave)
+    .then(async toSave => {
+      const auxiliarSaved = await ormRepository.save(toSave);
+      logger.info(`Updated Methods: ${auxiliarSaved.length} records`);
+    })
+    .catch(error => {
+      logger.error(`[updateMethod] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updateAnalysisGroup = async (): Promise<void> => {
@@ -296,9 +367,15 @@ const updateAnalysisGroup = async (): Promise<void> => {
     return auxiliarCreated;
   });
 
-  const toSave = await Promise.all(auxiliarToSave);
-  const auxiliarSaved = await ormRepository.save(toSave);
-  logger.info(`Updated Analysis Groups: ${auxiliarSaved.length} records`);
+  Promise.all(auxiliarToSave)
+    .then(async toSave => {
+      const auxiliarSaved = await ormRepository.save(toSave);
+      logger.info(`Updated Analysis Groups: ${auxiliarSaved.length} records`);
+    })
+    .catch(error => {
+      logger.error(`[updateAnalysisGroup] Finished with error: ${error}`);
+      process.exit(1);
+    });
 };
 
 const updAuxiliaries = async (): Promise<void> => {

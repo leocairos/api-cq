@@ -2,10 +2,11 @@ import { getRepository } from 'typeorm';
 
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 
+import logger from '@config/logger';
 import { ISampleInfo } from '../../dtos/ISampleMYLIMSDTO';
 import SampleInfo from '../typeorm/entities/SampleInfo';
 
-const SampleInfos = async (sampleId: number): Promise<number> => {
+const SampleInfosController = async (sampleId: number): Promise<number> => {
   const ormRepository = getRepository(SampleInfo);
   const infos = await apiMYLIMS.get(`/samples/${sampleId}/infos`);
 
@@ -23,10 +24,17 @@ const SampleInfos = async (sampleId: number): Promise<number> => {
     return sampleInfoCreated;
   });
 
-  const toSave = await Promise.all(sampleInfosToSave);
-  const sampleInfosSaved = await ormRepository.save(toSave);
-  // logger.info(` ${sampleId}, Infos: ${sampleInfosPromises.length}`);
-  return sampleInfosSaved.length;
+  Promise.all(sampleInfosToSave)
+    .then(async toSave => {
+      const sampleInfosSaved = await ormRepository.save(toSave);
+      // logger.info(` ${sampleId}, Infos: ${sampleInfosPromises.length}`);
+      return sampleInfosSaved.length;
+    })
+    .catch(error => {
+      logger.error(`[SampleInfosController] Finished with error: ${error}`);
+      process.exit(1);
+    });
+  return 0;
 };
 
-export default SampleInfos;
+export default SampleInfosController;

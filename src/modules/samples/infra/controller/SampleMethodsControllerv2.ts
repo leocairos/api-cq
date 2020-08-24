@@ -1,5 +1,6 @@
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 import { getRepository } from 'typeorm';
+import logger from '@config/logger';
 import { ISampleMethod } from '../../dtos/ISampleMYLIMSDTO';
 import SampleMethod from '../typeorm/entities/SampleMethod';
 
@@ -26,10 +27,17 @@ const SampleMethodsController = async (sampleId: number): Promise<number> => {
     return sampleMethodCreated;
   });
 
-  const toSave = await Promise.all(sampleMethodsToSave);
-  const sampleMethodsSaved = await ormRepository.save(toSave);
-  // logger.info(` ${sampleId}, Methods: ${sampleMethodsSaved.length}`);
-  return sampleMethodsSaved.length;
+  Promise.all(sampleMethodsToSave)
+    .then(async toSave => {
+      const sampleMethodsSaved = await ormRepository.save(toSave);
+      // logger.info(` ${sampleId}, Methods: ${sampleMethodsSaved.length}`);
+      return sampleMethodsSaved.length;
+    })
+    .catch(error => {
+      logger.error(`[SampleMethodsController] Finished with error: ${error}`);
+      process.exit(1);
+    });
+  return 0;
 };
 
 export default SampleMethodsController;
