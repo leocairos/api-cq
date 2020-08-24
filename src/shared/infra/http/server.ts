@@ -103,8 +103,8 @@ app.listen(appPortChange, () => {
     case 'sync':
       logger.info(process.argv[2]);
 
+      let isRunning = false;
       try {
-        let isRunning = false;
         const job = new CronJob('* * * * * *', () => {
           if (!isRunning) {
             isRunning = true;
@@ -118,6 +118,7 @@ app.listen(appPortChange, () => {
         job.start();
       } catch (err) {
         logger.error(`Finished with error: ${err}`);
+        isRunning = false;
       }
       break;
 
