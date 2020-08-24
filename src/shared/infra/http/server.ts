@@ -17,61 +17,51 @@ createConnection();
 const app = express();
 
 const importAllSamples = async (): Promise<void> => {
-  try {
-    const samples = await apiMYLIMS.get(
-      '/samples?$inlinecount=allpages&$top=5',
-    );
-    const totalCount = samples.data.TotalCount as number;
-    const samplesController = new SamplesControllerv2();
+  const samples = await apiMYLIMS.get('/samples?$inlinecount=allpages&$top=5');
+  const totalCount = samples.data.TotalCount as number;
+  const samplesController = new SamplesControllerv2();
 
-    const top = Number(process.env.COUNT_SINC_AT_TIME);
-    let skip = Number(process.env.INTERVAL_SINC_MYLIMS_SKIP || 0);
-    let recordsProcesseds = 0;
-    const filter = '';
-    while (skip < totalCount) {
-      // eslint-disable-next-line no-await-in-loop
-      const recordsProcNow = await samplesController.update(skip, top, filter);
-      skip += top;
-      recordsProcesseds += recordsProcNow;
-      logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
-    }
-    logger.info(`Finished with ${totalCount} imported records`);
-  } catch (err) {
-    logger.error(`Finished with error: ${err}`);
+  const top = Number(process.env.COUNT_SINC_AT_TIME);
+  let skip = Number(process.env.INTERVAL_SINC_MYLIMS_SKIP || 0);
+  let recordsProcesseds = 0;
+  const filter = '';
+  while (skip < totalCount) {
+    // eslint-disable-next-line no-await-in-loop
+    const recordsProcNow = await samplesController.update(skip, top, filter);
+    skip += top;
+    recordsProcesseds += recordsProcNow;
+    logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
   }
+  logger.info(`Finished with ${totalCount} imported records`);
 };
 
 const importNews = async (): Promise<void> => {
-  try {
-    const samplesController = new SamplesControllerv2();
-    const lastDate = await samplesController.getLastEditionStored();
-    lastDate.setHours(
-      lastDate.getHours() - Number(process.env.HOUR_TO_RETROCED_IMPORT || 12),
-    );
-    const formatedDate = lastDate.toISOString();
-    const baseURL = '/samples?$inlinecount=allpages&$top=5&$skip=0';
-    const filter = `CurrentStatus/EditionDateTime ge DATETIME'${formatedDate}'`;
+  const samplesController = new SamplesControllerv2();
+  const lastDate = await samplesController.getLastEditionStored();
+  lastDate.setHours(
+    lastDate.getHours() - Number(process.env.HOUR_TO_RETROCED_IMPORT || 12),
+  );
+  const formatedDate = lastDate.toISOString();
+  const baseURL = '/samples?$inlinecount=allpages&$top=5&$skip=0';
+  const filter = `CurrentStatus/EditionDateTime ge DATETIME'${formatedDate}'`;
 
-    const samples = await apiMYLIMS.get(`${baseURL}&$filter=${filter}`);
+  const samples = await apiMYLIMS.get(`${baseURL}&$filter=${filter}`);
 
-    const totalCount = samples.data.TotalCount as number;
+  const totalCount = samples.data.TotalCount as number;
 
-    logger.info(`${totalCount} records until ${formatedDate}`);
+  logger.info(`${totalCount} records until ${formatedDate}`);
 
-    const top = Number(process.env.COUNT_SINC_AT_TIME);
-    let skip = 0;
-    let recordsProcesseds = 0;
-    while (skip < totalCount) {
-      // eslint-disable-next-line no-await-in-loop
-      const recordsProcNow = await samplesController.update(skip, top, filter);
-      skip += top;
-      recordsProcesseds += recordsProcNow;
-      logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
-    }
-    logger.info(`Finished with ${totalCount} imported records`);
-  } catch (err) {
-    logger.error(`Finished with error: ${err}`);
+  const top = Number(process.env.COUNT_SINC_AT_TIME);
+  let skip = 0;
+  let recordsProcesseds = 0;
+  while (skip < totalCount) {
+    // eslint-disable-next-line no-await-in-loop
+    const recordsProcNow = await samplesController.update(skip, top, filter);
+    skip += top;
+    recordsProcesseds += recordsProcNow;
+    logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
   }
+  logger.info(`Finished with ${totalCount} imported records`);
 };
 
 const appPort = process.env.APP_PORT || 3039;
@@ -100,29 +90,35 @@ app.listen(appPortChange, () => {
     case 'importAll':
       logger.info('Import All records');
 
-      setTimeout(async () => {
-        await AuxiliariesControllerv2();
-        await importAllSamples();
-      }, 3000);
-
+      try {
+        setTimeout(async () => {
+          await AuxiliariesControllerv2();
+          await importAllSamples();
+        }, 3000);
+      } catch (err) {
+        logger.error(`Finished with error: ${err}`);
+      }
       break;
 
     case 'sync':
       logger.info(process.argv[2]);
 
-      let isRunning = false;
-      const job = new CronJob('* * * * * *', () => {
-        if (!isRunning) {
-          isRunning = true;
-          setTimeout(async () => {
-            await AuxiliariesControllerv2();
-            await importNews();
-            isRunning = false;
-          }, 3000);
-        }
-      });
-      job.start();
-
+      try {
+        let isRunning = false;
+        const job = new CronJob('* * * * * *', () => {
+          if (!isRunning) {
+            isRunning = true;
+            setTimeout(async () => {
+              await AuxiliariesControllerv2();
+              await importNews();
+              isRunning = false;
+            }, 3000);
+          }
+        });
+        job.start();
+      } catch (err) {
+        logger.error(`Finished with error: ${err}`);
+      }
       break;
 
     default:
