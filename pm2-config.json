@@ -4,9 +4,13 @@
       "name": "api-cq-sync",
       "script": "dist/shared/infra/http/server.js",
       "args":["sync"],
+      "max_memory_restart": "500M",
+      "time": true,
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "restart_delay": 4000,
       "watch": ["server", "client"],
-      "watch_delay": 1000,
-      "ignore_watch" : ["node_modules", "app-sync.log*", "app-impo.log*"],
+      "watch_delay": 3000,
+      "ignore_watch": [ "[\/\\]\\./" , "node_modules"],
       "watch_options": {
         "followSymlinks": false
       }
@@ -15,9 +19,13 @@
       "name": "api-cq-impo",
       "script": "dist/shared/infra/http/server.js",
       "args":["importAll"],
+      "max_memory_restart": "500M",
+      "time": true,
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "restart_delay": 4000,
       "watch": ["server", "client"],
-      "watch_delay": 1000,
-      "ignore_watch" : ["node_modules", "app-sync.log*", "app-impo.log*"],
+      "watch_delay": 3000,
+      "ignore_watch": [ "[\/\\]\\./" , "node_modules"],
       "watch_options": {
         "followSymlinks": false
       }
