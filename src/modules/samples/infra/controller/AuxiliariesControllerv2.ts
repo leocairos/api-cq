@@ -38,6 +38,7 @@ const queryParms = '?$inlinecount=allpages&$orderby=Id desc&$top=10000&$skip=0';
 
 const updateSampleConclusion = async (): Promise<void> => {
   const ormRepository = getRepository(SampleConclusion);
+
   const auxiliar = await apiMYLIMS.get(`/sampleconclusions${queryParms}`);
 
   const auxiliarData = auxiliar.data.Result as ISampleConclusion[];
@@ -385,6 +386,7 @@ const updAuxiliaries = async (): Promise<void> => {
   } catch {
     //
   }
+
   await updateSampleConclusion();
   await updateSampleReasons();
   await updateServiceCenter();

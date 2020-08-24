@@ -110,67 +110,66 @@ export default class Samples {
     });
 
     let samplesCount = 0;
-    await Promise.all(samplesToSave)
-      .then(async toSave => {
-        logger.info(`Total Samples avaliable to save: ${toSave.length}`);
+    const toSave = await Promise.all(samplesToSave);
 
-        const samplesSaved = await ormRepository.save(toSave);
+    logger.info(`Total Samples avaliable to save: ${toSave.length}`);
 
-        logger.info(`samples Saved: ${samplesSaved.length} `);
+    const samplesSaved = await ormRepository.save(toSave);
 
-        const samplesDataSaved = samplesSaved.map(async sample => {
-          logger.info(
-            `Sample: ${sample.id} last edition in ${sample.currentStatusEditionDateTime}`,
-          );
+    logger.info(`samples Saved: ${samplesSaved.length} `);
 
-          const sampleInfoSaved = await sampleInfosv2(sample.id);
-          const sampleMethodSaved = await sampleMethodsv2(sample.id);
-          const sampleAnalysesSaved = await sampleAnalysesv2(sample.id);
+    // const samplesDataSaved = [];
+    const samplesDataSaved = samplesSaved.map(async sample => {
+      // eslint-disable-next-line no-restricted-syntax
+      // for (const sample of samplesSaved) {
+      logger.info(
+        `Sample: ${sample.id} last edition in ${sample.currentStatusEditionDateTime}`,
+      );
 
-          return {
-            infosCount: sampleInfoSaved,
-            methodsCount: sampleMethodSaved,
-            analysesCount: sampleAnalysesSaved,
-          };
-        });
+      // eslint-disable-next-line no-await-in-loop
 
-        logger.info(
-          `Getting samples details (infos, methods and analysis)... `,
-        );
-        await Promise.all(samplesDataSaved)
-          .then(countData => {
-            const totalInfo = countData.reduce((ac, info) => {
-              return ac + info.infosCount;
-            }, 0);
-            logger.info(`Total SamplesInfos saved: ${totalInfo}`);
+      const sampleInfoSaved = await sampleInfosv2(sample.id);
+      // eslint-disable-next-line no-await-in-loop
+      const sampleMethodSaved = await sampleMethodsv2(sample.id);
+      // eslint-disable-next-line no-await-in-loop
+      const sampleAnalysesSaved = await sampleAnalysesv2(sample.id);
 
-            const totalMethods = countData.reduce((ac, method) => {
-              return ac + method.methodsCount;
-            }, 0);
-            logger.info(`Total SamplesMethods saved: ${totalMethods}`);
+      /* samplesDataSaved.push({
+        infosCount: sampleInfoSaved,
+        methodsCount: sampleMethodSaved,
+        analysesCount: sampleAnalysesSaved,
+      }); */
+      return {
+        infosCount: sampleInfoSaved,
+        methodsCount: sampleMethodSaved,
+        analysesCount: sampleAnalysesSaved,
+      };
+    });
+    // }
+    logger.info(`Getting samples details (infos, methods and analysis)... `);
 
-            const totalAnalyses = countData.reduce((ac, method) => {
-              return ac + method.analysesCount;
-            }, 0);
-            logger.info(`Total SamplesAnalyses saved: ${totalAnalyses}`);
+    const countData = await Promise.all(samplesDataSaved);
 
-            logger.info(
-              `End step (${skip + 1} to ${
-                skip + top
-              }) of synchronization with myLIMs`,
-            );
+    const totalInfo = countData.reduce((ac, info) => {
+      return ac + info.infosCount;
+    }, 0);
+    logger.info(`Total SamplesInfos saved: ${totalInfo}`);
 
-            samplesCount = samplesSaved.length;
-          })
-          .catch(error => {
-            logger.error(`[SamplesController A] Aborted with error: ${error}`);
-            // process.exit(1);
-          });
-      })
-      .catch(error => {
-        logger.error(`[SamplesController B] Aborted with error: ${error}`);
-        // process.exit(1);
-      });
+    const totalMethods = countData.reduce((ac, method) => {
+      return ac + method.methodsCount;
+    }, 0);
+    logger.info(`Total SamplesMethods saved: ${totalMethods}`);
+
+    const totalAnalyses = countData.reduce((ac, method) => {
+      return ac + method.analysesCount;
+    }, 0);
+    logger.info(`Total SamplesAnalyses saved: ${totalAnalyses}`);
+
+    logger.info(
+      `End step (${skip + 1} to ${skip + top}) of synchronization with myLIMs`,
+    );
+
+    samplesCount = samplesSaved.length;
 
     return samplesCount;
   }

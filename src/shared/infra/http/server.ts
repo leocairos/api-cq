@@ -1,4 +1,8 @@
 /* eslint-disable no-case-declarations */
+import 'reflect-metadata';
+import cors from 'cors';
+
+import helmet from 'helmet';
 import 'dotenv/config';
 import logger from '@config/logger';
 
@@ -15,6 +19,12 @@ import runMode from '@config/runMode';
 createConnection();
 
 const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.use(helmet());
+app.disable('x-powered-by');
 
 const importAllSamples = async (): Promise<void> => {
   const samples = await apiMYLIMS.get('/samples?$inlinecount=allpages&$top=5');
