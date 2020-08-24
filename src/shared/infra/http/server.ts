@@ -18,7 +18,7 @@ const app = express();
 
 const importAllSamples = async (): Promise<void> => {
   const samples = await apiMYLIMS.get('/samples?$inlinecount=allpages&$top=5');
-  const totalCount = samples.data.TotalCount as number;
+  const totalCount = Number(samples.data.TotalCount);
   const samplesController = new SamplesControllerv2();
 
   const top = Number(process.env.COUNT_SINC_AT_TIME);
@@ -47,7 +47,7 @@ const importNews = async (): Promise<void> => {
 
   const samples = await apiMYLIMS.get(`${baseURL}&$filter=${filter}`);
 
-  const totalCount = samples.data.TotalCount as number;
+  const totalCount = Number(samples.data.TotalCount);
 
   logger.info(`${totalCount} records until ${formatedDate}`);
 
@@ -64,26 +64,25 @@ const importNews = async (): Promise<void> => {
   logger.info(`Finished with ${totalCount} imported records`);
 };
 
-const appPort = process.env.APP_PORT || 3039;
-let appPortChange = appPort as number;
+let appPort = Number(process.env.APP_PORT || 3039);
 
 switch (runMode()) {
   case 'importAll':
-    appPortChange += 0;
+    appPort += 0;
     break;
   case 'sync':
-    appPortChange += 1;
+    appPort += 1;
     break;
   default:
     logger.warn('Sorry, that is not something I know how to do.');
     process.exit(1);
 }
 
-app.listen(appPortChange, () => {
+app.listen(appPort, () => {
   logger.info(
     `\n${'#'.repeat(80)}\n#${' '.repeat(
       21,
-    )} Service now running on port '${appPortChange}' ${' '.repeat(
+    )} Service now running on port '${appPort}' ${' '.repeat(
       21,
     )}# \n${'#'.repeat(80)}\n`,
   );
