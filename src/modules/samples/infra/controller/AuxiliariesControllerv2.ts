@@ -184,7 +184,7 @@ const updateMyLIMSUser = async (): Promise<void> => {
   });
 
   Promise.all(auxiliarToSave)
-    .then(toSave => {
+    .then(async toSave => {
       const auxiliarSaved = await ormRepository.save(toSave);
       logger.info(`Updated MyLIMS Users: ${auxiliarSaved.length} records`);
     })
