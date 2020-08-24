@@ -3,12 +3,14 @@
     {
       "name": "api-cq-sync",
       "script": "dist/shared/infra/http/server.js",
-      "args":["sync"]
+      "args":["sync"],
+      "watch": true
     },
     {
       "name": "api-cq-impo",
       "script": "dist/shared/infra/http/server.js",
-      "args":["importAll"]
+      "args":["importAll"],
+      "watch": true
     }
   ]
 }

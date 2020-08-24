@@ -95,9 +95,11 @@ app.listen(appPort, () => {
         setTimeout(async () => {
           await AuxiliariesControllerv2();
           await importAllSamples();
+          process.exit(0);
         }, 3000);
       } catch (err) {
         logger.error(`Finished with error: ${err}`);
+        process.exit(1);
       }
       break;
 
