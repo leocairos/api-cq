@@ -1,15 +1,10 @@
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 
-import { createConnection, getRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { ISampleAnalyse } from '../../dtos/ISampleMYLIMSDTO';
 import SampleAnalyse from '../typeorm/entities/SampleAnalyse';
 
 const SampleAnalysesController = async (sampleId: number): Promise<number> => {
-  try {
-    await createConnection();
-  } catch {
-    //
-  }
   const ormRepository = getRepository(SampleAnalyse);
   const analyses = await apiMYLIMS.get(`/samples/${sampleId}/Analyses`);
 

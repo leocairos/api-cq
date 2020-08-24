@@ -1,4 +1,4 @@
-import { getRepository, createConnection } from 'typeorm';
+import { getRepository } from 'typeorm';
 
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 
@@ -6,11 +6,6 @@ import { ISampleInfo } from '../../dtos/ISampleMYLIMSDTO';
 import SampleInfo from '../typeorm/entities/SampleInfo';
 
 const SampleInfos = async (sampleId: number): Promise<number> => {
-  try {
-    await createConnection();
-  } catch {
-    //
-  }
   const ormRepository = getRepository(SampleInfo);
   const infos = await apiMYLIMS.get(`/samples/${sampleId}/infos`);
 
