@@ -164,7 +164,9 @@ export default class Samples {
         samplesCount = samplesSaved.length;
       })
       .catch(error => {
-        logger.error(`[Samples Get] Aborted with error: ${error}`);
+        logger.error(
+          `[Samples Get] Aborted with error: ${error} \n in: ${defaultRoute}`,
+        );
       });
 
     return samplesCount;

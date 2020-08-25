@@ -34,13 +34,17 @@ const SampleInfosController = async (sampleId: number): Promise<number> => {
           sampleInfosCount = sampleInfosSaved.length;
         })
         .catch(error => {
-          logger.error(`[SampleInfosController] Aborted with error: ${error}`);
+          logger.error(
+            `[SampleInfosController] 'sample ${sampleId}' Aborted with error: ${error}`,
+          );
           // process.exit(1);
         });
       infoCounts = sampleInfosCount;
     })
     .catch(error => {
-      logger.error(`[SampleInfosController Get] Aborted with error: ${error}`);
+      logger.error(
+        `[SampleInfosController Get] 'sample ${sampleId}'  Aborted with error: ${error}`,
+      );
     });
   return infoCounts;
 };

@@ -41,7 +41,7 @@ const SampleAnalysesController = async (sampleId: number): Promise<number> => {
         })
         .catch(error => {
           logger.error(
-            `[SampleAnalysesController] Aborted with error: ${error}`,
+            `[SampleAnalysesController] 'sample ${sampleId}' Aborted with error: ${error}`,
           );
           // process.exit(1);
         });
@@ -49,7 +49,7 @@ const SampleAnalysesController = async (sampleId: number): Promise<number> => {
     })
     .catch(error => {
       logger.error(
-        `[SampleAnalysesController Get] Aborted with error: ${error}`,
+        `[SampleAnalysesController Get] 'sample ${sampleId}' Aborted with error: ${error}`,
       );
     });
   return analysesCount;
