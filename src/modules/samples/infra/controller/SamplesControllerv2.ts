@@ -25,151 +25,147 @@ export default class Samples {
       //
     }
     const ormRepository = getRepository(Sample);
+    let samplesCount = 0;
     const defaultRoute = `/samples?$inlinecount=allpages&$top=${top}&$skip=${skip}&$orderby=CurrentStatus/EditionDateTime`;
 
-    const samples = await apiMYLIMS.get(
-      filter === '' ? defaultRoute : `${defaultRoute}&$filter=${filter}`,
-    );
+    await apiMYLIMS
+      .get(filter === '' ? defaultRoute : `${defaultRoute}&$filter=${filter}`)
+      .then(async samples => {
+        const samplesData = samples.data.Result as ISample[];
 
-    const samplesData = samples.data.Result as ISample[];
+        logger.info(`Total Samples found:  ${samplesData.length}`);
 
-    logger.info(`Total Samples found:  ${samplesData.length}`);
+        const samplesToSave = samplesData.map(sample => {
+          const sampleCreated = ormRepository.create({
+            id: sample.Id,
+            identification: sample.Identification,
+            controlNumber: sample.ControlNumber,
+            number: sample.Number,
+            year: sample.Year,
+            subNumber: sample.SubNumber,
+            revision: sample.Revision,
+            active: sample.Active,
+            syncPortal: sample.SyncPortal,
+            received: sample.Received,
+            finalized: sample.Finalized,
+            published: sample.Published,
+            reviewed: sample.Reviewed,
+            takenDateTime: sample.TakenDateTime,
+            receivedTime: sample.ReceivedTime,
+            finalizedTime: sample.FinalizedTime,
+            publishedTime: sample.PublishedTime,
+            reviewedTime: sample.ReviewedTime,
 
-    const samplesToSave = samplesData.map(sample => {
-      const sampleCreated = ormRepository.create({
-        id: sample.Id,
-        identification: sample.Identification,
-        controlNumber: sample.ControlNumber,
-        number: sample.Number,
-        year: sample.Year,
-        subNumber: sample.SubNumber,
-        revision: sample.Revision,
-        active: sample.Active,
-        syncPortal: sample.SyncPortal,
-        received: sample.Received,
-        finalized: sample.Finalized,
-        published: sample.Published,
-        reviewed: sample.Reviewed,
-        takenDateTime: sample.TakenDateTime,
-        receivedTime: sample.ReceivedTime,
-        finalizedTime: sample.FinalizedTime,
-        publishedTime: sample.PublishedTime,
-        reviewedTime: sample.ReviewedTime,
+            sampleStatus: sample.CurrentStatus?.SampleStatus?.Id
+              ? {
+                  id: sample.CurrentStatus?.SampleStatus?.Id,
+                  identification:
+                    sample.CurrentStatus?.SampleStatus?.Identification,
+                }
+              : undefined,
+            currentStatusUser: sample.CurrentStatus?.EditionUser?.Id
+              ? {
+                  id: sample.CurrentStatus?.EditionUser?.Id,
+                  identification:
+                    sample.CurrentStatus?.EditionUser?.Identification,
+                }
+              : undefined,
+            currentStatusEditionDateTime: sample.CurrentStatus?.EditionDateTime,
 
-        sampleStatus: sample.CurrentStatus?.SampleStatus?.Id
-          ? {
-              id: sample.CurrentStatus?.SampleStatus?.Id,
-              identification:
-                sample.CurrentStatus?.SampleStatus?.Identification,
-            }
-          : undefined,
-        currentStatusUser: sample.CurrentStatus?.EditionUser?.Id
-          ? {
-              id: sample.CurrentStatus?.EditionUser?.Id,
-              identification: sample.CurrentStatus?.EditionUser?.Identification,
-            }
-          : undefined,
-        currentStatusEditionDateTime: sample.CurrentStatus?.EditionDateTime,
+            sampleServiceCenter: sample.ServiceCenter?.Id
+              ? {
+                  id: sample.ServiceCenter?.Id,
+                  identification: sample.ServiceCenter?.Identification,
+                }
+              : undefined,
 
-        sampleServiceCenter: sample.ServiceCenter?.Id
-          ? {
-              id: sample.ServiceCenter?.Id,
-              identification: sample.ServiceCenter?.Identification,
-            }
-          : undefined,
+            sampleConclusion: sample.SampleConclusion?.Id
+              ? {
+                  id: sample.SampleConclusion?.Id,
+                  identification: sample.SampleConclusion?.Identification,
+                }
+              : undefined,
 
-        sampleConclusion: sample.SampleConclusion?.Id
-          ? {
-              id: sample.SampleConclusion?.Id,
-              identification: sample.SampleConclusion?.Identification,
-            }
-          : undefined,
+            sampleReason: sample.SampleReason?.Id
+              ? {
+                  id: sample.SampleReason?.Id,
+                  identification: sample.SampleReason?.Identification,
+                }
+              : undefined,
 
-        sampleReason: sample.SampleReason?.Id
-          ? {
-              id: sample.SampleReason?.Id,
-              identification: sample.SampleReason?.Identification,
-            }
-          : undefined,
+            sampleType: sample.SampleType?.Id
+              ? {
+                  id: sample.SampleType?.Id,
+                  identification: sample.SampleType?.Identification,
+                }
+              : undefined,
 
-        sampleType: sample.SampleType?.Id
-          ? {
-              id: sample.SampleType?.Id,
-              identification: sample.SampleType?.Identification,
-            }
-          : undefined,
+            sampleCollectionPoint: sample.CollectionPoint?.Id
+              ? {
+                  id: sample.CollectionPoint?.Id,
+                  identification: sample.CollectionPoint?.Identification,
+                }
+              : undefined,
+          });
+          return sampleCreated;
+        });
 
-        sampleCollectionPoint: sample.CollectionPoint?.Id
-          ? {
-              id: sample.CollectionPoint?.Id,
-              identification: sample.CollectionPoint?.Identification,
-            }
-          : undefined,
+        const toSave = await Promise.all(samplesToSave);
+
+        logger.info(`Total Samples avaliable to save: ${toSave.length}`);
+
+        const samplesSaved = await ormRepository.save(toSave);
+
+        logger.info(`samples Saved: ${samplesSaved.length} `);
+
+        const samplesDataSaved = samplesSaved.map(async sample => {
+          logger.info(
+            `Sample: ${sample.id} last edition in ${sample.currentStatusEditionDateTime}`,
+          );
+
+          const sampleInfoSaved = await sampleInfosv2(sample.id);
+          const sampleMethodSaved = await sampleMethodsv2(sample.id);
+          const sampleAnalysesSaved = await sampleAnalysesv2(sample.id);
+
+          return {
+            infosCount: sampleInfoSaved,
+            methodsCount: sampleMethodSaved,
+            analysesCount: sampleAnalysesSaved,
+          };
+        });
+
+        logger.info(
+          `Getting samples details (infos, methods and analysis)... `,
+        );
+
+        const countData = await Promise.all(samplesDataSaved);
+
+        const totalInfo = countData.reduce((ac, info) => {
+          return ac + info.infosCount;
+        }, 0);
+        logger.info(`Total SamplesInfos saved: ${totalInfo}`);
+
+        const totalMethods = countData.reduce((ac, method) => {
+          return ac + method.methodsCount;
+        }, 0);
+        logger.info(`Total SamplesMethods saved: ${totalMethods}`);
+
+        const totalAnalyses = countData.reduce((ac, method) => {
+          return ac + method.analysesCount;
+        }, 0);
+        logger.info(`Total SamplesAnalyses saved: ${totalAnalyses}`);
+
+        logger.info(
+          `End step (${skip + 1} to ${
+            skip + top
+          }) of synchronization with myLIMs`,
+        );
+
+        samplesCount = samplesSaved.length;
+      })
+      .catch(error => {
+        logger.error(`[Samples Get] Aborted with error: ${error}`);
       });
-      return sampleCreated;
-    });
-
-    let samplesCount = 0;
-    const toSave = await Promise.all(samplesToSave);
-
-    logger.info(`Total Samples avaliable to save: ${toSave.length}`);
-
-    const samplesSaved = await ormRepository.save(toSave);
-
-    logger.info(`samples Saved: ${samplesSaved.length} `);
-
-    // const samplesDataSaved = [];
-    const samplesDataSaved = samplesSaved.map(async sample => {
-      // eslint-disable-next-line no-restricted-syntax
-      // for (const sample of samplesSaved) {
-      logger.info(
-        `Sample: ${sample.id} last edition in ${sample.currentStatusEditionDateTime}`,
-      );
-
-      // eslint-disable-next-line no-await-in-loop
-
-      const sampleInfoSaved = await sampleInfosv2(sample.id);
-      // eslint-disable-next-line no-await-in-loop
-      const sampleMethodSaved = await sampleMethodsv2(sample.id);
-      // eslint-disable-next-line no-await-in-loop
-      const sampleAnalysesSaved = await sampleAnalysesv2(sample.id);
-
-      /* samplesDataSaved.push({
-        infosCount: sampleInfoSaved,
-        methodsCount: sampleMethodSaved,
-        analysesCount: sampleAnalysesSaved,
-      }); */
-      return {
-        infosCount: sampleInfoSaved,
-        methodsCount: sampleMethodSaved,
-        analysesCount: sampleAnalysesSaved,
-      };
-    });
-    // }
-    logger.info(`Getting samples details (infos, methods and analysis)... `);
-
-    const countData = await Promise.all(samplesDataSaved);
-
-    const totalInfo = countData.reduce((ac, info) => {
-      return ac + info.infosCount;
-    }, 0);
-    logger.info(`Total SamplesInfos saved: ${totalInfo}`);
-
-    const totalMethods = countData.reduce((ac, method) => {
-      return ac + method.methodsCount;
-    }, 0);
-    logger.info(`Total SamplesMethods saved: ${totalMethods}`);
-
-    const totalAnalyses = countData.reduce((ac, method) => {
-      return ac + method.analysesCount;
-    }, 0);
-    logger.info(`Total SamplesAnalyses saved: ${totalAnalyses}`);
-
-    logger.info(
-      `End step (${skip + 1} to ${skip + top}) of synchronization with myLIMs`,
-    );
-
-    samplesCount = samplesSaved.length;
 
     return samplesCount;
   }

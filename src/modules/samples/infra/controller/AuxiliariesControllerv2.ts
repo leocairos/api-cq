@@ -39,343 +39,422 @@ const queryParms = '?$inlinecount=allpages&$orderby=Id desc&$top=10000&$skip=0';
 const updateSampleConclusion = async (): Promise<void> => {
   const ormRepository = getRepository(SampleConclusion);
 
-  const auxiliar = await apiMYLIMS.get(`/sampleconclusions${queryParms}`);
+  await apiMYLIMS
+    .get(`/sampleconclusions${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as ISampleConclusion[];
 
-  const auxiliarData = auxiliar.data.Result as ISampleConclusion[];
+      const auxiliarToSave = auxiliarData.map(auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+        });
 
-  const auxiliarToSave = auxiliarData.map(auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-    });
+        return auxiliarCreated;
+      });
 
-    return auxiliarCreated;
-  });
-
-  await Promise.all(auxiliarToSave)
-    .then(async toSave => {
-      const auxiliarSaved = await ormRepository.save(toSave);
-      logger.info(
-        `Updated Sample Conclusions: ${auxiliarSaved.length} records`,
-      );
+      await Promise.all(auxiliarToSave)
+        .then(async toSave => {
+          const auxiliarSaved = await ormRepository.save(toSave);
+          logger.info(
+            `Updated Sample Conclusions: ${auxiliarSaved.length} records`,
+          );
+        })
+        .catch(error => {
+          logger.error(`[updateSampleConclusion] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateSampleConclusion] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateSampleConclusion Get] Aborted with error: ${error}`);
     });
 };
 
 const updateSampleReasons = async (): Promise<void> => {
   const ormRepository = getRepository(SampleReason);
-  const auxiliar = await apiMYLIMS.get(`/samplereasons${queryParms}`);
+  await apiMYLIMS
+    .get(`/samplereasons${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as ISampleReason[];
 
-  const auxiliarData = auxiliar.data.Result as ISampleReason[];
+      const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+        });
 
-  const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-    });
+        const auxiliarSaved = await ormRepository.save(auxiliarCreated);
+        return auxiliarSaved;
+      });
 
-    const auxiliarSaved = await ormRepository.save(auxiliarCreated);
-    return auxiliarSaved;
-  });
-
-  await Promise.all(auxiliarPromises)
-    .then(() => {
-      logger.info(`Updated Sample Reasons: ${auxiliarPromises.length} records`);
+      await Promise.all(auxiliarPromises)
+        .then(() => {
+          logger.info(
+            `Updated Sample Reasons: ${auxiliarPromises.length} records`,
+          );
+        })
+        .catch(error => {
+          logger.error(`[updateSampleReasons] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateSampleReasons] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateSampleReasons Get] Aborted with error: ${error}`);
     });
 };
 
 const updateServiceCenter = async (): Promise<void> => {
   const ormRepository = getRepository(ServiceCenter);
-  const auxiliar = await apiMYLIMS.get(`/servicecenters${queryParms}`);
+  await apiMYLIMS
+    .get(`/servicecenters${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as IServiceCenter[];
 
-  const auxiliarData = auxiliar.data.Result as IServiceCenter[];
+      const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+        });
 
-  const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-    });
+        const auxiliarSaved = await ormRepository.save(auxiliarCreated);
+        return auxiliarSaved;
+      });
 
-    const auxiliarSaved = await ormRepository.save(auxiliarCreated);
-    return auxiliarSaved;
-  });
-
-  await Promise.all(auxiliarPromises)
-    .then(() => {
-      logger.info(`Updated Service Center: ${auxiliarPromises.length} records`);
+      await Promise.all(auxiliarPromises)
+        .then(() => {
+          logger.info(
+            `Updated Service Center: ${auxiliarPromises.length} records`,
+          );
+        })
+        .catch(error => {
+          logger.error(`[updateServiceCenter] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateServiceCenter] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateServiceCenter Get] Aborted with error: ${error}`);
     });
 };
 
 const updateSampleStatus = async (): Promise<void> => {
   const ormRepository = getRepository(SampleStatus);
-  const auxiliar = await apiMYLIMS.get(`/SampleStatus${queryParms}`);
+  await apiMYLIMS
+    .get(`/SampleStatus${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as ISampleStatus[];
 
-  const auxiliarData = auxiliar.data.Result as ISampleStatus[];
+      const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+        });
 
-  const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-    });
+        const auxiliarSaved = await ormRepository.save(auxiliarCreated);
+        return auxiliarSaved;
+      });
 
-    const auxiliarSaved = await ormRepository.save(auxiliarCreated);
-    return auxiliarSaved;
-  });
-
-  await Promise.all(auxiliarPromises)
-    .then(() => {
-      logger.info(`Updated Sample Status: ${auxiliarPromises.length} records`);
+      await Promise.all(auxiliarPromises)
+        .then(() => {
+          logger.info(
+            `Updated Sample Status: ${auxiliarPromises.length} records`,
+          );
+        })
+        .catch(error => {
+          logger.error(`[updateSampleStatus] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateSampleStatus] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateSampleStatus Get] Aborted with error: ${error}`);
     });
 };
 
 const updateSampleType = async (): Promise<void> => {
   const ormRepository = getRepository(SampleType);
-  const auxiliar = await apiMYLIMS.get(`/sampletypes${queryParms}`);
+  await apiMYLIMS
+    .get(`/sampletypes${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as ISampleType[];
 
-  const auxiliarData = auxiliar.data.Result as ISampleType[];
+      const auxiliarToSave = auxiliarData.map(auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+        });
 
-  const auxiliarToSave = auxiliarData.map(auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-    });
+        return auxiliarCreated;
+      });
 
-    return auxiliarCreated;
-  });
-
-  await Promise.all(auxiliarToSave)
-    .then(async toSave => {
-      const auxiliarSaved = await ormRepository.save(toSave);
-      logger.info(`Updated Sample Type: ${auxiliarSaved.length} records`);
+      await Promise.all(auxiliarToSave)
+        .then(async toSave => {
+          const auxiliarSaved = await ormRepository.save(toSave);
+          logger.info(`Updated Sample Type: ${auxiliarSaved.length} records`);
+        })
+        .catch(error => {
+          logger.error(`[updateSampleType] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateSampleType] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateSampleType Get] Aborted with error: ${error}`);
     });
 };
 
 const updateMyLIMSUser = async (): Promise<void> => {
   const ormRepository = getRepository(MyLIMSUser);
-  const auxiliar = await apiMYLIMS.get(`/Users${queryParms}`);
+  await apiMYLIMS
+    .get(`/Users${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as IMyLIMSUser[];
 
-  const auxiliarData = auxiliar.data.Result as IMyLIMSUser[];
+      const auxiliarToSave = auxiliarData.map(async auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+        });
 
-  const auxiliarToSave = auxiliarData.map(async auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-    });
+        return auxiliarCreated;
+      });
 
-    return auxiliarCreated;
-  });
-
-  await Promise.all(auxiliarToSave)
-    .then(async toSave => {
-      const auxiliarSaved = await ormRepository.save(toSave);
-      logger.info(`Updated MyLIMS Users: ${auxiliarSaved.length} records`);
+      await Promise.all(auxiliarToSave)
+        .then(async toSave => {
+          const auxiliarSaved = await ormRepository.save(toSave);
+          logger.info(`Updated MyLIMS Users: ${auxiliarSaved.length} records`);
+        })
+        .catch(error => {
+          logger.error(`[updateMyLIMSUser] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateMyLIMSUser] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateMyLIMSUser Get] Aborted with error: ${error}`);
     });
 };
 
 const updateCollectionPoint = async (): Promise<void> => {
   const ormRepository = getRepository(CollectionPoint);
-  const auxiliar = await apiMYLIMS.get(`/collectionpoints${queryParms}`);
+  await apiMYLIMS
+    .get(`/collectionpoints${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as ICollectionPoint[];
 
-  const auxiliarData = auxiliar.data.Result as ICollectionPoint[];
+      const auxiliarToSave = auxiliarData.map(auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+        });
 
-  const auxiliarToSave = auxiliarData.map(auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-    });
+        return auxiliarCreated;
+      });
 
-    return auxiliarCreated;
-  });
-
-  await Promise.all(auxiliarToSave)
-    .then(async toSave => {
-      const auxiliarSaved = await ormRepository.save(toSave);
-      logger.info(`Updated Collection Points: ${auxiliarSaved.length} records`);
+      await Promise.all(auxiliarToSave)
+        .then(async toSave => {
+          const auxiliarSaved = await ormRepository.save(toSave);
+          logger.info(
+            `Updated Collection Points: ${auxiliarSaved.length} records`,
+          );
+        })
+        .catch(error => {
+          logger.error(`[updateCollectionPoint] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateCollectionPoint] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateCollectionPoint Get] Aborted with error: ${error}`);
     });
 };
 
 const updateInfo = async (): Promise<void> => {
   const ormRepository = getRepository(Info);
-  const auxiliar = await apiMYLIMS.get(`/infos${queryParms}`);
+  await apiMYLIMS
+    .get(`/infos${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as IInfo[];
 
-  const auxiliarData = auxiliar.data.Result as IInfo[];
+      const auxiliarToSave = auxiliarData.map(auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+        });
 
-  const auxiliarToSave = auxiliarData.map(auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-    });
+        return auxiliarCreated;
+      });
 
-    return auxiliarCreated;
-  });
-
-  await Promise.all(auxiliarToSave)
-    .then(async toSave => {
-      const auxiliarSaved = await ormRepository.save(toSave);
-      logger.info(`Updated Infos: ${auxiliarSaved.length} records`);
+      await Promise.all(auxiliarToSave)
+        .then(async toSave => {
+          const auxiliarSaved = await ormRepository.save(toSave);
+          logger.info(`Updated Infos: ${auxiliarSaved.length} records`);
+        })
+        .catch(error => {
+          logger.error(`[updateInfo] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateInfo] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateInfo Get] Aborted with error: ${error}`);
     });
 };
 
 const updateServiceArea = async (): Promise<void> => {
   const ormRepository = getRepository(ServiceArea);
-  const auxiliar = await apiMYLIMS.get(`/serviceareas${queryParms}`);
+  await apiMYLIMS
+    .get(`/serviceareas${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as IServiceArea[];
 
-  const auxiliarData = auxiliar.data.Result as IServiceArea[];
+      const auxiliarToSave = auxiliarData.map(auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+          service_center_id: auxiliarItem.ServiceCenter.Id,
+        });
 
-  const auxiliarToSave = auxiliarData.map(auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-      service_center_id: auxiliarItem.ServiceCenter.Id,
-    });
+        return auxiliarCreated;
+      });
 
-    return auxiliarCreated;
-  });
-
-  await Promise.all(auxiliarToSave)
-    .then(async toSave => {
-      const auxiliarSaved = await ormRepository.save(toSave);
-      logger.info(`Updated Service Areas: ${auxiliarSaved.length} records`);
+      await Promise.all(auxiliarToSave)
+        .then(async toSave => {
+          const auxiliarSaved = await ormRepository.save(toSave);
+          logger.info(`Updated Service Areas: ${auxiliarSaved.length} records`);
+        })
+        .catch(error => {
+          logger.error(`[updateServiceArea] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateServiceArea] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateServiceArea Get] Aborted with error: ${error}`);
     });
 };
 
 const updateMethodType = async (): Promise<void> => {
   const ormRepository = getRepository(MethodType);
-  const auxiliar = await apiMYLIMS.get(`/MethodTypes${queryParms}`);
+  await apiMYLIMS
+    .get(`/MethodTypes${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as IMethodType[];
 
-  const auxiliarData = auxiliar.data.Result as IMethodType[];
+      const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+        });
 
-  const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-    });
+        const auxiliarSaved = await ormRepository.save(auxiliarCreated);
+        return auxiliarSaved;
+      });
 
-    const auxiliarSaved = await ormRepository.save(auxiliarCreated);
-    return auxiliarSaved;
-  });
-
-  await Promise.all(auxiliarPromises)
-    .then(() => {
-      logger.info(`Updated Method Types: ${auxiliarPromises.length} records`);
+      await Promise.all(auxiliarPromises)
+        .then(() => {
+          logger.info(
+            `Updated Method Types: ${auxiliarPromises.length} records`,
+          );
+        })
+        .catch(error => {
+          logger.error(`[updateMethodType] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateMethodType] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateMethodType Get] Aborted with error: ${error}`);
     });
 };
 
 const updateMethodStatus = async (): Promise<void> => {
   const ormRepository = getRepository(MethodStatus);
-  const auxiliar = await apiMYLIMS.get(`/MethodStatus${queryParms}`);
+  await apiMYLIMS
+    .get(`/MethodStatus${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as IMethodStatus[];
 
-  const auxiliarData = auxiliar.data.Result as IMethodStatus[];
+      const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+        });
 
-  const auxiliarPromises = auxiliarData.map(async auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-    });
+        const auxiliarSaved = await ormRepository.save(auxiliarCreated);
+        return auxiliarSaved;
+      });
 
-    const auxiliarSaved = await ormRepository.save(auxiliarCreated);
-    return auxiliarSaved;
-  });
-
-  await Promise.all(auxiliarPromises)
-    .then(() => {
-      logger.info(`Updated Method Status: ${auxiliarPromises.length} records`);
+      await Promise.all(auxiliarPromises)
+        .then(() => {
+          logger.info(
+            `Updated Method Status: ${auxiliarPromises.length} records`,
+          );
+        })
+        .catch(error => {
+          logger.error(`[updateMethodStatus] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateMethodStatus] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateMethodStatus Get] Aborted with error: ${error}`);
     });
 };
 
 const updateMethod = async (): Promise<void> => {
   const ormRepository = getRepository(Method);
-  const auxiliar = await apiMYLIMS.get(`/methods${queryParms}`);
+  await apiMYLIMS
+    .get(`/methods${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as IMethod[];
 
-  const auxiliarData = auxiliar.data.Result as IMethod[];
+      const auxiliarToSave = auxiliarData.map(auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+          method_type_id: auxiliarItem.MethodType.Id,
+        });
 
-  const auxiliarToSave = auxiliarData.map(auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-      method_type_id: auxiliarItem.MethodType.Id,
-    });
+        return auxiliarCreated;
+      });
 
-    return auxiliarCreated;
-  });
-
-  await Promise.all(auxiliarToSave)
-    .then(async toSave => {
-      const auxiliarSaved = await ormRepository.save(toSave);
-      logger.info(`Updated Methods: ${auxiliarSaved.length} records`);
+      await Promise.all(auxiliarToSave)
+        .then(async toSave => {
+          const auxiliarSaved = await ormRepository.save(toSave);
+          logger.info(`Updated Methods: ${auxiliarSaved.length} records`);
+        })
+        .catch(error => {
+          logger.error(`[updateMethod] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateMethod] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateMethod Get] Aborted with error: ${error}`);
     });
 };
 
 const updateAnalysisGroup = async (): Promise<void> => {
   const ormRepository = getRepository(AnalisisGroup);
-  const auxiliar = await apiMYLIMS.get(`/AnalysisGroups${queryParms}`);
+  await apiMYLIMS
+    .get(`/AnalysisGroups${queryParms}`)
+    .then(async auxiliar => {
+      const auxiliarData = auxiliar.data.Result as IAnalysisGroup[];
 
-  const auxiliarData = auxiliar.data.Result as IAnalysisGroup[];
+      const auxiliarToSave = auxiliarData.map(auxiliarItem => {
+        const auxiliarCreated = ormRepository.create({
+          id: auxiliarItem.Id,
+          identification: auxiliarItem.Identification,
+        });
 
-  const auxiliarToSave = auxiliarData.map(auxiliarItem => {
-    const auxiliarCreated = ormRepository.create({
-      id: auxiliarItem.Id,
-      identification: auxiliarItem.Identification,
-    });
+        return auxiliarCreated;
+      });
 
-    return auxiliarCreated;
-  });
-
-  await Promise.all(auxiliarToSave)
-    .then(async toSave => {
-      const auxiliarSaved = await ormRepository.save(toSave);
-      logger.info(`Updated Analysis Groups: ${auxiliarSaved.length} records`);
+      await Promise.all(auxiliarToSave)
+        .then(async toSave => {
+          const auxiliarSaved = await ormRepository.save(toSave);
+          logger.info(
+            `Updated Analysis Groups: ${auxiliarSaved.length} records`,
+          );
+        })
+        .catch(error => {
+          logger.error(`[updateAnalysisGroup] Aborted with error: ${error}`);
+          // process.exit(1);
+        });
     })
     .catch(error => {
-      logger.error(`[updateAnalysisGroup] Aborted with error: ${error}`);
-      // process.exit(1);
+      logger.error(`[updateAnalysisGroup Get] Aborted with error: ${error}`);
     });
 };
 

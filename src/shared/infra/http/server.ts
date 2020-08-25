@@ -27,22 +27,32 @@ app.use(helmet());
 app.disable('x-powered-by');
 
 const importAllSamples = async (): Promise<void> => {
-  const samples = await apiMYLIMS.get('/samples?$inlinecount=allpages&$top=5');
-  const totalCount = Number(samples.data.TotalCount);
   const samplesController = new SamplesControllerv2();
+  await apiMYLIMS
+    .get('/samples?$inlinecount=allpages&$top=5')
+    .then(async samples => {
+      const totalCount = Number(samples.data.TotalCount);
 
-  const top = Number(process.env.COUNT_SINC_AT_TIME);
-  let skip = Number(process.env.INTERVAL_SINC_MYLIMS_SKIP || 0);
-  let recordsProcesseds = 0;
-  const filter = '';
-  while (skip < totalCount) {
-    // eslint-disable-next-line no-await-in-loop
-    const recordsProcNow = await samplesController.update(skip, top, filter);
-    skip += top;
-    recordsProcesseds += recordsProcNow;
-    logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
-  }
-  logger.info(`Finished with ${totalCount} imported records`);
+      const top = Number(process.env.COUNT_SINC_AT_TIME);
+      let skip = Number(process.env.INTERVAL_SINC_MYLIMS_SKIP || 0);
+      let recordsProcesseds = 0;
+      const filter = '';
+      while (skip < totalCount) {
+        // eslint-disable-next-line no-await-in-loop
+        const recordsProcNow = await samplesController.update(
+          skip,
+          top,
+          filter,
+        );
+        skip += top;
+        recordsProcesseds += recordsProcNow;
+        logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
+      }
+      logger.info(`Finished with ${totalCount} imported records`);
+    })
+    .catch(error => {
+      logger.error(`[importAllSamples Get] Aborted with error: ${error}`);
+    });
 };
 
 const importNews = async (): Promise<void> => {
@@ -55,23 +65,32 @@ const importNews = async (): Promise<void> => {
   const baseURL = '/samples?$inlinecount=allpages&$top=5&$skip=0';
   const filter = `CurrentStatus/EditionDateTime ge DATETIME'${formatedDate}'`;
 
-  const samples = await apiMYLIMS.get(`${baseURL}&$filter=${filter}`);
+  await apiMYLIMS
+    .get(`${baseURL}&$filter=${filter}`)
+    .then(async samples => {
+      const totalCount = Number(samples.data.TotalCount);
 
-  const totalCount = Number(samples.data.TotalCount);
+      logger.info(`${totalCount} records until ${formatedDate}`);
 
-  logger.info(`${totalCount} records until ${formatedDate}`);
-
-  const top = Number(process.env.COUNT_SINC_AT_TIME);
-  let skip = 0;
-  let recordsProcesseds = 0;
-  while (skip < totalCount) {
-    // eslint-disable-next-line no-await-in-loop
-    const recordsProcNow = await samplesController.update(skip, top, filter);
-    skip += top;
-    recordsProcesseds += recordsProcNow;
-    logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
-  }
-  logger.info(`Finished with ${totalCount} imported records`);
+      const top = Number(process.env.COUNT_SINC_AT_TIME);
+      let skip = 0;
+      let recordsProcesseds = 0;
+      while (skip < totalCount) {
+        // eslint-disable-next-line no-await-in-loop
+        const recordsProcNow = await samplesController.update(
+          skip,
+          top,
+          filter,
+        );
+        skip += top;
+        recordsProcesseds += recordsProcNow;
+        logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
+      }
+      logger.info(`Finished with ${totalCount} imported records`);
+    })
+    .catch(error => {
+      logger.error(`[importNews Get] Aborted with error: ${error}`);
+    });
 };
 
 let appPort = Number(process.env.APP_PORT || 3039);
