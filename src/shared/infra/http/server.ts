@@ -16,6 +16,8 @@ import apiMYLIMS from '@shared/services/apiMYLIMS';
 import AuxiliariesControllerv2 from '@modules/samples/infra/controller/AuxiliariesControllerv2';
 import runMode from '@config/runMode';
 
+import apiPowerBI from '@shared/services/apiPowerBI';
+
 createConnection();
 
 const app = express();
@@ -109,11 +111,11 @@ switch (runMode()) {
 
 app.listen(appPort, () => {
   logger.info(
-    `\n${'#'.repeat(80)}\n#${' '.repeat(
-      21,
+    `\n${'#'.repeat(100)}\n#${' '.repeat(
+      31,
     )} Service now running on port '${appPort}' ${' '.repeat(
-      21,
-    )}# \n${'#'.repeat(80)}\n`,
+      31,
+    )}# \n${'#'.repeat(100)}\n`,
   );
 
   switch (runMode()) {
@@ -134,21 +136,32 @@ app.listen(appPort, () => {
 
     case 'sync':
       logger.info(
-        `Importing updated records in the last ${process.env.HOUR_TO_RETROCED_IMPORT} hours`,
+        `Every ${process.env.INTERVAL_TO_IMPORT} seconds importing updated records in the last ${process.env.HOUR_TO_RETROCED_IMPORT} hours`,
       );
 
       let isRunning = false;
       try {
-        const job = new CronJob('* * * * * *', () => {
-          if (!isRunning) {
-            isRunning = true;
-            setTimeout(async () => {
-              await AuxiliariesControllerv2();
-              await importNews();
-              isRunning = false;
-            }, 3000);
-          }
-        });
+        const job = new CronJob(
+          `*/${process.env.INTERVAL_TO_IMPORT} * * * * *`,
+          () => {
+            if (!isRunning) {
+              isRunning = true;
+              setTimeout(async () => {
+                await AuxiliariesControllerv2();
+                await importNews();
+                await apiPowerBI
+                  .get('')
+                  .then(res =>
+                    logger.info(`Refresh Power BI Dataset: ${res.statusText}`),
+                  )
+                  .catch(error =>
+                    logger.error(`Error while update Power BI: ${error}`),
+                  );
+                isRunning = false;
+              }, 3000);
+            }
+          },
+        );
         job.start();
       } catch (err) {
         logger.error(`Finished with error: ${err}`);
