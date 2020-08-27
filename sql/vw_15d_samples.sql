@@ -1,0 +1,83 @@
+-- public.vw_15d_samples source
+
+CREATE OR REPLACE VIEW public.vw_15d_samples
+AS SELECT s.id,
+    s.identification,
+    s.service_center_id,
+    s.created_at,
+    s.updated_at,
+    s.sample_conclusion_id,
+    s.control_number,
+    s.number,
+    s.year,
+    s.sub_number,
+    s.revision,
+    s.active,
+    s.sync_portal,
+    s.received,
+    s.finalized,
+    s.published,
+    s.reviewed,
+    s.taken_date_time,
+    s.received_time,
+    s.finalized_time,
+    s.published_time,
+    s.reviewed_time,
+    s.sample_reason_id,
+    s.sample_type_id,
+    s.sample_collection_point_id,
+    s.sample_status_id,
+    s.current_status_user_id,
+    s.current_status_edition_date_time,
+    cp.identification AS collection_point,
+    sc.identification AS sample_conclusion,
+    sr.identification AS sample_reason,
+    st.identification AS sample_type,
+    ss.identification AS sample_status,
+    mu.identification AS current_status_user,
+    vsa.id AS analyse_id,
+    vsa."order" AS analyse_order,
+    vsa.info_id AS analyse_info_id,
+    vsa.analise AS analyse_info,
+    vsa.measurement_unit AS analyse_measurement_unit,
+    vsa.display_value AS analyse_display_value,
+    vsa.value_float AS analyse_value_float,
+    vsa.reference_method AS analyse_reference_method,
+    vsa.method_id AS analyse_method_id,
+    vsa.method AS analyse_method,
+    vsa.method_analysis_type AS analyse_method_analyse_type,
+    vsa.conclusion AS analyse_conclusion,
+    vsa.analysis_group_id AS analyse_group_id,
+    vsa.analysis_group AS analyse_group,
+    vsa.created_at AS analyse_created_at,
+    vsa.updated_at AS analyse_updated_at,
+    vsa.method_type_id AS vsa_method_type_id,
+    vsa.method_type AS vsa_method_type,
+    vsa.service_area_id AS vsa_service_area_id,
+    vsa.service_area AS vsa_service_area,
+    vsa.method_status_id AS vsa_method_status_id,
+    vsa.method_status AS vsa_method_status,
+    vsa.edition_user_id AS vsa_edition_user_id,
+    vsa.edition_user AS vsa_edition_user,
+    vsa.edition_data_time AS vsa_edition_data_time,
+    vsa.start_user_id AS vsa_start_user_id,
+    vsa.start_user AS vsa_start_user,
+    vsa.start_data_time AS vsa_start_data_time,
+    vsa.execute_user_id AS vsa_execute_user_id,
+    vsa.execute_user AS vsa_execute_user,
+    vsa.execute_data_time AS vsa_execute_data_time,
+    vsa.vsm_created_at AS vsa_vsm_created_at,
+    vsa.vsm_updated_at AS vsa_vsm_updated_at,
+    sio.display_value AS observation,
+    sil.display_value AS lote
+   FROM samples s
+     LEFT JOIN collection_points cp ON s.sample_collection_point_id = cp.id
+     LEFT JOIN sample_conclusions sc ON s.sample_conclusion_id = sc.id
+     LEFT JOIN sample_reasons sr ON s.sample_reason_id = sr.id
+     LEFT JOIN sample_types st ON s.sample_type_id = st.id
+     LEFT JOIN sample_status ss ON s.sample_status_id = ss.id
+     LEFT JOIN mylims_users mu ON s.current_status_user_id = mu.id
+     LEFT JOIN vw_samples_analyses vsa ON s.id = vsa.sample_id
+     LEFT JOIN sample_infos sio ON s.id = sio.sample_id AND sio.info_id = 10163
+     LEFT JOIN sample_infos sil ON s.id = sil.sample_id AND sil.info_id = 10131
+  WHERE s.current_status_edition_date_time >= (now() - '15 days'::interval);

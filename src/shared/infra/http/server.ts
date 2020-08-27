@@ -17,6 +17,7 @@ import AuxiliariesControllerv2 from '@modules/samples/infra/controller/Auxiliari
 import runMode from '@config/runMode';
 
 import apiPowerBI from '@shared/services/apiPowerBI';
+import routes from './routes';
 
 createConnection();
 
@@ -27,6 +28,8 @@ app.use(express.json());
 
 app.use(helmet());
 app.disable('x-powered-by');
+
+app.use(routes);
 
 const importAllSamples = async (): Promise<void> => {
   const samplesController = new SamplesControllerv2();
@@ -95,6 +98,17 @@ const importNews = async (): Promise<void> => {
     });
 };
 
+const refreshPowerBI = async (): Promise<void> => {
+  await apiPowerBI
+    .post('')
+    .then(res =>
+      logger.info(`PBI >>>> Refresh Power BI Dataset: ${res.statusText}`),
+    )
+    .catch(error =>
+      logger.error(`ErrorPBI >>>>  while update Power BI: ${error}`),
+    );
+};
+
 let appPort = Number(process.env.APP_PORT || 3039);
 
 switch (runMode()) {
@@ -149,14 +163,7 @@ app.listen(appPort, () => {
               setTimeout(async () => {
                 await AuxiliariesControllerv2();
                 await importNews();
-                await apiPowerBI
-                  .get('')
-                  .then(res =>
-                    logger.info(`Refresh Power BI Dataset: ${res.statusText}`),
-                  )
-                  .catch(error =>
-                    logger.error(`Error while update Power BI: ${error}`),
-                  );
+                // await refreshPowerBI();
                 isRunning = false;
               }, 3000);
             }
