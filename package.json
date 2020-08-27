@@ -1,7 +1,7 @@
 {
   "name": "xilolite-api-cq",
   "description": "API Quality Control get analisys result and share",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "main": "index.js",
   "private": true,
   "scripts": {
