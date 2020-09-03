@@ -149,14 +149,14 @@ app.listen(appPort, () => {
               setTimeout(async () => {
                 await AuxiliariesControllerv2();
                 await importNews();
-                await apiPowerBI
+		/*await apiPowerBI
                   .get('')
                   .then(res =>
                     logger.info(`Refresh Power BI Dataset: ${res.statusText}`),
                   )
                   .catch(error =>
                     logger.error(`Error while update Power BI: ${error}`),
-                  );
+		    );*/
                 isRunning = false;
               }, 3000);
             }
