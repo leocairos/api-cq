@@ -4,6 +4,7 @@ import { createConnection, getRepository } from 'typeorm';
 import logger from '@config/logger';
 
 import Sample from '@modules/samples/infra/typeorm/entities/Sample';
+import apiMYLIMS from '@shared/services/apiMYLIMS';
 
 const routes = Router();
 
@@ -24,9 +25,19 @@ const list = async (request: Request, response: Response): Promise<any> => {
   return response.json(findSample);
 };
 
-const serviceStatus = (request: Request, response: Response): Response => {
+const serviceStatus = async (
+  request: Request,
+  response: Response,
+): Promise<Response> => {
   logger.info(`GET in serviceStatus`);
-  return response.json({ message: `Service is running` });
+
+  const myLIMsResponse = await apiMYLIMS.get('/checkConnection');
+
+  const connectedMyLIMS = myLIMsResponse.data === true;
+
+  return response.json({
+    connectedMyLIMS,
+  });
 };
 
 routes.get('/samples', list);
