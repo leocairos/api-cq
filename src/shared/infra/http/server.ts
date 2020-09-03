@@ -123,6 +123,16 @@ switch (runMode()) {
     process.exit(1);
 }
 
+app.get('/serviceStatus', async (request, response) => {
+  logger.info(`GET in serviceStatus`);
+
+  const myLIMsResponse = await apiMYLIMS.get('/checkConnection');
+
+  const connectedMyLIMS = myLIMsResponse.data === true;
+
+  return response.json({ connectedMyLIMS });
+});
+
 app.listen(appPort, () => {
   logger.info(
     `\n${'#'.repeat(100)}\n#${' '.repeat(

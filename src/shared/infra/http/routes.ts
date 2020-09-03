@@ -25,7 +25,7 @@ const list = async (request: Request, response: Response): Promise<any> => {
   return response.json(findSample);
 };
 
-const serviceStatus = async (
+/* const serviceStatus = async (
   request: Request,
   response: Response,
 ): Promise<Response> => {
@@ -35,13 +35,11 @@ const serviceStatus = async (
 
   const connectedMyLIMS = myLIMsResponse.data === true;
 
-  return response.json({
-    connectedMyLIMS,
-  });
+  return response.json({ connectedMyLIMS });
 };
 
-routes.get('/samples', list);
+routes.get('/serviceStatus', serviceStatus); */
 
-routes.get('/serviceStatus', serviceStatus);
+routes.get('/samples', list);
 
 export default routes;
