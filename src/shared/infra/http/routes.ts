@@ -24,6 +24,13 @@ const list = async (request: Request, response: Response): Promise<any> => {
   return response.json(findSample);
 };
 
+const serviceStatus = (request: Request, response: Response): Response => {
+  logger.info(`GET in serviceStatus`);
+  return response.json({ message: `Service is running` });
+};
+
 routes.get('/samples', list);
+
+routes.get('/serviceStatus', serviceStatus);
 
 export default routes;
