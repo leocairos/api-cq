@@ -173,8 +173,9 @@ app.listen(appPort, () => {
             if (!isRunning) {
               isRunning = true;
               setTimeout(async () => {
-                if (countUpdAux % 3 === 0) {
+                if (countUpdAux % 50 === 0) {
                   await AuxiliariesControllerv2();
+                  countUpdAux = 0;
                 }
                 countUpdAux += 1;
 
