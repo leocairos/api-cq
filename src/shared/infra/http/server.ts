@@ -92,6 +92,7 @@ const importNews = async (): Promise<void> => {
         logger.info(`${recordsProcesseds} records imported (of ${totalCount})`);
       }
       logger.info(`Finished with ${totalCount} imported records`);
+      logger.info(`Waiting next synchronization..`);
     })
     .catch(error => {
       logger.error(`[importNews Get] Aborted with error: ${error}`);
@@ -164,6 +165,7 @@ app.listen(appPort, () => {
       );
 
       let isRunning = false;
+      let countUpdAux = 0;
       try {
         const job = new CronJob(
           `*/${process.env.INTERVAL_TO_IMPORT} * * * * *`,
@@ -171,7 +173,12 @@ app.listen(appPort, () => {
             if (!isRunning) {
               isRunning = true;
               setTimeout(async () => {
-                await AuxiliariesControllerv2();
+                if (countUpdAux % 50 === 0) {
+                  await AuxiliariesControllerv2();
+                  countUpdAux = 0;
+                }
+                countUpdAux += 1;
+
                 await importNews();
                 // await refreshPowerBI();
                 isRunning = false;
