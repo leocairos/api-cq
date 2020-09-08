@@ -1,9 +1,10 @@
 /* eslint-disable no-case-declarations */
 import 'reflect-metadata';
+import 'express-async-errors';
+import 'dotenv/config';
 import cors from 'cors';
 
 import helmet from 'helmet';
-import 'dotenv/config';
 import logger from '@config/logger';
 
 import createConnection from '@shared/infra/typeorm';
@@ -16,7 +17,7 @@ import apiMYLIMS from '@shared/services/apiMYLIMS';
 import AuxiliariesControllerv2 from '@modules/samples/infra/controller/AuxiliariesControllerv2';
 import runMode from '@config/runMode';
 
-import apiPowerBI from '@shared/services/apiPowerBI';
+// import apiPowerBI from '@shared/services/apiPowerBI';
 import routes from './routes';
 
 createConnection();
@@ -28,8 +29,6 @@ app.use(express.json());
 
 app.use(helmet());
 app.disable('x-powered-by');
-
-app.use(routes);
 
 const importAllSamples = async (): Promise<void> => {
   const samplesController = new SamplesControllerv2();
@@ -99,7 +98,7 @@ const importNews = async (): Promise<void> => {
     });
 };
 
-const refreshPowerBI = async (): Promise<void> => {
+/* const refreshPowerBI = async (): Promise<void> => {
   await apiPowerBI
     .post('')
     .then(res =>
@@ -108,7 +107,7 @@ const refreshPowerBI = async (): Promise<void> => {
     .catch(error =>
       logger.error(`ErrorPBI >>>>  while update Power BI: ${error}`),
     );
-};
+}; */
 
 let appPort = Number(process.env.APP_PORT || 3039);
 
@@ -133,6 +132,8 @@ app.get('/serviceStatus', async (request, response) => {
 
   return response.json({ connectedMyLIMS });
 });
+
+app.use(routes);
 
 app.listen(appPort, () => {
   logger.info(
