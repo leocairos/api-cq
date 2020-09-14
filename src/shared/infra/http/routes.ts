@@ -3,6 +3,7 @@ import { createConnection, getRepository } from 'typeorm';
 
 import logger from '@config/logger';
 import Sample from '@modules/samples/infra/typeorm/entities/Sample';
+import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesControllerv2';
 
 import ensureAuthenticated from './ensureAuthenticated';
 
@@ -83,9 +84,15 @@ const mylimsNotification = async (
 
   const { Entity, EntityId, ReferenceKey, Event } = request.body;
 
-  logger.info({ Entity, EntityId, ReferenceKey, Event });
+  logger.info(JSON.stringify({ Entity, EntityId, ReferenceKey, Event }));
 
-  return response.json({ Entity, EntityId, ReferenceKey, Event });
+  if (Entity === 'Sample') {
+    const samplesController = new SamplesControllerv2();
+
+    samplesController.updateSample(EntityId);
+  }
+
+  return response.sendStatus(200);
 };
 
 routes.use(ensureAuthenticated);
