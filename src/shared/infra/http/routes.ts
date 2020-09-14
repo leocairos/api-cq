@@ -84,6 +84,7 @@ const mylimsNotification = async (
   const { Entity, EntityId, ReferenceKey, Event } = request.body;
 
   logger.info({ Entity, EntityId, ReferenceKey, Event });
+  console.log({ Entity, EntityId, ReferenceKey, Event });
 
   return response.json({ Entity, EntityId, ReferenceKey, Event });
 };
