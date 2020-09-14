@@ -118,6 +118,9 @@ switch (runMode()) {
   case 'sync':
     appPort += 1;
     break;
+  case 'api':
+    appPort += 2;
+    break;
   default:
     logger.warn('Sorry, that is not something I know how to do.');
     process.exit(1);
@@ -192,6 +195,11 @@ app.listen(appPort, () => {
         logger.error(`Finished with error: ${err}`);
         isRunning = false;
       }
+      break;
+
+    case 'api':
+      logger.info('API mode');
+
       break;
 
     default:

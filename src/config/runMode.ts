@@ -5,6 +5,8 @@ const runMode = (): string => {
         return 'importAll';
       case 'SYNC':
         return 'sync';
+      case 'API':
+        return 'api';
       default:
         return 'noParms';
     }
