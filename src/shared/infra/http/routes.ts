@@ -3,6 +3,7 @@ import { createConnection, getRepository } from 'typeorm';
 
 import logger from '@config/logger';
 import Sample from '@modules/samples/infra/typeorm/entities/Sample';
+
 import ensureAuthenticated from './ensureAuthenticated';
 
 const routes = Router();
@@ -30,6 +31,33 @@ const getLastSampleUpdated = async (
   return response.json(findSample);
 };
 
+const getSamples = async (
+  request: Request,
+  response: Response,
+): Promise<any> => {
+  logger.info(`GET samples (from ${request.connection.remoteAddress})...`);
+
+  const [page = 1, pageSize = 10] = request.body;
+
+  try {
+    await createConnection();
+  } catch {
+    //
+  }
+
+  const ormRepository = getRepository(Sample);
+
+  const total = await ormRepository.count();
+
+  const findSamples = await ormRepository.find({
+    order: { currentStatusEditionDateTime: 'DESC' },
+    take: pageSize,
+    skip: pageSize * (page - 1),
+  });
+
+  return response.json({ total, page, samples: findSamples });
+};
+
 const mylimsNotification = async (
   request: Request,
   response: Response,
@@ -55,11 +83,14 @@ const mylimsNotification = async (
 
   const { Entity, EntityId, ReferenceKey, Event } = request.body;
 
+  logger.info({ Entity, EntityId, ReferenceKey, Event });
+
   return response.json({ Entity, EntityId, ReferenceKey, Event });
 };
 
 routes.use(ensureAuthenticated);
 routes.get('/lastSample', getLastSampleUpdated);
+routes.get('/samples', getSamples);
 
 routes.post('/mylims/notification', mylimsNotification);
 
