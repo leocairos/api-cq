@@ -237,8 +237,8 @@ const sendMail = sample => {
 
   mailProvider.sendMail({
     to: {
-      name: 'leocairos',
-      email: 'leocairos@gmail.com',
+      name: 'Leonardo',
+      email: 'leonardo@xilolite.com.br',
     },
     subject: `[API-CQ] Atualização da Amostra ${sample.id}`,
     html: htmlMessage,
@@ -288,7 +288,7 @@ const mylimsNotification = async (
         const sampleDetail = await getSampleToMail(
           findSampleMethod[0].sample_id,
         );
-        sendMail(sampleDetail);
+        // sendMail(sampleDetail);
         return response.status(200).json(sampleDetail);
       } catch {
         // return response.sendStatus(200);
@@ -297,7 +297,7 @@ const mylimsNotification = async (
     await samplesController.updateSample(EntityId);
     const sampleDetail = await getSampleToMail(EntityId);
 
-    sendMail(sampleDetail);
+    // sendMail(sampleDetail);
     return response.status(200).json(sampleDetail);
 
     // console.log(JSON.stringify(sampleDetail));
