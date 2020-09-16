@@ -150,6 +150,9 @@ class Sample {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updated_at: Date;
+
+  @Column({ name: 'hash_mail' })
+  hashMail: string;
 }
 
 export default Sample;

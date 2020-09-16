@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 
 import AppError from '@shared/errors/AppError';
 import logger from '@config/logger';
-import remoteIp from '@shared/services/util';
+import { remoteIp } from '@shared/services/util';
 
 function ensureAuthenticated(
   request: Request,

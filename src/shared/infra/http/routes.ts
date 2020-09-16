@@ -8,7 +8,8 @@ import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesContro
 import SampleMethod from '@modules/samples/infra/typeorm/entities/SampleMethod';
 import MailProvider from '@shared/services/MailProvider';
 import msgSampleUpdated from '@shared/providers/MailTemplate';
-import remoteIp from '@shared/services/util';
+import { BCryptHash, remoteIp } from '@shared/services/util';
+import { assign } from 'nodemailer/lib/shared';
 import ensureAuthenticated from './ensureAuthenticated';
 
 const routes = Router();
@@ -77,7 +78,7 @@ const getSampleById = async (
 
   const ormRepository = getRepository(Sample);
 
-  const findSample = await ormRepository.find({
+  const findSample = await ormRepository.findOne({
     where: { id: idSample },
   });
 
@@ -122,7 +123,7 @@ const getVwSamples = async (
 };
 
 const getSampleToMail = async (idSample: number): Promise<any> => {
-  logger.info(`Getting sample detail for mail...`);
+  logger.info(`Getting sample detail for mail (Sanple ${idSample})...`);
 
   try {
     await createConnection();
@@ -143,7 +144,7 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
       analyse_method_analyse_type, analyse_conclusion, analyse_group, analyse_updated_at,
       vsa_method_type, vsa_service_area, vsa_method_status,
       vsa_edition_data_time, vsa_edition_user, vsa_start_data_time, vsa_start_user,
-      vsa_execute_data_time,vsa_execute_user, vsa_vsm_updated_at
+      vsa_execute_data_time,vsa_execute_user, vsa_vsm_updated_at, hash_mail
     FROM
       vw_all_samples vas
     WHERE
@@ -174,6 +175,7 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
       lote: findSampleDetail[0].lote,
       observation: findSampleDetail[0].observation,
       analysis: sampleAnalysis,
+      hashMail: findSampleDetail[0].hash_mail,
     };
     return sampleDetail;
   } catch {
@@ -183,10 +185,25 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
 
 const sendMail = async (idSample: number): Promise<boolean> => {
   const mailProvider = new MailProvider();
+  const hashProvider = new BCryptHash();
 
   const sampleDetail = await getSampleToMail(idSample);
   const htmlMessage = msgSampleUpdated(sampleDetail);
 
+  // console.log('htmlMessage', htmlMessage);
+  // console.log('sampleDetail.hashMail', sampleDetail.hashMail || '');
+  const hashIsEqual = await hashProvider.compareHash(
+    htmlMessage,
+    sampleDetail.hashMail || '',
+  );
+
+  // Sample with same hash, send mail is not necessary
+  if (hashIsEqual) {
+    logger.info(
+      `Send mail Sanple ${idSample} is not necessary, because sample hash is not new...`,
+    );
+    return false;
+  }
   const recipients = process.env.MAIL_TO_FORNO || '';
 
   try {
@@ -195,6 +212,29 @@ const sendMail = async (idSample: number): Promise<boolean> => {
       subject: `[API-CQ] Atualização da Amostra ${idSample}`,
       html: htmlMessage,
     });
+
+    // BEGIN atualizar o hash_mail
+    try {
+      await createConnection();
+    } catch {
+      //
+    }
+    const ormRepository = getRepository(Sample);
+
+    const findSample = await ormRepository.findOne({
+      where: { id: idSample },
+    });
+
+    // console.log('findSample antes', findSample);
+
+    findSample.hashMail = await hashProvider.generateHash(htmlMessage);
+
+    // Object.assign(findSample, { hash: newHashMail });
+
+    // console.log('findSample depois', findSample);
+    await ormRepository.save(findSample);
+    // END atualizar o hash_mail
+
     return true;
   } catch {
     return false;
