@@ -18,6 +18,7 @@ import AuxiliariesControllerv2 from '@modules/samples/infra/controller/Auxiliari
 import runMode from '@config/runMode';
 
 // import apiPowerBI from '@shared/services/apiPowerBI';
+import MailProvider from '@shared/services/MailProvider';
 import routes from './routes';
 
 createConnection();
@@ -137,7 +138,6 @@ app.get('/serviceStatus', async (request, response) => {
 });
 
 app.use(routes);
-
 app.listen(appPort, () => {
   logger.info(
     `\n${'#'.repeat(100)}\n#${' '.repeat(
@@ -200,6 +200,15 @@ app.listen(appPort, () => {
     case 'api':
       logger.info('API mode');
 
+      /* const mailProvider = new MailProvider();
+      mailProvider.sendMail({
+        to: {
+          name: 'leocairos',
+          email: 'leocairos@gmail.com',
+        },
+        subject: '[CQ] Resultados de Amostras',
+        html: 'mensagem',
+      }); */
       break;
 
     default:

@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   PrimaryColumn,
   JoinColumn,
+  OneToMany,
   ManyToOne,
 } from 'typeorm';
 import ServiceCenter from './ServiceCenter';
@@ -14,6 +15,9 @@ import SampleType from './SampleType';
 import CollectionPoint from './CollectionPoint';
 import SampleStatus from './SampleStatus';
 import MyLIMSUser from './MyLIMSUser';
+import SampleAnalyse from './SampleAnalyse';
+import SampleInfo from './SampleInfo';
+import SampleMethod from './SampleMethod';
 
 @Entity('samples')
 class Sample {
@@ -122,6 +126,24 @@ class Sample {
   @ManyToOne(() => MyLIMSUser, { eager: true, cascade: true })
   @JoinColumn({ name: 'current_status_user_id' })
   currentStatusUser: MyLIMSUser;
+
+  /* @OneToMany(() => SampleAnalyse, sampleAnalyse => sampleAnalyse.sample, {
+    cascade: true,
+    eager: true,
+  })
+  sample_Analyse: SampleAnalyse[];
+
+  @OneToMany(() => SampleInfo, sampleInfo => sampleInfo.sample, {
+    cascade: true,
+    eager: true,
+  })
+  sample_Info: SampleInfo[];
+
+  @OneToMany(() => SampleMethod, sampleMethod => sampleMethod.sample, {
+    cascade: true,
+    eager: true,
+  })
+  sample_Method: SampleMethod[]; */
 
   @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;
