@@ -123,7 +123,7 @@ const getVwSamples = async (
 };
 
 const getSampleToMail = async (idSample: number): Promise<any> => {
-  logger.info(`Getting sample detail for mail (Sanple ${idSample})...`);
+  logger.info(`Getting sample detail for mail (Sample ${idSample})...`);
 
   try {
     await createConnection();
@@ -190,6 +190,8 @@ const sendMail = async (idSample: number): Promise<boolean> => {
   const sampleDetail = await getSampleToMail(idSample);
   const htmlMessage = msgSampleUpdated(sampleDetail);
 
+  const isFornoMHF =
+    sampleDetail.collectionPoint === 'Tubulação de Saída da Peneira PE-5001';
   // console.log('htmlMessage', htmlMessage);
   // console.log('sampleDetail.hashMail', sampleDetail.hashMail || '');
   const hashIsEqual = await hashProvider.compareHash(
@@ -200,18 +202,24 @@ const sendMail = async (idSample: number): Promise<boolean> => {
   // Sample with same hash, send mail is not necessary
   if (hashIsEqual) {
     logger.info(
-      `Send mail Sanple ${idSample} is not necessary, because sample hash is not new...`,
+      `Send mail Sample ${idSample} is not necessary, because sample hash is not new...`,
     );
     return false;
   }
   const recipients = process.env.MAIL_TO_FORNO || '';
 
   try {
-    await mailProvider.sendMail({
-      to: recipients, // 'leonardo@xilolite.com.br',
-      subject: `[API-CQ] Atualização da Amostra ${idSample}`,
-      html: htmlMessage,
-    });
+    if (isFornoMHF) {
+      await mailProvider.sendMail({
+        to: recipients, // 'leonardo@xilolite.com.br',
+        subject: `[API-CQ] Atualização da Amostra ${idSample}`,
+        html: htmlMessage,
+      });
+    } else {
+      logger.info(
+        `Send mail Sample ${idSample} not sent, because sample hash is not from MHF`,
+      );
+    }
 
     // BEGIN atualizar o hash_mail
     try {
@@ -234,7 +242,7 @@ const sendMail = async (idSample: number): Promise<boolean> => {
     // console.log('findSample depois', findSample);
     await ormRepository.save(findSample);
     // END atualizar o hash_mail
-
+    logger.info(`Sample ${idSample}, hashMail updatesd`);
     return true;
   } catch {
     return false;
