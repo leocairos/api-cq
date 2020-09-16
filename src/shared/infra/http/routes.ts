@@ -167,20 +167,13 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
   try {
     const sampleDetail = {
       id: findSampleDetail[0].id,
-      // identification: findSampleDetail[0].identification,
-      taken_date_time: findSampleDetail[0].taken_date_time,
-      collection_point: findSampleDetail[0].collection_point,
-      sample_conclusion: findSampleDetail[0].sample_conclusion,
-      sample_status: findSampleDetail[0].sample_status,
-      sample_type: findSampleDetail[0].sample_type,
+      takenDateTime: findSampleDetail[0].taken_date_time,
+      collectionPoint: findSampleDetail[0].collection_point,
+      conclusion: findSampleDetail[0].sample_conclusion,
+      status: findSampleDetail[0].sample_status,
+      type: findSampleDetail[0].sample_type,
       lote: findSampleDetail[0].lote,
       observation: findSampleDetail[0].observation,
-      /* updated_at, control_number,
-        number, year, sub_number, revision, active,
-        taken_date_time, received_time, finalized_time, published_time, reviewed_time,
-        collection_point,  sample_conclusion,
-        sample_reason, sample_type, observation, lote,
-        current_status_edition_date_time, current_status_user, sample_status, */
       analysis: sampleAnalysis,
     };
     return sampleDetail;
@@ -189,19 +182,25 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
   }
 };
 
-const sendMail = sample => {
+const sendMail = async (idSample: number): Promise<boolean> => {
   const mailProvider = new MailProvider();
 
-  const htmlMessage = msgSampleUpdated(sample);
+  const sampleDetail = await getSampleToMail(idSample);
+  const htmlMessage = msgSampleUpdated(sampleDetail);
 
-  mailProvider.sendMail({
-    to: {
-      name: 'Leonardo',
-      email: 'leonardo@xilolite.com.br',
-    },
-    subject: `[API-CQ] Atualização da Amostra ${sample.id}`,
-    html: htmlMessage,
-  });
+  const recipients = process.env.MAIL_TO_FORNO || '';
+  console.log('recipients', recipients);
+
+  try {
+    await mailProvider.sendMail({
+      to: recipients, // 'leonardo@xilolite.com.br',
+      subject: `[API-CQ] Atualização da Amostra ${idSample}`,
+      html: htmlMessage,
+    });
+    return true;
+  } catch {
+    return false;
+  }
 };
 
 const mylimsNotification = async (
@@ -211,21 +210,6 @@ const mylimsNotification = async (
   logger.info(
     `POST in mylims/notification (from ${request.connection.remoteAddress})...`,
   );
-  /*
-  URI:
-    http://empresa.site/api/mylims/notification
-    Header:
-    x-access-key: a9s8das9d8asdas98d90
-    Verb:
-    POST
-    JSON:
-    {
-    “Entity”: “Sample”,
-    “EntityId”: 1,
-    “ReferenceKey”: “L001”,
-    “Event”: “Insert”
-    }
-*/
 
   const { Entity, EntityId, ReferenceKey, Event } = request.body;
 
@@ -252,12 +236,10 @@ const mylimsNotification = async (
       idSample = EntityId;
     }
 
-    console.log('idSample', idSample);
     await samplesController.updateSample(idSample);
-    const sampleDetail = await getSampleToMail(idSample);
 
-    // sendMail(sampleDetail);
-    return response.status(200).json(sampleDetail);
+    sendMail(idSample);
+    return response.status(200).json({ sample: idSample });
 
     // console.log(JSON.stringify(sampleDetail));
   }

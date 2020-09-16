@@ -3,7 +3,7 @@ import mailConfig from '@config/mail';
 import logger from '@config/logger';
 
 interface ISendMailDTO {
-  to: { name: string; email: string };
+  to: string;
   from?: { name: string; email: string };
   subject: string;
   html: string;
@@ -30,7 +30,7 @@ export default class MailProvider {
     subject,
     html,
   }: ISendMailDTO): Promise<void> {
-    logger.info(`Sending email "${subject}" to ${to.email}`);
+    logger.info(`Sending email "${subject}" to ${to}`);
 
     const { name, email } = mailConfig.defaults.from;
 
@@ -39,10 +39,7 @@ export default class MailProvider {
         name: from?.name || name,
         address: from?.email || email,
       },
-      to: {
-        name: to.name,
-        address: to.email,
-      },
+      to,
       subject,
       html,
     });
