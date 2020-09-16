@@ -69,7 +69,8 @@ AS SELECT s.id,
     vsa.vsm_created_at AS vsa_vsm_created_at,
     vsa.vsm_updated_at AS vsa_vsm_updated_at,
     sio.display_value AS observation,
-    sil.display_value AS lote
+    sil.display_value AS lote,
+    s.hash_mail
    FROM samples s
      LEFT JOIN collection_points cp ON s.sample_collection_point_id = cp.id
      LEFT JOIN sample_conclusions sc ON s.sample_conclusion_id = sc.id

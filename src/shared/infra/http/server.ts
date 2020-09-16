@@ -19,7 +19,7 @@ import runMode from '@config/runMode';
 
 // import apiPowerBI from '@shared/services/apiPowerBI';
 
-import remoteIp from '@shared/services/util';
+import { remoteIp } from '@shared/services/util';
 import routes from './routes';
 
 createConnection();
