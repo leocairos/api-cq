@@ -7,7 +7,7 @@ import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesContro
 
 import SampleMethod from '@modules/samples/infra/typeorm/entities/SampleMethod';
 import MailProvider from '@shared/services/MailProvider';
-import { format } from 'date-fns';
+import msgSampleUpdated from '@shared/providers/MailTemplate';
 import ensureAuthenticated from './ensureAuthenticated';
 
 const routes = Router();
@@ -192,48 +192,7 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
 const sendMail = sample => {
   const mailProvider = new MailProvider();
 
-  const takenDateFormatted = sample.taken_date_time
-    ? format(sample.taken_date_time, "dd/MM/yyyy 'às' HH:mm'h'")
-    : '';
-  let htmlMessage = ` <strong>Id Amostra: </strong> ${sample.id}</br>
-      <strong>Data da Coleta: </strong>${takenDateFormatted}</br>
-      <strong>Ponto de Coleta: </strong>${sample.collection_point} </br>
-      <strong>Tipo de Amostra: </strong>${sample.sample_type}</br>
-      <strong>Situação da Amostra: </strong>${sample.sample_status}</br>
-      <strong>Parecer da Amostra: </strong>${sample.sample_conclusion}</br>
-      <strong>Observação: </strong>${sample.observation || ''}</br>
-      <strong>Lote: </strong> ${sample.lote || ''} </br></br>
-
-      <strong>Análises</strong></br></br>
-
-      <table style="text-align:left; border: 1px solid black">
-      <thead>
-        <tr style="text-align:left; border: 1px solid black">
-          <th style="text-align:left; border: 1px solid black">Método Análise</th>
-          <th style="text-align:left; border: 1px solid black">Valor</th>
-          <th style="text-align:left; border: 1px solid black">Parecer da Análise</th>
-        </tr>
-      </thead>
-      <tbody>`;
-
-  // eslint-disable-next-line no-restricted-syntax
-  for (const analyse of sample.analysis) {
-    htmlMessage += `
-      <tr style="text-align:left; border: 1px solid black">
-        <td style="text-align:left; border: 1px solid black">${
-          analyse.analyse
-        }</td>
-        <td style="text-align:right; border: 1px solid black">${
-          analyse.value || '-'
-        } ${analyse.unit}</td>
-        <td style="text-align:left; border: 1px solid black">${
-          analyse.conclusion
-        }</td>
-    </tr>`;
-  }
-
-  htmlMessage += `</tbody>
-    </table>`;
+  const htmlMessage = msgSampleUpdated(sample);
 
   mailProvider.sendMail({
     to: {
@@ -272,30 +231,30 @@ const mylimsNotification = async (
 
   logger.info(JSON.stringify({ Entity, EntityId, ReferenceKey, Event }));
 
+  let idSample = 0;
   if (Entity === 'Sample' || Entity === 'SampleMethod') {
     const samplesController = new SamplesControllerv2();
 
     if (Entity === 'SampleMethod') {
       try {
         await createConnection();
-        const ormRepository = getRepository(SampleMethod);
-
-        const findSampleMethod = await ormRepository.find({
-          where: { id: EntityId },
-        });
-
-        await samplesController.updateSample(findSampleMethod[0].sample_id);
-        const sampleDetail = await getSampleToMail(
-          findSampleMethod[0].sample_id,
-        );
-        // sendMail(sampleDetail);
-        return response.status(200).json(sampleDetail);
       } catch {
-        // return response.sendStatus(200);
+        //
       }
+      const ormRepository = getRepository(SampleMethod);
+
+      const findSampleMethod = await ormRepository.findOne({
+        where: { id: EntityId },
+      });
+
+      idSample = findSampleMethod.sample_id;
+    } else {
+      idSample = EntityId;
     }
-    await samplesController.updateSample(EntityId);
-    const sampleDetail = await getSampleToMail(EntityId);
+
+    console.log('idSample', idSample);
+    await samplesController.updateSample(idSample);
+    const sampleDetail = await getSampleToMail(idSample);
 
     // sendMail(sampleDetail);
     return response.status(200).json(sampleDetail);
