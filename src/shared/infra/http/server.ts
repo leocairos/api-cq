@@ -18,7 +18,8 @@ import AuxiliariesControllerv2 from '@modules/samples/infra/controller/Auxiliari
 import runMode from '@config/runMode';
 
 // import apiPowerBI from '@shared/services/apiPowerBI';
-import MailProvider from '@shared/services/MailProvider';
+
+import remoteIp from '@shared/services/util';
 import routes from './routes';
 
 createConnection();
@@ -128,7 +129,7 @@ switch (runMode()) {
 }
 
 app.get('/serviceStatus', async (request, response) => {
-  logger.info(`GET in serviceStatus`);
+  logger.info(`GET in serviceStatus (from ${remoteIp(request)})...`);
 
   const myLIMsResponse = await apiMYLIMS.get('/checkConnection');
 
@@ -200,15 +201,6 @@ app.listen(appPort, () => {
     case 'api':
       logger.info('API mode');
 
-      /* const mailProvider = new MailProvider();
-      mailProvider.sendMail({
-        to: {
-          name: 'leocairos',
-          email: 'leocairos@gmail.com',
-        },
-        subject: '[CQ] Resultados de Amostras',
-        html: 'mensagem',
-      }); */
       break;
 
     default:
