@@ -8,6 +8,7 @@ import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesContro
 import SampleMethod from '@modules/samples/infra/typeorm/entities/SampleMethod';
 import MailProvider from '@shared/services/MailProvider';
 import msgSampleUpdated from '@shared/providers/MailTemplate';
+import remoteIp from '@shared/services/util';
 import ensureAuthenticated from './ensureAuthenticated';
 
 const routes = Router();
@@ -16,9 +17,7 @@ const getLastSampleUpdated = async (
   request: Request,
   response: Response,
 ): Promise<any> => {
-  logger.info(
-    `GET in lastSampleUpdate (from ${request.connection.remoteAddress})...`,
-  );
+  logger.info(`GET in lastSampleUpdate (from ${remoteIp(request)})...`);
 
   try {
     await createConnection();
@@ -39,7 +38,7 @@ const getSamples = async (
   request: Request,
   response: Response,
 ): Promise<any> => {
-  logger.info(`GET samples (from ${request.connection.remoteAddress})...`);
+  logger.info(`GET samples (from ${remoteIp(request)})...`);
 
   const { page = 1, pageSize = 10 } = request.query;
 
@@ -66,7 +65,7 @@ const getSampleById = async (
   request: Request,
   response: Response,
 ): Promise<any> => {
-  logger.info(`GET sample by Id (from ${request.connection.remoteAddress})...`);
+  logger.info(`GET sample by Id (from ${remoteIp(request)})...`);
 
   const { idSample = 0 } = request.query;
 
@@ -89,8 +88,8 @@ const getVwSamples = async (
   request: Request,
   response: Response,
 ): Promise<any> => {
-  logger.info(`GET samples VW(from ${request.connection.remoteAddress})...`);
-  console.log(request.query);
+  logger.info(`GET samples VW(from ${remoteIp(request)})...`);
+  // console.log(request.query);
   const { page = 1, pageSize = 10, idSample = 0 } = request.query;
 
   try {
@@ -189,7 +188,6 @@ const sendMail = async (idSample: number): Promise<boolean> => {
   const htmlMessage = msgSampleUpdated(sampleDetail);
 
   const recipients = process.env.MAIL_TO_FORNO || '';
-  console.log('recipients', recipients);
 
   try {
     await mailProvider.sendMail({
@@ -207,9 +205,7 @@ const mylimsNotification = async (
   request: Request,
   response: Response,
 ): Promise<Response> => {
-  logger.info(
-    `POST in mylims/notification (from ${request.connection.remoteAddress})...`,
-  );
+  logger.info(`POST in mylims/notification (from ${remoteIp(request)})...`);
 
   const { Entity, EntityId, ReferenceKey, Event } = request.body;
 
