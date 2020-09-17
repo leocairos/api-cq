@@ -3,6 +3,8 @@ import 'reflect-metadata';
 import 'express-async-errors';
 import 'dotenv/config';
 import cors from 'cors';
+import morgan from 'morgan';
+import compression from 'compression';
 
 import helmet from 'helmet';
 import logger from '@config/logger';
@@ -31,6 +33,15 @@ app.use(express.json());
 
 app.use(helmet());
 app.disable('x-powered-by');
+
+app.use(
+  morgan(
+    ':method :url :remote-addr - :remote-user :status :res[content-length] B :response-time ms',
+    { stream: logger.stream },
+  ),
+);
+
+app.use(compression());
 
 const importAllSamples = async (): Promise<void> => {
   const samplesController = new SamplesControllerv2();
@@ -141,12 +152,14 @@ app.get('/serviceStatus', async (request, response) => {
 app.use(routes);
 app.listen(appPort, () => {
   logger.info(
-    `\n${'#'.repeat(100)}\n#${' '.repeat(
-      31,
-    )} Service now running on port '${appPort}' ${' '.repeat(
-      31,
-    )}# \n${'#'.repeat(100)}\n`,
+    `\n${'#'.repeat(100)}\n${' '.repeat(
+      26,
+    )} Service now running on port '${appPort}' (${
+      process.env.NODE_ENV
+    }) ${' '.repeat(26)} \n${'#'.repeat(100)}\n`,
   );
+
+  console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 
   switch (runMode()) {
     case 'importAll':

@@ -269,50 +269,54 @@ export default class Samples {
 
         const toSave = await Promise.all(samplesToSave);
 
-        logger.info(`Total Samples avaliable to save: ${toSave.length}`);
+        if (toSave.length > 0) {
+          logger.info(`Total Samples avaliable to save: ${toSave.length}`);
 
-        const samplesSaved = await ormRepository.save(toSave);
+          const samplesSaved = await ormRepository.save(toSave);
 
-        logger.info(`samples Saved: ${samplesSaved.length} `);
+          logger.info(`samples Saved: ${samplesSaved.length} `);
 
-        const samplesDataSaved = samplesSaved.map(async sample => {
+          const samplesDataSaved = samplesSaved.map(async sample => {
+            logger.info(
+              `Sample: ${sample.id} last edition in ${sample.currentStatusEditionDateTime}`,
+            );
+
+            const sampleInfoSaved = await sampleInfosv2(sample.id);
+            const sampleMethodSaved = await sampleMethodsv2(sample.id);
+            const sampleAnalysesSaved = await sampleAnalysesv2(sample.id);
+
+            return {
+              infosCount: sampleInfoSaved,
+              methodsCount: sampleMethodSaved,
+              analysesCount: sampleAnalysesSaved,
+            };
+          });
+
           logger.info(
-            `Sample: ${sample.id} last edition in ${sample.currentStatusEditionDateTime}`,
+            `Getting samples details (infos, methods and analysis)... `,
           );
 
-          const sampleInfoSaved = await sampleInfosv2(sample.id);
-          const sampleMethodSaved = await sampleMethodsv2(sample.id);
-          const sampleAnalysesSaved = await sampleAnalysesv2(sample.id);
+          const countData = await Promise.all(samplesDataSaved);
 
-          return {
-            infosCount: sampleInfoSaved,
-            methodsCount: sampleMethodSaved,
-            analysesCount: sampleAnalysesSaved,
-          };
-        });
+          const totalInfo = countData.reduce((ac, info) => {
+            return ac + info.infosCount;
+          }, 0);
+          logger.info(`Total SamplesInfos saved: ${totalInfo}`);
 
-        logger.info(
-          `Getting samples details (infos, methods and analysis)... `,
-        );
+          const totalMethods = countData.reduce((ac, method) => {
+            return ac + method.methodsCount;
+          }, 0);
+          logger.info(`Total SamplesMethods saved: ${totalMethods}`);
 
-        const countData = await Promise.all(samplesDataSaved);
+          const totalAnalyses = countData.reduce((ac, method) => {
+            return ac + method.analysesCount;
+          }, 0);
+          logger.info(`Total SamplesAnalyses saved: ${totalAnalyses}`);
 
-        const totalInfo = countData.reduce((ac, info) => {
-          return ac + info.infosCount;
-        }, 0);
-        logger.info(`Total SamplesInfos saved: ${totalInfo}`);
-
-        const totalMethods = countData.reduce((ac, method) => {
-          return ac + method.methodsCount;
-        }, 0);
-        logger.info(`Total SamplesMethods saved: ${totalMethods}`);
-
-        const totalAnalyses = countData.reduce((ac, method) => {
-          return ac + method.analysesCount;
-        }, 0);
-        logger.info(`Total SamplesAnalyses saved: ${totalAnalyses}`);
-
-        samplesCount = samplesSaved.length;
+          samplesCount = samplesSaved.length;
+        } else {
+          samplesCount = 0;
+        }
       })
       .catch(error => {
         logger.error(
