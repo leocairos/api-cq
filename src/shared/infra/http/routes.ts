@@ -286,7 +286,19 @@ const mylimsNotification = async (
 
     await samplesController.updateSample(idSample);
 
-    sendMail(idSample);
+    const sendMailEvents = [
+      'Método da Amostra - Finalizar',
+      'Amostra - Finalizar',
+    ];
+
+    if (sendMailEvents.includes(Event)) {
+      sendMail(idSample);
+    } else {
+      logger.info(
+        `Send mail Sample ${idSample} not sent, because sample Event is not in "${sendMailEvents}"`,
+      );
+    }
+
     return response.status(200).json({ sample: idSample });
 
     // console.log(JSON.stringify(sampleDetail));
