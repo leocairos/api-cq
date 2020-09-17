@@ -188,6 +188,8 @@ const sendMail = async (idSample: number): Promise<boolean> => {
   const hashProvider = new BCryptHash();
 
   const sampleDetail = await getSampleToMail(idSample);
+  const hashMailStored = sampleDetail.hasMail;
+  delete sampleDetail.hashMail;
   const htmlMessage = msgSampleUpdated(sampleDetail);
 
   const isFornoMHF =
@@ -195,8 +197,8 @@ const sendMail = async (idSample: number): Promise<boolean> => {
   // console.log('htmlMessage', htmlMessage);
   // console.log('sampleDetail.hashMail', sampleDetail.hashMail || '');
   const hashIsEqual = await hashProvider.compareHash(
-    htmlMessage,
-    sampleDetail.hashMail || '',
+    JSON.stringify(sampleDetail),
+    hashMailStored || '',
   );
 
   // Sample with same hash, send mail is not necessary
@@ -235,14 +237,16 @@ const sendMail = async (idSample: number): Promise<boolean> => {
 
     // console.log('findSample antes', findSample);
 
-    findSample.hashMail = await hashProvider.generateHash(htmlMessage);
+    findSample.hashMail = await hashProvider.generateHash(
+      JSON.stringify(sampleDetail),
+    );
 
     // Object.assign(findSample, { hash: newHashMail });
 
     // console.log('findSample depois', findSample);
     await ormRepository.save(findSample);
     // END atualizar o hash_mail
-    logger.info(`Sample ${idSample}, hashMail updatesd`);
+    logger.info(`Sample ${idSample}, hashMail updated`);
     return true;
   } catch {
     return false;
