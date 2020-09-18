@@ -43,6 +43,17 @@ const getSamples = async (
 
   const { page = 1, pageSize = 10 } = request.query;
 
+  if (!Number.isInteger(Number(pageSize))) {
+    return response.json({
+      total: 0,
+      page,
+      pageSize: 'invalid',
+      samples: [],
+    });
+  }
+
+  const pageSizeValid = pageSize > 1000 ? 1000 : pageSize;
+
   try {
     await createConnection();
   } catch {
@@ -54,12 +65,17 @@ const getSamples = async (
   const total = await ormRepository.count();
 
   const findSamples = await ormRepository.find({
-    order: { currentStatusEditionDateTime: 'DESC' },
-    take: pageSize,
-    skip: pageSize * (page - 1),
+    order: { updated_at: 'DESC' },
+    take: Number(pageSizeValid),
+    skip: Number(pageSizeValid) * (Number(page) - 1),
   });
 
-  return response.json({ total, page, pageSize, samples: findSamples });
+  return response.json({
+    total,
+    page,
+    pageSize: Number(pageSizeValid),
+    samples: findSamples,
+  });
 };
 
 const getSampleById = async (
@@ -90,8 +106,20 @@ const getVwSamples = async (
   response: Response,
 ): Promise<any> => {
   logger.info(`GET samples VW(from ${remoteIp(request)})...`);
-  // console.log(request.query);
-  const { page = 1, pageSize = 10, idSample = 0 } = request.query;
+  logger.info(`GET samples (from ${remoteIp(request)})...`);
+
+  const { page = 1, pageSize = 10 } = request.query;
+
+  if (!Number.isInteger(Number(pageSize))) {
+    return response.json({
+      total: 0,
+      page,
+      pageSize: 'invalid',
+      samples: [],
+    });
+  }
+
+  const pageSizeValid = pageSize > 1000 ? 1000 : pageSize;
 
   try {
     await createConnection();
@@ -99,26 +127,55 @@ const getVwSamples = async (
     //
   }
 
-  // const ormRepository = getRepository(Sample);
-
-  // const total = await ormRepository.count();
-
-  const findSamplesVw = await getConnection().query(
-    `select  * from vw_all_samples vas where id=${idSample}`,
+  const findSampleDetail = await getConnection().query(
+    `SELECT
+	    id, identification, updated_at, control_number,
+      number, year, sub_number, revision, active,
+      taken_date_time, received_time, finalized_time, published_time, reviewed_time,
+      collection_point,  sample_conclusion,
+      sample_reason, sample_type, observation, lote,
+      current_status_edition_date_time, current_status_user, sample_status,
+      analyse_id, analyse_order, analyse_info, analyse_display_value, analyse_measurement_unit,
+      analyse_value_float, analyse_reference_method, analyse_method,
+      analyse_method_analyse_type, analyse_conclusion, analyse_group, analyse_updated_at,
+      vsa_method_type, vsa_service_area, vsa_method_status,
+      vsa_edition_data_time, vsa_edition_user, vsa_start_data_time, vsa_start_user,
+      vsa_execute_data_time,vsa_execute_user, vsa_vsm_updated_at, hash_mail
+    FROM
+      vw_all_samples vas
+      order by updated_at limit ${pageSizeValid}`,
   );
 
-  /* const findSamples = await ormRepository.find({
-    order: { currentStatusEditionDateTime: 'DESC' },
-    take: pageSize,
-    skip: pageSize * (page - 1),
-  }); */
+  /* const sampleDetail = findSampleDetail.map(sample => {
+    return {
+      id: findSampleDetail[0].id,
+      takenDateTime: findSampleDetail[0].taken_date_time,
+      collectionPoint: findSampleDetail[0].collection_point,
+      conclusion: findSampleDetail[0].sample_conclusion,
+      status: findSampleDetail[0].sample_status,
+      type: findSampleDetail[0].sample_type,
+      lote: findSampleDetail[0].lote,
+      observation: findSampleDetail[0].observation,
+      hashMail: findSampleDetail[0].hash_mail,
+
+      analysis: sampleAnalysis,
+
+      order: sample.analyse_order,
+      method: sample.analyse_method,
+      analyse: sample.analyse_info,
+      conclusion: sample.analyse_conclusion,
+      value: sample.analyse_display_value,
+      unit: sample.analyse_measurement_unit,
+
+
+  };
+  */
 
   return response.json({
-    // total: findSamplesVw.length,
-    // page,
-
-    findSamplesVw,
-    // samples: findSamples,
+    total: findSampleDetail.length,
+    page,
+    pageSize: Number(pageSizeValid),
+    samples: findSampleDetail,
   });
 };
 

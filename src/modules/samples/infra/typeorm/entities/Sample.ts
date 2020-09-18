@@ -127,7 +127,7 @@ class Sample {
   @JoinColumn({ name: 'current_status_user_id' })
   currentStatusUser: MyLIMSUser;
 
-  /* @OneToMany(() => SampleAnalyse, sampleAnalyse => sampleAnalyse.sample, {
+  @OneToMany(() => SampleAnalyse, sampleAnalyse => sampleAnalyse.sample, {
     cascade: true,
     eager: true,
   })
@@ -139,7 +139,7 @@ class Sample {
   })
   sample_Info: SampleInfo[];
 
-  @OneToMany(() => SampleMethod, sampleMethod => sampleMethod.sample, {
+  /* @OneToMany(() => SampleMethod, sampleMethod => sampleMethod.sample, {
     cascade: true,
     eager: true,
   })

@@ -25,7 +25,7 @@ class SampleInfo {
   @Column()
   info_id: number;
 
-  @ManyToOne(() => Info)
+  @ManyToOne(() => Info, { cascade: true, eager: true })
   @JoinColumn({ name: 'info_id' })
   info: Info;
 
