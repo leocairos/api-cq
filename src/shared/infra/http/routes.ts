@@ -9,7 +9,6 @@ import SampleMethod from '@modules/samples/infra/typeorm/entities/SampleMethod';
 import MailProvider from '@shared/services/MailProvider';
 import msgSampleUpdated from '@shared/providers/MailTemplate';
 import { BCryptHash, remoteIp } from '@shared/services/util';
-import { assign } from 'nodemailer/lib/shared';
 import ensureAuthenticated from './ensureAuthenticated';
 
 const routes = Router();
@@ -78,6 +77,31 @@ const getSamples = async (
   });
 };
 
+const getAxiliarByTable = async (
+  request: Request,
+  response: Response,
+): Promise<any> => {
+  logger.info(`GET getAxiliarByTable (from ${remoteIp(request)})...`);
+
+  const { table } = request.query;
+
+  try {
+    await createConnection();
+  } catch {
+    //
+  }
+
+  const findAuxiliar = await getConnection().query(
+    `SELECT identification
+     FROM ${table}
+     ORDER BY identification limit 1000`,
+  );
+
+  return response.json({
+    data: findAuxiliar,
+  });
+};
+
 const getSampleById = async (
   request: Request,
   response: Response,
@@ -106,7 +130,6 @@ const getVwSamples = async (
   response: Response,
 ): Promise<any> => {
   logger.info(`GET samples VW(from ${remoteIp(request)})...`);
-  logger.info(`GET samples (from ${remoteIp(request)})...`);
 
   const { page = 1, pageSize = 10 } = request.query;
 
@@ -179,6 +202,64 @@ const getVwSamples = async (
   });
 };
 
+const getSamplesHeader = async (
+  request: Request,
+  response: Response,
+): Promise<any> => {
+  logger.info(`GET samplesheader (from ${remoteIp(request)})...`);
+
+  const { page = 1, pageSize = 10, filters } = request.query;
+
+  if (!Number.isInteger(Number(pageSize))) {
+    return response.json({
+      total: 0,
+      page: Number(page),
+      pageSize: 'invalid',
+      samples: [],
+    });
+  }
+
+  const pageSizeValid = pageSize > 1000 ? 1000 : pageSize;
+
+  try {
+    await createConnection();
+  } catch {
+    //
+  }
+
+  const findTotal = await getConnection().query(
+    `SELECT count(*) total FROM vw_samples_header  ${
+      filters ? `WHERE ${filters} ` : ``
+    }`,
+  );
+
+  const query = `SELECT
+      id, identification, updated_at, control_number, number,
+      year, sub_number, revision, active, sync_portal,
+      received, finalized, published, reviewed, taken_date_time,
+      received_time, finalized_time, published_time, reviewed_time,
+      current_status_edition_date_time, collection_point,
+      sample_conclusion, sample_reason, sample_type, sample_status,
+      observation, lote, hash_mail
+    FROM
+      vw_samples_header
+    ${filters ? `WHERE ${filters} ` : ``}
+    order by
+      updated_at desc
+    limit ${Number(pageSizeValid)} offset ${
+    Number(Number(page) - 1) * Number(pageSizeValid)
+  }`;
+
+  const findSampleDetail = await getConnection().query(query);
+
+  return response.json({
+    total: Number(findTotal[0].total),
+    page: Number(page),
+    pageSize: Number(pageSizeValid),
+    samples: findSampleDetail,
+  });
+};
+
 const getSampleToMail = async (idSample: number): Promise<any> => {
   logger.info(`Getting sample detail for mail (Sample ${idSample})...`);
 
@@ -201,7 +282,7 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
       analyse_method_analyse_type, analyse_conclusion, analyse_group, analyse_updated_at,
       vsa_method_type, vsa_service_area, vsa_method_status,
       vsa_edition_data_time, vsa_edition_user, vsa_start_data_time, vsa_start_user,
-      vsa_execute_data_time,vsa_execute_user, vsa_vsm_updated_at, hash_mail
+      vsa_execute_data_time, vsa_execute_user, vsa_vsm_updated_at, hash_mail
     FROM
       vw_all_samples vas
     WHERE
@@ -240,6 +321,32 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
   }
 };
 
+const updateHashMail = async (idSample: number): Promise<void> => {
+  const hashProvider = new BCryptHash();
+  const sampleDetail = await getSampleToMail(idSample);
+
+  try {
+    await createConnection();
+  } catch {
+    //
+  }
+  const ormRepository = getRepository(Sample);
+
+  const findSample = await ormRepository.findOne({
+    where: { id: idSample },
+  });
+
+  if (findSample) {
+    findSample.hashMail = await hashProvider.generateHash(
+      JSON.stringify(sampleDetail),
+    );
+
+    await ormRepository.save(findSample);
+  }
+
+  logger.info(`Sample ${idSample}, hashMail updated`);
+};
+
 const sendMail = async (idSample: number): Promise<boolean> => {
   const mailProvider = new MailProvider();
   const hashProvider = new BCryptHash();
@@ -251,8 +358,7 @@ const sendMail = async (idSample: number): Promise<boolean> => {
 
   const isFornoMHF =
     sampleDetail.collectionPoint === 'Tubulação de Saída da Peneira PE-5001';
-  // console.log('htmlMessage', htmlMessage);
-  // console.log('sampleDetail.hashMail', sampleDetail.hashMail || '');
+
   const hashIsEqual = await hashProvider.compareHash(
     JSON.stringify(sampleDetail),
     hashMailStored || '',
@@ -265,12 +371,11 @@ const sendMail = async (idSample: number): Promise<boolean> => {
     );
     return false;
   }
-  const recipients = process.env.MAIL_TO_FORNO || '';
 
   try {
     if (isFornoMHF) {
       await mailProvider.sendMail({
-        to: recipients, // 'leonardo@xilolite.com.br',
+        to: process.env.MAIL_TO_FORNO || '', // 'leonardo@xilolite.com.br',
         subject: `[API-CQ] Atualização da Amostra ${idSample}`,
         html: htmlMessage,
       });
@@ -280,30 +385,7 @@ const sendMail = async (idSample: number): Promise<boolean> => {
       );
     }
 
-    // BEGIN atualizar o hash_mail
-    try {
-      await createConnection();
-    } catch {
-      //
-    }
-    const ormRepository = getRepository(Sample);
-
-    const findSample = await ormRepository.findOne({
-      where: { id: idSample },
-    });
-
-    // console.log('findSample antes', findSample);
-
-    findSample.hashMail = await hashProvider.generateHash(
-      JSON.stringify(sampleDetail),
-    );
-
-    // Object.assign(findSample, { hash: newHashMail });
-
-    // console.log('findSample depois', findSample);
-    await ormRepository.save(findSample);
-    // END atualizar o hash_mail
-    logger.info(`Sample ${idSample}, hashMail updated`);
+    updateHashMail(idSample);
     return true;
   } catch {
     return false;
@@ -336,7 +418,7 @@ const mylimsNotification = async (
         where: { id: EntityId },
       });
 
-      idSample = findSampleMethod.sample_id;
+      idSample = findSampleMethod?.sample_id || 0;
     } else {
       idSample = EntityId;
     }
@@ -351,14 +433,13 @@ const mylimsNotification = async (
     if (sendMailEvents.includes(Event)) {
       sendMail(idSample);
     } else {
+      updateHashMail(idSample);
       logger.info(
         `Send mail Sample ${idSample} not sent, because sample Event is not in "${sendMailEvents}"`,
       );
     }
 
     return response.status(200).json({ sample: idSample });
-
-    // console.log(JSON.stringify(sampleDetail));
   }
 
   return response.sendStatus(200);
@@ -369,6 +450,8 @@ routes.get('/lastSample', getLastSampleUpdated);
 routes.get('/samples', getSamples);
 routes.get('/sample', getSampleById);
 routes.get('/samplesvw', getVwSamples);
+routes.get('/samplesHeader', getSamplesHeader);
+routes.get('/auxiliar', getAxiliarByTable);
 
 routes.post('/mylims/notification', mylimsNotification);
 
