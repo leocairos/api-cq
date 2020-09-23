@@ -77,28 +77,41 @@ const getSamples = async (
   });
 };
 
-const getAxiliarByTable = async (
+const getFilterByTable = async (
   request: Request,
   response: Response,
 ): Promise<any> => {
-  logger.info(`GET getAxiliarByTable (from ${remoteIp(request)})...`);
+  logger.info(`GET getFilterByTable (from ${remoteIp(request)})...`);
 
-  const { table } = request.query;
+  const { fieldTable } = request.query;
 
-  try {
-    await createConnection();
-  } catch {
-    //
+  if (fieldTable) {
+    try {
+      await createConnection();
+    } catch {
+      //
+    }
+
+    const query = `select distinct ${fieldTable} as value from vw_samples_header
+    where ${fieldTable} is not null order by ${fieldTable};`;
+
+    try {
+      const findAuxiliar = await getConnection().query(query);
+      return response.json({
+        total: Number(findAuxiliar.length),
+        data: findAuxiliar,
+      });
+    } catch {
+      logger.warn(
+        `GET getFilterByTable: Query ERROR (from ${remoteIp(request)})...`,
+      );
+      return response.json({
+        data: [],
+      });
+    }
   }
-
-  const findAuxiliar = await getConnection().query(
-    `SELECT identification
-     FROM ${table}
-     ORDER BY identification limit 1000`,
-  );
-
   return response.json({
-    data: findAuxiliar,
+    data: [],
   });
 };
 
@@ -208,7 +221,7 @@ const getSamplesHeader = async (
 ): Promise<any> => {
   logger.info(`GET samplesheader (from ${remoteIp(request)})...`);
 
-  const { page = 1, pageSize = 10, filters } = request.query;
+  const { page = 1, pageSize = 10, filters, orderby } = request.query;
 
   if (!Number.isInteger(Number(pageSize))) {
     return response.json({
@@ -228,36 +241,46 @@ const getSamplesHeader = async (
   }
 
   const findTotal = await getConnection().query(
-    `SELECT count(*) total FROM vw_samples_header  ${
+    `SELECT count(*) total FROM vw_samples_header ${
       filters ? `WHERE ${filters} ` : ``
     }`,
   );
 
-  const query = `SELECT
-      id, identification, updated_at, control_number, number,
-      year, sub_number, revision, active, sync_portal,
-      received, finalized, published, reviewed, taken_date_time,
-      received_time, finalized_time, published_time, reviewed_time,
-      current_status_edition_date_time, collection_point,
-      sample_conclusion, sample_reason, sample_type, sample_status,
-      observation, lote, hash_mail
-    FROM
-      vw_samples_header
-    ${filters ? `WHERE ${filters} ` : ``}
-    order by
-      updated_at desc
-    limit ${Number(pageSizeValid)} offset ${
-    Number(Number(page) - 1) * Number(pageSizeValid)
-  }`;
+  try {
+    const query = `SELECT
+        id, identification, updated_at, control_number, number,
+        year, sub_number, revision, active, sync_portal,
+        received, finalized, published, reviewed, taken_date_time,
+        received_time, finalized_time, published_time, reviewed_time,
+        current_status_edition_date_time, collection_point,
+        sample_conclusion, sample_reason, sample_type, sample_status,
+        observation, lote, hash_mail
+      FROM
+        vw_samples_header
+      ${filters ? `WHERE ${filters} ` : ``}
+      order by
+        ${orderby ? `${orderby} ` : `updated_at desc`}
+      limit ${Number(pageSizeValid)} offset ${
+      Number(Number(page) - 1) * Number(pageSizeValid)
+    }`;
 
-  const findSampleDetail = await getConnection().query(query);
+    const findSampleDetail = await getConnection().query(query);
 
-  return response.json({
-    total: Number(findTotal[0].total),
-    page: Number(page),
-    pageSize: Number(pageSizeValid),
-    samples: findSampleDetail,
-  });
+    return response.json({
+      total: Number(findTotal[0].total),
+      page: Number(page),
+      pageSize: Number(pageSizeValid),
+      samples: findSampleDetail,
+    });
+  } catch {
+    logger.warn(`GET samplesheader ERROR Query(from ${remoteIp(request)})...`);
+    return response.json({
+      total: Number(0),
+      page: Number(0),
+      pageSize: Number(0),
+      samples: [],
+    });
+  }
 };
 
 const getSampleToMail = async (idSample: number): Promise<any> => {
@@ -451,7 +474,7 @@ routes.get('/samples', getSamples);
 routes.get('/sample', getSampleById);
 routes.get('/samplesvw', getVwSamples);
 routes.get('/samplesHeader', getSamplesHeader);
-routes.get('/auxiliar', getAxiliarByTable);
+routes.get('/filterByTable', getFilterByTable);
 
 routes.post('/mylims/notification', mylimsNotification);
 
