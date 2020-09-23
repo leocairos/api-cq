@@ -1,4 +1,5 @@
 import { hash, compare } from 'bcryptjs';
+import { Request } from 'express';
 
 class BCryptHash {
   public async generateHash(payload: string): Promise<string> {
@@ -10,12 +11,12 @@ class BCryptHash {
   }
 }
 
-const remoteIp = req => {
+const remoteIp = (request: Request): string => {
   const ip =
-    req.socket.remoteAddress || // Recupera o endereço através do socket TCP
-    (req.headers['x-forwarded-for'] || '').split(',').pop() || // Recupera o IP de origem, caso a fonte esteja utilizando proxy
-    req.connection.remoteAddress || // Recupera o endereço remoto da chamada
-    req.connection.socket.remoteAddress; // Recupera o endereço através do socket da conexão
+    request.socket.remoteAddress || // Recupera o endereço através do socket TCP
+    (request.headers['x-forwarded-for'] || ['']).split(',').pop() || // Recupera o IP de origem, caso a fonte esteja utilizando proxy
+    request.connection.remoteAddress || // Recupera o endereço remoto da chamada
+    request.connection.socket.remoteAddress; // Recupera o endereço através do socket da conexão
   return ip;
 };
 
