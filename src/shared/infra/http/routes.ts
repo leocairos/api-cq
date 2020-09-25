@@ -283,6 +283,51 @@ const getSamplesHeader = async (
   }
 };
 
+const getSamplesAnalyesBySample = async (
+  request: Request,
+  response: Response,
+): Promise<any> => {
+  logger.info(`GET getSamplesAnalyesBySample (from ${remoteIp(request)})...`);
+
+  const { sample_id } = request.params;
+
+  try {
+    await createConnection();
+  } catch {
+    //
+  }
+
+  try {
+    const query = `
+    SELECT
+	    sa.sample_id, sa.id, sa."order", sa.display_value, sa.measurement_unit,
+      sa.value_float, sa.method_analysis_type, sa.conclusion, sa.created_at,
+      sa.updated_at, i2.identification AS analise, vsm.id AS id_sample_method,
+      vsm.method, vsm.method_type, vsm.service_area, vsm.method_status
+    FROM sample_analyses sa
+      LEFT JOIN infos i2 ON sa.info_id = i2.id
+      LEFT JOIN vw_samples_methods vsm ON sa.sample_id = vsm.sample_id AND sa.method_id = vsm.method_id
+    WHERE sa.sample_id='${sample_id}'
+    ORDER BY sa."order"`;
+
+    console.log(query);
+    const findSampleAnalysis = await getConnection().query(query);
+
+    return response.json({
+      total: findSampleAnalysis.length,
+      samplesAnalysis: findSampleAnalysis,
+    });
+  } catch {
+    logger.warn(
+      `GET getSamplesAnalyesBySample ERROR Query(from ${remoteIp(request)})...`,
+    );
+    return response.json({
+      total: 0,
+      samplesAnalysis: [],
+    });
+  }
+};
+
 const getSampleToMail = async (idSample: number): Promise<any> => {
   logger.info(`Getting sample detail for mail (Sample ${idSample})...`);
 
@@ -474,6 +519,7 @@ routes.get('/samples', getSamples);
 routes.get('/sample', getSampleById);
 routes.get('/samplesvw', getVwSamples);
 routes.get('/samplesHeader', getSamplesHeader);
+routes.get('/samples/:sample_id/analysis', getSamplesAnalyesBySample);
 routes.get('/filterByTable', getFilterByTable);
 
 routes.post('/mylims/notification', mylimsNotification);
