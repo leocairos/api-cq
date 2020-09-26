@@ -7,22 +7,24 @@ import morgan from 'morgan';
 import compression from 'compression';
 
 import helmet from 'helmet';
+import { errors } from 'celebrate';
 import logger from '@config/logger';
 
 import createConnection from '@shared/infra/typeorm';
 import { CronJob } from 'cron';
-
 import express from 'express';
 
 import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesControllerv2';
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 import AuxiliariesControllerv2 from '@modules/samples/infra/controller/AuxiliariesControllerv2';
-import runMode from '@config/runMode';
-
-// import apiPowerBI from '@shared/services/apiPowerBI';
+import { runMode, appPort } from '@config/runMode';
+import uploadConfig from '@config/upload';
 
 import { remoteIp } from '@shared/services/util';
+import AppError from '@shared/errors/AppError';
+import rateLimiter from './middlewares/rateLimiter';
 import routes from './routes';
+import '@shared/container';
 
 createConnection();
 
@@ -42,6 +44,9 @@ app.use(
 );
 
 app.use(compression());
+app.use(rateLimiter);
+
+app.use('/files', express.static(uploadConfig.uploadsFolder));
 
 const importAllSamples = async (): Promise<void> => {
   const samplesController = new SamplesControllerv2();
@@ -111,55 +116,48 @@ const importNews = async (): Promise<void> => {
     });
 };
 
-/* const refreshPowerBI = async (): Promise<void> => {
-  await apiPowerBI
-    .post('')
-    .then(res =>
-      logger.info(`PBI >>>> Refresh Power BI Dataset: ${res.statusText}`),
-    )
-    .catch(error =>
-      logger.error(`ErrorPBI >>>>  while update Power BI: ${error}`),
-    );
-}; */
-
-let appPort = Number(process.env.APP_PORT || 3039);
-
-switch (runMode()) {
-  case 'importAll':
-    appPort += 0;
-    break;
-  case 'sync':
-    appPort += 1;
-    break;
-  case 'api':
-    appPort += 2;
-    break;
-  default:
-    logger.warn('Sorry, that is not something I know how to do.');
-    process.exit(1);
-}
-
 app.get('/serviceStatus', async (request, response) => {
   logger.info(`GET in serviceStatus (from ${remoteIp(request)})...`);
-
   const myLIMsResponse = await apiMYLIMS.get('/checkConnection');
-
   const connectedMyLIMS = myLIMsResponse.data === true;
 
   return response.json({ connectedMyLIMS });
 });
 
 app.use(routes);
-app.listen(appPort, () => {
+
+app.use(errors());
+
+app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
+  if (err instanceof AppError) {
+    return response.status(err.statusCode).json({
+      status: 'error',
+      message: err.message,
+    });
+  }
+  console.error(
+    '\n******************************************************************\n',
+    'ERROR:',
+    err.name,
+    err.message,
+    '\n******************************************************************\n',
+    err,
+  );
+
+  return response.status(500).json({
+    status: 'error',
+    message: `Internal server error! ${err.name}: ${err.message} `,
+  });
+});
+
+app.listen(appPort(), () => {
   logger.info(
     `\n${'#'.repeat(100)}\n${' '.repeat(
       26,
-    )} Service now running on port '${appPort}' (${
+    )} Service now running on port '${appPort()}' (${
       process.env.NODE_ENV
     }) ${' '.repeat(26)} \n${'#'.repeat(100)}\n`,
   );
-
-  console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 
   switch (runMode()) {
     case 'importAll':
