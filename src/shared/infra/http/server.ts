@@ -26,6 +26,8 @@ import rateLimiter from './middlewares/rateLimiter';
 import routes from './routes';
 import '@shared/container';
 
+require('events').EventEmitter.defaultMaxListeners = 12;
+
 createConnection();
 
 const app = express();

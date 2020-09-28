@@ -1,0 +1,64 @@
+<style>
+  .message-content {
+    font-family: Arial, Helvetica, sans-serif;
+    max-width: 600px;
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 4px;
+  }
+</style>
+
+<div class="message-content">
+  <table style="border: 0px;  padding: 0px; background-color: #fff">
+    <tr>
+      <td><strong>Id Amostra: </strong>{{id}}</td>
+      <td><strong>Data da Coleta: </strong>{{takenDateTime}}</td>
+    </tr>
+    <tr>
+      <td><strong>Situação da Amostra: </strong>{{status}}</td>
+      <td><strong>Parecer da Amostra: </strong>{{conclusion}}</td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Ponto de Coleta: </strong>{{
+        collectionPoint}}</td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Tipo de Amostra: </strong>{{type}}</td>
+    </tr>
+    {{#if observation}}
+      <tr>
+        <td colspan="2"><strong>Observação: </strong>{{observation}}</td>
+      </tr>
+    {{/if}}
+    {{#if lote}}
+      <tr>
+        <td colspan="2"><strong>Lote: </strong> {{lote}}</td>
+      </tr>
+    {{/if}}
+  </table>
+
+  <div style="overflow-x:auto;">
+    <table style="border: 1px solid #ddd; border-spacing: 0; width: 100%;">
+      <thead>
+        <tr style="background-color: #e1e1e1">
+          <th style="border: 1px solid #ddd;">Método Análise</th>
+          <th style="border: 1px solid #ddd;">Valor</th>
+          <th style="border: 1px solid #ddd;">Parecer da Análise</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{#each analysis}}
+        <tr style="border: 1px solid #ddd;">
+          <td style="border: 1px solid #ddd;">{{analyse}}</td>
+          <td style="border: 1px solid #ddd;">{{value}} {{unit}}</td>
+          <td style="border: 1px solid #ddd;">{{conclusion}}</td>
+        </tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>

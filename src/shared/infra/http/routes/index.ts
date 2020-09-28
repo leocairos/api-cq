@@ -6,17 +6,23 @@ import Sample from '@modules/samples/infra/typeorm/entities/Sample';
 import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesControllerv2';
 
 import SampleMethod from '@modules/samples/infra/typeorm/entities/SampleMethod';
-import MailProvider from '@shared/services/MailProvider';
-import msgSampleUpdated from '@shared/providers/MailTemplate';
+// import MailProvider from '@shared/services/MailProvider';
+// import msgSampleUpdated from '@shared/providers/MailTemplate';
 import { BCryptHash, remoteIp } from '@shared/services/util';
+
+import samplesRouter from '@modules/samples/infra/http/routes/samples.routes';
 
 import usersRouter from '@modules/users/infra/http/routes/users.routes';
 import sessionsRouter from '@modules/users/infra/http/routes/sessions.routes';
 import passwordRouter from '@modules/users/infra/http/routes/password.routes';
 import profileRouter from '@modules/users/infra/http/routes/profile.routes';
 import ensureKeyAuthorization from '@modules/users/infra/http/middlewares/ensureKeyAuthorization';
+import SampleMailNotificationController from '@modules/samples/infra/controller/SampleMailNotificationController';
+import { ISampleDetail } from '@modules/samples/dtos/ISampleNotificationDTO';
 
 const routes = Router();
+
+routes.use('/samples', samplesRouter);
 
 routes.use('/users', usersRouter);
 routes.use('/sessions', sessionsRouter);
@@ -191,31 +197,6 @@ const getVwSamples = async (
       vw_all_samples vas
       order by updated_at limit ${pageSizeValid}`,
   );
-
-  /* const sampleDetail = findSampleDetail.map(sample => {
-    return {
-      id: findSampleDetail[0].id,
-      takenDateTime: findSampleDetail[0].taken_date_time,
-      collectionPoint: findSampleDetail[0].collection_point,
-      conclusion: findSampleDetail[0].sample_conclusion,
-      status: findSampleDetail[0].sample_status,
-      type: findSampleDetail[0].sample_type,
-      lote: findSampleDetail[0].lote,
-      observation: findSampleDetail[0].observation,
-      hashMail: findSampleDetail[0].hash_mail,
-
-      analysis: sampleAnalysis,
-
-      order: sample.analyse_order,
-      method: sample.analyse_method,
-      analyse: sample.analyse_info,
-      conclusion: sample.analyse_conclusion,
-      value: sample.analyse_display_value,
-      unit: sample.analyse_measurement_unit,
-
-
-  };
-  */
 
   return response.json({
     total: findSampleDetail.length,
@@ -399,9 +380,8 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
   }
 };
 
-const updateHashMail = async (idSample: number): Promise<void> => {
+const updateHashMail = async (sampleDetail: ISampleDetail): Promise<void> => {
   const hashProvider = new BCryptHash();
-  const sampleDetail = await getSampleToMail(idSample);
 
   try {
     await createConnection();
@@ -411,7 +391,7 @@ const updateHashMail = async (idSample: number): Promise<void> => {
   const ormRepository = getRepository(Sample);
 
   const findSample = await ormRepository.findOne({
-    where: { id: idSample },
+    where: { id: sampleDetail.id },
   });
 
   if (findSample) {
@@ -422,17 +402,17 @@ const updateHashMail = async (idSample: number): Promise<void> => {
     await ormRepository.save(findSample);
   }
 
-  logger.info(`Sample ${idSample}, hashMail updated`);
+  logger.info(`Sample ${sampleDetail.id}, hashMail updated`);
 };
 
 const sendMail = async (idSample: number): Promise<boolean> => {
-  const mailProvider = new MailProvider();
+  // const mailProvider = new MailProvider();
   const hashProvider = new BCryptHash();
 
   const sampleDetail = await getSampleToMail(idSample);
   const hashMailStored = sampleDetail.hasMail;
   delete sampleDetail.hashMail;
-  const htmlMessage = msgSampleUpdated(sampleDetail);
+  // const htmlMessage = msgSampleUpdated(sampleDetail);
 
   const isFornoMHF =
     sampleDetail.collectionPoint === 'Tubulação de Saída da Peneira PE-5001';
@@ -452,18 +432,26 @@ const sendMail = async (idSample: number): Promise<boolean> => {
 
   try {
     if (isFornoMHF) {
-      await mailProvider.sendMail({
+      /* await mailProvider.sendMail({
         to: process.env.MAIL_TO_FORNO || '', // 'leonardo@xilolite.com.br',
         subject: `[API-CQ] Atualização da Amostra ${idSample}`,
         html: htmlMessage,
       });
+*/
+
+      const sendSampleMailNotificationController = new SampleMailNotificationController();
+
+      await sendSampleMailNotificationController.create(
+        'leonardo@xilolite.com.br',
+        sampleDetail,
+      );
     } else {
       logger.info(
         `Send mail Sample ${idSample} not sent, because sample hash is not from MHF`,
       );
     }
 
-    updateHashMail(idSample);
+    updateHashMail(sampleDetail);
     return true;
   } catch {
     return false;
