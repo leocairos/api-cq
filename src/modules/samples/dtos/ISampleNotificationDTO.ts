@@ -15,4 +15,5 @@ export interface ISampleDetail {
   observation?: string;
   lote?: string;
   analysis?: IAnalysis[];
+  hashMail?: string;
 }
