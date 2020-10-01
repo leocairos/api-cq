@@ -5,7 +5,7 @@ import User from '../entities/User';
 
 interface IListReturn {
   users: User[];
-  count: number;
+  total: number;
 }
 
 class UsersRepository implements IUsersRepository {
@@ -15,19 +15,16 @@ class UsersRepository implements IUsersRepository {
     this.ormRepository = getRepository(User);
   }
 
-  public async list(skip: number, take: number): Promise<IListReturn> {
-    const count = await this.ormRepository.count();
+  public async list(page: number, pageSize: number): Promise<IListReturn> {
+    const total = await this.ormRepository.count();
 
     const users = await this.ormRepository.find({
       select: ['id', 'name', 'email', 'role'],
-      order: {
-        id: 'ASC',
-      },
-      skip,
-      take,
-      cache: false,
+      order: { id: 'ASC' },
+      take: Number(pageSize),
+      skip: Number(pageSize) * (Number(page) - 1),
     });
-    return { users, count };
+    return { users, total };
   }
 
   public async findById(id: string): Promise<User | undefined> {

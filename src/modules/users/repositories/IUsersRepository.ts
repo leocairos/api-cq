@@ -3,11 +3,11 @@ import User from '../infra/typeorm/entities/User';
 
 interface IListReturn {
   users: User[];
-  count: number;
+  total: number;
 }
 
 export default interface IUsersRespository {
-  list(skip: number, take: number): Promise<IListReturn>;
+  list(page: number, pageSize: number): Promise<IListReturn>;
   findById(id: string): Promise<User | undefined>;
   findByEmail(email: string): Promise<User | undefined>;
   findByDocument(document: string): Promise<User | undefined>;

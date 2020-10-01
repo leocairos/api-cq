@@ -5,7 +5,8 @@ import User from '../infra/typeorm/entities/User';
 
 interface IResponse {
   users: User[];
-  count: number;
+  total: number;
+  pageSizeV: number;
 }
 
 @injectable()
@@ -15,13 +16,13 @@ class ListUserService {
     private usersRepository: IUsersRepository,
   ) {}
 
-  public async execute(skip: number, take: number): Promise<IResponse> {
-    const { users, count } = await this.usersRepository.list(
-      skip,
-      take > 50 ? 50 : take,
+  public async execute(page: number, pageSize: number): Promise<IResponse> {
+    const { users, total } = await this.usersRepository.list(
+      page,
+      pageSize > 50 ? 50 : pageSize,
     );
 
-    return { users, count };
+    return { users, total, pageSizeV: pageSize };
   }
 }
 

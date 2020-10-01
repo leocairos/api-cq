@@ -5,6 +5,8 @@ import { classToClass } from 'class-transformer';
 import CreateUserService from '@modules/users/services/CreateUserService';
 import ListUserService from '@modules/users/services/ListUserService';
 import UpdateUserService from '@modules/users/services/UpdateUserService';
+import logger from '@config/logger';
+import { remoteIp } from '@shared/services/util';
 
 export default class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -24,18 +26,22 @@ export default class UsersController {
   }
 
   public async list(request: Request, response: Response): Promise<Response> {
-    const { skip = 0, take = 20 } = request.query;
+    logger.info(`GET users (from ${remoteIp(request)})...`);
+    const { page = 1, pageSize = 10 } = request.query;
 
     const listUsers = container.resolve(ListUserService);
-    const { users, count } = await listUsers.execute(
-      skip as number,
-      take as number,
+
+    const { users, total, pageSizeV } = await listUsers.execute(
+      Number(page),
+      Number(pageSize),
     );
 
-    response.header('x-total-count', count.toString());
-    response.header('Access-Control-Expose-Headers', 'x-total-count');
-
-    return response.json(classToClass(users));
+    return response.json({
+      total,
+      page: Number(page),
+      pageSize: Number(pageSizeV),
+      users,
+    });
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
