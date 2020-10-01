@@ -25,15 +25,17 @@ export default function ensureAuthenticated(
 
   try {
     const decoded = verify(token, authConfig.jwt.secret);
-
-    const { sub, role } = decoded as ITokenPayload;
-
+    const { sub, role, exp } = decoded as ITokenPayload;
     const user = { id: sub, role };
+
+    if (Math.floor(Date.now() / 1000) > exp) {
+      throw new AppError('Token expired');
+    }
 
     request.user = user;
 
     return next();
-  } catch {
-    throw new AppError('Unauthenticated: Invalid JWT token.', 401);
+  } catch (e) {
+    throw new AppError(`Unauthorized: Invalid JWT token.${e.message}`, 401);
   }
 }

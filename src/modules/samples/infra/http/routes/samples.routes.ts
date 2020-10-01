@@ -7,6 +7,8 @@ import Sample from '@modules/samples/infra/typeorm/entities/Sample';
 
 import { remoteIp } from '@shared/services/util';
 
+import ensureAuthorization from '@modules/users/infra/http/middlewares/ensureAuthorization';
+
 const samplesRouter = Router();
 const getLastSampleUpdated = async (
   request: Request,
@@ -298,6 +300,7 @@ const getSamplesAnalyesBySample = async (
   }
 };
 
+samplesRouter.use(ensureAuthorization(['admin']));
 samplesRouter.get('/lastSample', getLastSampleUpdated);
 samplesRouter.get('/samples', getSamples);
 samplesRouter.get('/sample', getSampleById);

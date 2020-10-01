@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
+import { isAfter } from 'date-fns';
 
 import AppError from '@shared/errors/AppError';
 import authConfig from '@config/auth';
@@ -22,11 +23,13 @@ const authorize = (roles = ['']): any => {
       const [, token] = authHeader.split(' ');
 
       try {
-        console.log('Unauthorized', token);
         const decoded = verify(token, authConfig.jwt.secret);
-
-        const { sub, role } = decoded as ITokenPayload;
+        const { sub, role, exp } = decoded as ITokenPayload;
         const user = { id: sub, role };
+
+        if (Math.floor(Date.now() / 1000) > exp) {
+          throw new AppError('Token expired');
+        }
 
         request.user = user;
 
@@ -37,8 +40,8 @@ const authorize = (roles = ['']): any => {
         }
 
         return next();
-      } catch {
-        throw new AppError('Unauthorized: Invalid JWT token.', 401);
+      } catch (e) {
+        throw new AppError(`Unauthorized: Invalid JWT token.${e.message}`, 401);
       }
     },
   ];
