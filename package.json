@@ -1,6 +1,6 @@
 {
   "name": "xilolite-api-cq",
-  "description": "API Quality Control get analisys result from myLIMS.",
+  "description": "API Quality Control get analisys result from myLIMS",
   "version": "2.0.0",
   "main": "index.js",
   "private": true,
