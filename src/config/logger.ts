@@ -1,5 +1,5 @@
 import { createLogger, format, transports } from 'winston';
-import runMode from './runMode';
+import { runMode } from './runMode';
 
 const { combine, timestamp, printf } = format;
 
@@ -10,7 +10,7 @@ const myFormat = printf(({ level, message, timestamp }) => {
 // define the custom settings for each transport (file, console)
 const options = {
   file: {
-    filename: `app-${runMode()}.log`,
+    filename: `${process.env.APP_NAME}_mode_${runMode()}.log`,
     handleExceptions: true,
     maxsize: 5242880, // 5MB
     maxFiles: 5,

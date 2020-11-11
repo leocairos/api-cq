@@ -1,3 +1,5 @@
+import logger from './logger';
+
 const runMode = (): string => {
   try {
     switch (process.argv[2].toUpperCase()) {
@@ -15,4 +17,25 @@ const runMode = (): string => {
   }
 };
 
-export default runMode;
+const appPort = (): number => {
+  let appPortAux = Number(process.env.APP_PORT || 3039);
+
+  switch (runMode()) {
+    case 'importAll':
+      appPortAux += 0;
+      break;
+    case 'sync':
+      appPortAux += 1;
+      break;
+    case 'api':
+      appPortAux += 2;
+      break;
+    default:
+      logger.warn('Sorry, that is not something I know how to do.');
+      process.exit(1);
+  }
+
+  return appPortAux;
+};
+
+export { runMode, appPort };

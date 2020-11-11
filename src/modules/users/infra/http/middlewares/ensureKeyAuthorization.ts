@@ -4,11 +4,11 @@ import AppError from '@shared/errors/AppError';
 import logger from '@config/logger';
 import { remoteIp } from '@shared/services/util';
 
-function ensureAuthenticated(
+const ensureKeyAuthorization = (
   request: Request,
   response: Response,
   next: NextFunction,
-): void {
+): void => {
   const accessKey = request.headers['x-access-key'];
   if (!accessKey) {
     logger.warn(`Token is missing from ${remoteIp(request)}`);
@@ -20,6 +20,6 @@ function ensureAuthenticated(
   }
   logger.warn(`Invalid token from ${remoteIp(request)}`);
   throw new AppError('Invalid token.', 401);
-}
+};
 
-export default ensureAuthenticated;
+export default ensureKeyAuthorization;
