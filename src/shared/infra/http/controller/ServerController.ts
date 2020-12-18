@@ -19,6 +19,20 @@ const serviceStatus = async (
   return response.status(200).json({ connectedMyLIMS });
 };
 
+const checkTasks = async (
+  request: Request,
+  response: Response,
+): Promise<Response> => {
+  logger.info(`GET in checkTasks (from ${remoteIp(request)})...`);
+  let tasksUrl = '/tasks/9/Histories?$inlinecount=allpages&$top=50&';
+  tasksUrl += '$filter=Success eq false&$orderby=CreateDateTime';
+  const myLIMsResponse = await apiMYLIMS.get(tasksUrl);
+
+  const tasksWithError = myLIMsResponse.data.TotalCount;
+
+  return response.status(200).json({ tasksWithError });
+};
+
 const importAllSamples = async (): Promise<void> => {
   const samplesController = new SamplesControllerv2();
   await apiMYLIMS
@@ -91,8 +105,7 @@ const serverListen = (): void => {
   logger.info(
     `\n${'#'.repeat(100)}\n${' '.repeat(
       26,
-    )} Service now running on port '${appPort()}' (${
-      process.env.NODE_ENV
+    )} Service now running on port '${appPort()}' (${process.env.NODE_ENV
     }) ${' '.repeat(26)} \n${'#'.repeat(100)}\n`,
   );
 
@@ -158,4 +171,4 @@ const serverListen = (): void => {
   }
 };
 
-export { serverListen, serviceStatus };
+export { serverListen, serviceStatus, checkTasks };
