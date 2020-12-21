@@ -47,6 +47,6 @@ const serviceStatus = async (
   return response.status(200).json({ connectedMyLIMS, tasksWithError });
 };
 
-mylimsStatusRouter.get('/', ensureKeyAuthorization, serviceStatus);
+mylimsStatusRouter.get('/status', ensureKeyAuthorization, serviceStatus);
 
 export default mylimsStatusRouter;

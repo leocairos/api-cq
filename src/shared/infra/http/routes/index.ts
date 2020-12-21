@@ -11,7 +11,7 @@ import profileRouter from '@modules/users/infra/http/routes/profile.routes';
 
 const routes = Router();
 
-routes.use('/serviceStatus', serviceStatusRouter);
+routes.use('/service', serviceStatusRouter);
 
 routes.use('/samples', samplesRouter);
 routes.use('/mylims', mylimsRouter);
