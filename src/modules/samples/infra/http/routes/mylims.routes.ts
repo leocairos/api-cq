@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 
 import { createConnection, getConnection, getRepository } from 'typeorm';
 
+import apiMYLIMS from '@shared/services/apiMYLIMS';
 import logger from '@config/logger';
 import Sample from '@modules/samples/infra/typeorm/entities/Sample';
 import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesControllerv2';
@@ -201,7 +202,27 @@ const mylimsNotification = async (
   return response.sendStatus(200);
 };
 
+const serviceStatus = async (
+  request: Request,
+  response: Response,
+): Promise<Response> => {
+  logger.info(`GET in serviceStatus (from ${remoteIp(request)})...`);
+
+  const myLIMsResponseConn = await apiMYLIMS.get('/checkConnection');
+  const connectedMyLIMS = myLIMsResponseConn.data === true;
+
+  let tasksUrl = '/tasks/9/Histories?$inlinecount=allpages&$top=50&';
+  tasksUrl += '$filter=Success eq false&$orderby=CreateDateTime';
+
+  const myLIMsResponseTsk = await apiMYLIMS.get(tasksUrl);
+  const tasksWithError = myLIMsResponseTsk.data.TotalCount;
+
+  return response.status(200).json({ connectedMyLIMS, tasksWithError });
+};
+
 mylimsRouter.use(ensureKeyAuthorization);
+
+mylimsRouter.get('/status', serviceStatus);
 
 mylimsRouter.post('/notification', mylimsNotification);
 
