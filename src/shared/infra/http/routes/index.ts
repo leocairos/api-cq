@@ -13,7 +13,7 @@ import { serviceStatus, checkTasks } from '../controller/ServerController';
 const routes = Router();
 
 routes.get('/serviceStatus', serviceStatus);
-routes.get('/checkTasks', checkTasks);
+// routes.get('/checkTasks', checkTasks);
 
 routes.use('/samples', samplesRouter);
 routes.use('/mylims', mylimsRouter);
