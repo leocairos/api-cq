@@ -2,7 +2,6 @@ import { Router } from 'express';
 
 import samplesRouter from '@modules/samples/infra/http/routes/samples.routes';
 import mylimsRouter from '@modules/samples/infra/http/routes/mylims.routes';
-import serviceStatusRouter from '@modules/samples/infra/http/routes/mylimsStatus.routes';
 
 import usersRouter from '@modules/users/infra/http/routes/users.routes';
 import sessionsRouter from '@modules/users/infra/http/routes/sessions.routes';
@@ -11,9 +10,8 @@ import profileRouter from '@modules/users/infra/http/routes/profile.routes';
 
 const routes = Router();
 
-routes.use('/service', serviceStatusRouter);
-
 routes.use('/samples', samplesRouter);
+
 routes.use('/mylims', mylimsRouter);
 
 routes.use('/users', usersRouter);

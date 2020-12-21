@@ -1,12 +1,12 @@
 import { CronJob } from 'cron';
-import { Request, Response } from 'express';
+// import { Request, Response } from 'express';
 
 import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesControllerv2';
 import apiMYLIMS from '@shared/services/apiMYLIMS';
 import AuxiliariesControllerv2 from '@modules/samples/infra/controller/AuxiliariesControllerv2';
 import { runMode, appPort } from '@config/runMode';
 import logger from '@config/logger';
-import { remoteIp } from '@shared/services/util';
+// import { remoteIp } from '@shared/services/util';
 
 /* const serviceStatus = async (
   request: Request,
