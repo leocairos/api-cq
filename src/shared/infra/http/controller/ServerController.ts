@@ -30,8 +30,6 @@ const checkTasks = async (
 
   const tasksWithError = myLIMsResponse.data.TotalCount;
 
-  console.log(tasksWithError);
-
   return response.status(200).json({ tasksWithError });
 };
 
