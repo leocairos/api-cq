@@ -8,7 +8,7 @@ import { runMode, appPort } from '@config/runMode';
 import logger from '@config/logger';
 import { remoteIp } from '@shared/services/util';
 
-const serviceStatus = async (
+/* const serviceStatus = async (
   request: Request,
   response: Response,
 ): Promise<Response> => {
@@ -32,6 +32,7 @@ const checkTasks = async (
 
   return response.status(200).json({ tasksWithError });
 };
+*/
 
 const importAllSamples = async (): Promise<void> => {
   const samplesController = new SamplesControllerv2();
@@ -171,4 +172,4 @@ const serverListen = (): void => {
   }
 };
 
-export { serverListen, serviceStatus, checkTasks };
+export { serverListen /* , serviceStatus, checkTasks */ };
