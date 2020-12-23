@@ -131,7 +131,7 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
       const sendSampleMailNotificationController = new SampleMailNotificationController();
 
       await sendSampleMailNotificationController.create(
-        'leonardo@xilolite.com.br',
+        `${process.env.MAIL_TO_FORNO}`,
         sampleDetail,
       );
     } else {
@@ -209,12 +209,12 @@ const serviceStatus = async (
   logger.info(`GET in serviceStatus (from ${remoteIp(request)})...`);
 
   const myLIMsResponseConn = await apiMYLIMS.get('/checkConnection');
+
+  const myLIMsResponseTsk = await apiMYLIMS.get(
+    '/tasks/9/Histories?$inlinecount=allpages&$top=10&$filter=Success eq false',
+  );
+
   const connectedMyLIMS = myLIMsResponseConn.data === true;
-
-  let tasksUrl = '/tasks/9/Histories?$inlinecount=allpages&$top=50&';
-  tasksUrl += '$filter=Success eq false&$orderby=CreateDateTime';
-
-  const myLIMsResponseTsk = await apiMYLIMS.get(tasksUrl);
   const tasksWithError = myLIMsResponseTsk.data.TotalCount;
 
   return response.status(200).json({ connectedMyLIMS, tasksWithError });
