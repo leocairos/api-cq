@@ -113,18 +113,18 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
   const isFornoMHF =
     sampleDetail.collectionPoint === 'Tubulação de Saída da Peneira PE-5001';
 
-  const hashIsEqual = await hashProvider.compareHash(
+  /* const hashIsEqual = await hashProvider.compareHash(
     JSON.stringify(sampleDetail),
     hashMailStored || '',
-  );
+  ); */
 
   // Sample with same hash, send mail is not necessary
-  if (hashIsEqual) {
+  /* if (hashIsEqual) {
     logger.info(
       `Send mail Sample ${sampleDetail.id} is not necessary, because sample hash is not new...`,
     );
     return false;
-  }
+  } */
 
   try {
     if (isFornoMHF) {
