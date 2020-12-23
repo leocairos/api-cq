@@ -180,21 +180,21 @@ const mylimsNotification = async (
 
     await samplesController.updateSample(idSample);
 
-    const sendMailEvents = [
+    /* const sendMailEvents = [
       'Método da Amostra - Finalizar',
       'Amostra - Finalizar',
-    ];
+    ]; */
 
     const sampleDetail = await getSampleToMail(idSample);
 
-    if (sendMailEvents.includes(Event)) {
-      sendMail(sampleDetail);
-    } else {
-      updateHashMail(sampleDetail);
-      logger.info(
-        `Send mail Sample ${idSample} not sent, because sample Event is not in "${sendMailEvents}"`,
-      );
-    }
+    // if (sendMailEvents.includes(Event)) {
+    sendMail(sampleDetail);
+    // } else {
+    //   updateHashMail(sampleDetail);
+    //   logger.info(
+    //     `Send mail Sample ${idSample} not sent, because sample Event is not in "${sendMailEvents}"`,
+    //   );
+    // }
 
     return response.status(200).json({ sample: idSample });
   }
