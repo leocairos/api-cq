@@ -102,6 +102,80 @@ const importNews = async (): Promise<void> => {
     });
 };
 
+const reprocessTasksWithError = async (): Promise<void> => {
+  logger.info(`Reprocessing Tasks With Error...`);
+
+  const urlMyLimsTaskbase =
+    '/tasks/9/Histories?$inlinecount=allpages&$top=10&$filter=Success eq false';
+
+  const myLIMsResponseTsk = await apiMYLIMS.get(
+    `${urlMyLimsTaskbase}&$orderby=CreateDateTime`,
+  );
+
+  const tasksToReprocess = myLIMsResponseTsk.data.TotalCount;
+  const tasksWithError = myLIMsResponseTsk.data.Result;
+
+  const tasksDetails = tasksWithError.map(task => {
+    const rawData = task.Data;
+    const urlToReprocess = `/Tasks/9/Histories/${task.Id}/Execute`;
+    const parsedTask = {
+      Id: task.Id,
+      Event: task.TaskTrigger.Identification,
+      Entity: rawData.substring(
+        rawData.indexOf('{') + 2,
+        rawData.indexOf(':') - 1,
+      ),
+      EntityId: Number(
+        rawData.substring(rawData.indexOf(':') + 1, rawData.indexOf('}')),
+      ),
+      urlToReprocess,
+      // rawData,
+    };
+
+    return parsedTask;
+  });
+
+  await Promise.all(tasksDetails);
+
+  logger.info(
+    `>> Tasks to Reprocess: ${tasksToReprocess} Reprocessing: ${tasksDetails.length}`,
+  );
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const task of tasksDetails) {
+    // eslint-disable-next-line no-await-in-loop
+    await apiMYLIMS.get(task.urlToReprocess);
+    logger.info(`>> reprocessing Task ${task.Id} [${task.Event}]...`);
+  }
+};
+
+const runCheck = () => {
+  logger.info(
+    `Every ${process.env.INTERVAL_TO_IMPORT} seconds check tasks with error...`,
+  );
+
+  // eslint-disable-next-line no-case-declarations
+  let isRunningRep = false;
+  try {
+    const job = new CronJob(
+      `*/${process.env.INTERVAL_TO_IMPORT} * * * * *`,
+      () => {
+        if (!isRunningRep) {
+          isRunningRep = true;
+          setTimeout(async () => {
+            await reprocessTasksWithError();
+            isRunningRep = false;
+          }, 3000);
+        }
+      },
+    );
+    job.start();
+  } catch (err) {
+    logger.error(`Finished with error: ${err}`);
+    isRunningRep = false;
+  }
+};
+
 const serverListen = (): void => {
   logger.info(
     `\n${'#'.repeat(100)}\n${' '.repeat(
@@ -164,7 +238,35 @@ const serverListen = (): void => {
     case 'api':
       logger.info('API mode');
 
+      runCheck();
       break;
+
+    // case 'reprocessTasks':
+    //   logger.info(
+    //     `Every ${process.env.INTERVAL_TO_IMPORT} seconds check tasks with error...`,
+    //   );
+
+    //   // eslint-disable-next-line no-case-declarations
+    //   let isRunningRep = false;
+    //   try {
+    //     const job = new CronJob(
+    //       `*/${process.env.INTERVAL_TO_IMPORT} * * * * *`,
+    //       () => {
+    //         if (!isRunningRep) {
+    //           isRunningRep = true;
+    //           setTimeout(async () => {
+    //             await reprocessTasksWithError();
+    //             isRunningRep = false;
+    //           }, 3000);
+    //         }
+    //       },
+    //     );
+    //     job.start();
+    //   } catch (err) {
+    //     logger.error(`Finished with error: ${err}`);
+    //     isRunningRep = false;
+    //   }
+    //   break;
 
     default:
       logger.warn('Sorry, that is not something I know how to do.');

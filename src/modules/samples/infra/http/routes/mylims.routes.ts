@@ -207,17 +207,114 @@ const serviceStatus = async (
   response: Response,
 ): Promise<Response> => {
   logger.info(`GET in serviceStatus (from ${remoteIp(request)})...`);
+  const urlMyLimsTaskbase =
+    '/tasks/9/Histories?$inlinecount=allpages&$top=10&$filter=Success eq false';
 
   const myLIMsResponseConn = await apiMYLIMS.get('/checkConnection');
 
   const myLIMsResponseTsk = await apiMYLIMS.get(
-    '/tasks/9/Histories?$inlinecount=allpages&$top=10&$filter=Success eq false',
+    `${urlMyLimsTaskbase}&$orderby=CreateDateTime`,
   );
+  const myLIMsResponseTskDesc = await apiMYLIMS.get(
+    `${urlMyLimsTaskbase}&$orderby=CreateDateTime desc`,
+  );
+
+  const messageOlder = myLIMsResponseTsk.data.Result[0]?.Message;
 
   const connectedMyLIMS = myLIMsResponseConn.data === true;
   const tasksWithError = myLIMsResponseTsk.data.TotalCount;
+  const olderTask = {
+    id: myLIMsResponseTsk.data.Result[0]?.Id,
+    trigger: myLIMsResponseTsk.data.Result[0]?.TaskTrigger?.Identification,
+    integration:
+      myLIMsResponseTsk.data.Result[0]?.ActiveIntegration?.Identification,
+    executionDateTime: myLIMsResponseTsk.data.Result[0]?.Execution,
+    createDateTime: myLIMsResponseTsk.data.Result[0]?.CreateDateTime,
+    createUser: myLIMsResponseTsk.data.Result[0]?.CreateUser?.Identification,
+    attempts: myLIMsResponseTsk.data.Result[0]?.Attempts,
+    data: myLIMsResponseTsk.data.Result[0]?.Data,
+    message: messageOlder.substring(
+      messageOlder.indexOf('<p><b>') + 6,
+      messageOlder.indexOf('</p>'),
+    ),
+  };
 
-  return response.status(200).json({ connectedMyLIMS, tasksWithError });
+  const messageNewest = myLIMsResponseTskDesc.data.Result[0]?.Message;
+  const newestTask = {
+    id: myLIMsResponseTskDesc.data.Result[0]?.Id,
+    trigger: myLIMsResponseTskDesc.data.Result[0]?.TaskTrigger?.Identification,
+    integration:
+      myLIMsResponseTskDesc.data.Result[0]?.ActiveIntegration?.Identification,
+    executionDateTime: myLIMsResponseTskDesc.data.Result[0]?.Execution,
+    createDateTime: myLIMsResponseTskDesc.data.Result[0]?.CreateDateTime,
+    createUser:
+      myLIMsResponseTskDesc.data.Result[0]?.CreateUser?.Identification,
+    attempts: myLIMsResponseTskDesc.data.Result[0]?.Attempts,
+    data: myLIMsResponseTskDesc.data.Result[0]?.Data,
+    message: messageNewest.substring(
+      messageNewest.indexOf('<p><b>') + 6,
+      messageNewest.indexOf('</p>'),
+    ),
+  };
+  return response
+    .status(200)
+    .json({ connectedMyLIMS, tasksWithError, olderTask, newestTask });
+};
+
+const reprocessTasksWithError = async (
+  request: Request,
+  response: Response,
+): Promise<Response> => {
+  logger.info(`POST in reprocessTasksWithError (from ${remoteIp(request)})...`);
+
+  const urlMyLimsTaskbase =
+    '/tasks/9/Histories?$inlinecount=allpages&$top=10&$filter=Success eq false';
+
+  const myLIMsResponseTsk = await apiMYLIMS.get(
+    `${urlMyLimsTaskbase}&$orderby=CreateDateTime`,
+  );
+
+  const tasksToReprocess = myLIMsResponseTsk.data.TotalCount;
+  const tasksWithError = myLIMsResponseTsk.data.Result;
+
+  /*
+   "Entity": "{\"SampleMethodId\":436378}",
+   "EntityId": "{\"SampleMethodId\":436378}"
+  */
+  const tasksDetails = tasksWithError.map(task => {
+    const rawData = task.Data;
+    const urlToReprocess = `/Tasks/9/Histories/${task.Id}/Execute`;
+    const parsedTask = {
+      Id: task.Id,
+      Event: task.TaskTrigger.Identification,
+      Entity: rawData.substring(
+        rawData.indexOf('{') + 2,
+        rawData.indexOf(':') - 1,
+      ),
+      EntityId: Number(
+        rawData.substring(rawData.indexOf(':') + 1, rawData.indexOf('}')),
+      ),
+      urlToReprocess,
+      // rawData,
+    };
+
+    return parsedTask;
+  });
+
+  await Promise.all(tasksDetails);
+  // eslint-disable-next-line no-restricted-syntax
+  for (const task of tasksDetails) {
+    // eslint-disable-next-line no-await-in-loop
+    // await
+    apiMYLIMS.get(task.urlToReprocess);
+    logger.info(`>> reprocessing Task ${task.Id} [${task.Event}]...`);
+  }
+
+  return response.status(200).json({
+    tasksToReprocess,
+    reprocessing: tasksDetails.length,
+    tasksDetails,
+  });
 };
 
 mylimsRouter.use(ensureKeyAuthorization);
@@ -225,5 +322,7 @@ mylimsRouter.use(ensureKeyAuthorization);
 mylimsRouter.get('/status', serviceStatus);
 
 mylimsRouter.post('/notification', mylimsNotification);
+
+mylimsRouter.post('/reprocesstaskswitherror', reprocessTasksWithError);
 
 export default mylimsRouter;
