@@ -1,0 +1,526 @@
+[33mcommit f98ed3b61277a9fa8a4d93667a5d24154780aed2[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Dec 23 16:08:40 2020 -0300
+
+    sendMailEvents filter desactived
+
+[33mcommit 191a011a9756ef4e6b54d15c4ccdd05f62e5f3b2[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Dec 23 15:41:08 2020 -0300
+
+    Hashmail desactived
+
+[33mcommit c55df3f71080c0fcbe97910ef050b6683ca7201d[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Dec 23 15:27:06 2020 -0300
+
+    MAIL LIST FIXED
+
+[33mcommit e6cf9cf8e2e5f5bf7873077bf57e3d675fc6fb66[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Dec 21 09:11:31 2020 -0300
+
+    serviceStatus refactored 2; integrated with mylims router
+
+[33mcommit 5ef3beac0055e81a104775d90ce69939aa4482b4[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Dec 21 09:01:06 2020 -0300
+
+    service/status
+
+[33mcommit a99533c8f3b9a527a1b9174cb16a40f1e3598596[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Dec 21 08:54:30 2020 -0300
+
+    serviceStatus refactored
+
+[33mcommit 178805d1a1d610767ccccae0269fd0bbf228a18c[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Dec 21 08:25:23 2020 -0300
+
+    checktasks removed
+
+[33mcommit 4f2b88498555eb15c9e019dc1fe10bdbee1fd604[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Dec 21 08:20:43 2020 -0300
+
+    checktasks 2
+
+[33mcommit b5339177230a7d22800b543ffb7278b3166144e2[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Dec 21 08:17:12 2020 -0300
+
+    checktasks
+
+[33mcommit 5f91166f042e727b16302960f7e121eb10de9a11[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Fri Dec 18 15:13:27 2020 -0300
+
+    chekTasks route
+
+[33mcommit 200f2150ddbbb39cb8b6dfcff86750b1e2053209[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Nov 19 16:40:33 2020 -0300
+
+    GET list users update to include url_avatar
+
+[33mcommit 6674d9d8616e6320269fe2dbb2a8918ab9fe5ea2[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Nov 11 11:13:47 2020 -0300
+
+    Readme: Git Flow instructions
+
+[33mcommit 0709bc1b49b48098827936058af90d29d87c0be0[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Nov 11 11:10:03 2020 -0300
+
+    Readme: Git Flow instructions
+
+[33mcommit 935edb2e6452c5ca5adf14ad4d93e36af8094af2[m[33m ([m[1;33mtag: 2.0.0[m[33m)[m
+Merge: 8388368 0eb7126
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Nov 11 10:12:02 2020 -0300
+
+    Merge branch 'release/2.0.0'
+
+[33mcommit 0eb71269c06526ac58b3d7a0b550a885dc3779f7[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Nov 11 10:11:24 2020 -0300
+
+    Bumped version number to 2.0.0
+
+[33mcommit 8388368f96cfe5d3ee21c02f11f28d63828414a9[m
+Merge: 1395b8c 8460dc1
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Nov 11 10:04:46 2020 -0300
+
+    Merge branch 'release/2.0'
+
+[33mcommit 8460dc16422a51d3658778ea8d262a18f0a810df[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Nov 11 10:03:53 2020 -0300
+
+    Bumped version number to 2.0
+
+[33mcommit 1395b8c5bee60d54abdbe0f8b9ce251119231374[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Nov 11 09:50:46 2020 -0300
+
+    Release 2.0
+
+[33mcommit 3a800aa9ef5c25b457e8f58189bd79486290314e[m
+Merge: 6db7e9b ee52b09
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Nov 11 09:42:27 2020 -0300
+
+    Merge branch 'release/2.0'
+
+[33mcommit ee52b097cd5b4f4dc6468ed453e963897aa00134[m[33m ([m[1;31morigin/release/2.0[m[33m)[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Nov 11 09:41:49 2020 -0300
+
+    Insomnia and Routes
+
+[33mcommit 8568bc68ea940044876f6dfbadd0c0c0e218bc9c[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Oct 1 20:26:13 2020 -0300
+
+    user list controller and service updated
+
+[33mcommit 1d6bdb971367aab45157c9c91948ff5cf7f7b109[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Oct 1 17:15:37 2020 -0300
+
+    token expireIn
+
+[33mcommit b1760ca80b7ae16ff7b515a9f166e5ed3a81e8f3[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Oct 1 16:27:59 2020 -0300
+
+    token expiration fixed/optmized
+
+[33mcommit 29ce7bc775ca74a182175ef4beab9692919d7b42[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Tue Sep 29 16:55:13 2020 -0300
+
+    refactory routes in insomnia
+
+[33mcommit 34a052adacfb51a28393caae00dd3e8287e8d85b[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Tue Sep 29 13:41:32 2020 -0300
+
+    refactory routes and server.ts
+
+[33mcommit 12d3174d16e7f1b849811ab3423a76f9e58ec0b8[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Sep 28 16:54:31 2020 -0300
+
+    Send mail with injection and template provider (handlebarsMail)
+
+[33mcommit f08519069d731fa608947f89517f8a5fd15b22a0[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Sat Sep 26 20:48:13 2020 -0300
+
+    Version number to 2.0.0
+
+[33mcommit 4343ece5c034cd656d3b43090c0290c70d49cfd4[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Sat Sep 26 20:46:48 2020 -0300
+
+    Version number to 2.0
+
+[33mcommit 6db7e9b7d96ca7f703cb2e326e6fd147a86fc2ef[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Fri Sep 25 18:09:02 2020 -0300
+
+    update insomnia and create router to sampleAnalyses
+
+[33mcommit 79f1fe426b4a4ef1adfbb9afd174c55cb827791a[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Sep 23 16:53:11 2020 -0300
+
+    routes update
+
+[33mcommit 4b50ab0274d79fc311bfb7a11a6c5497146127d8[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Tue Sep 22 17:22:03 2020 -0300
+
+    routes update and update hashMail always
+
+[33mcommit 1377e54e7ba7d7b8bf97b30bb0930f1b86c8d3af[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Fri Sep 18 12:15:19 2020 -0300
+
+    limit GET to 1000 records; validate pageSize; implements GET Samples e SamplesVW
+
+[33mcommit c30293c1156ed0d03c8a3f5177cb981e75e1e97f[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Sep 17 16:23:09 2020 -0300
+
+    logging
+
+[33mcommit 3820a501935626c2a191c9c8eb37cbc656860878[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Sep 17 08:37:02 2020 -0300
+
+    filter sendMail events
+
+[33mcommit 94fbaf6eae4c913462356a664dfe9eb96bf1a909[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Sep 17 07:57:11 2020 -0300
+
+    fix valid hashmail
+
+[33mcommit 5e371fc058b73a66ba71d5a9997fb6dc74955c86[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Sep 16 15:29:44 2020 -0300
+
+    filter send mail only one collection point at MHF
+
+[33mcommit 21ed77ecab501410eff1b292d4035a369f4a83b0[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Sep 16 14:53:01 2020 -0300
+
+    sendMail only sample hash_mail is new
+
+[33mcommit 28957928f1de93481fadc70a7648e7bd226c122f[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Sep 16 13:26:17 2020 -0300
+
+    sendMail and info request updated
+
+[33mcommit d2bcdeb69fe00b26d87622f05a4c9c5e0f55508b[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Sep 16 12:18:56 2020 -0300
+
+    senMail template
+
+[33mcommit 3c503d52f15c2709c9a051c4cb73d7304b434b82[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Wed Sep 16 08:37:10 2020 -0300
+
+    fix sampleUpdate where SampleMethod
+
+[33mcommit 6ab8be95f9fd845b0b1371a2708af7586cb7d266[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Tue Sep 15 20:59:50 2020 -0300
+
+    mail disabled
+
+[33mcommit 254b1c7cb54eb8de322c6137358c06970ea0b225[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Tue Sep 15 18:04:57 2020 -0300
+
+    insomnia
+
+[33mcommit 35bcb3c9be60da973daef13efa14c29b1c33ee72[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Tue Sep 15 18:03:07 2020 -0300
+
+    Mail alert function; SampleMethod received update
+
+[33mcommit 196159ed83535e66ad8dca35d3103eede1daeba7[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Sep 14 16:38:17 2020 -0300
+
+    myLIMsNotification
+
+[33mcommit 9fde234114bf9743975ef60241c01dc827a76d96[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Sep 14 15:49:41 2020 -0300
+
+    myLIMsNotification
+
+[33mcommit 61e1f76050f15b14ae409f365910bbb1824e58a5[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Sep 14 15:43:18 2020 -0300
+
+    pm2-config
+
+[33mcommit 367bbaefaba3bd8d4e420053d050b127f7683cc3[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Sep 14 15:42:22 2020 -0300
+
+    Implements route to getSamples and Active Integration with myLIMS. Init by API parm
+
+[33mcommit 8e3cc599a1a317ba51ddda03f27d41c8765abee8[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Tue Sep 8 16:40:18 2020 -0300
+
+    insomnia json update
+
+[33mcommit 916288a2a768cc51875fab885f6099954c68d530[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Tue Sep 8 15:17:38 2020 -0300
+
+    route mylims/notification implemented
+
+[33mcommit 903f8720e7224a9ce4f8f79ff0dc896c54d95180[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Fri Sep 4 15:24:46 2020 -0300
+
+    pm2-config.json
+
+[33mcommit cfbd80173ec2b8bb4a0864e38e74ee4582e04e53[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Fri Sep 4 15:23:20 2020 -0300
+
+    syncronization auxiliares only every 50 cycles
+
+[33mcommit 8e97d12375e04ec25d629605b26253b2a188b686[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Fri Sep 4 15:18:38 2020 -0300
+
+    syncronization auxiliares only every 50 cycles
+
+[33mcommit f92b8ed3463715b01254735d87f22398b005b2ef[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Sep 3 15:43:59 2020 -0300
+
+    GET serviceStatus update rote
+
+[33mcommit 7ab190e83ef0a1188bda2508b978790b8af89203[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Sep 3 09:30:01 2020 -0300
+
+    updated status with API MyLIMs Status
+
+[33mcommit 6e54ffcf9f1dc7a64f9aae6688b15a7c14eaf071[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Sep 3 09:03:16 2020 -0300
+
+    update to monitor service status by GET request
+
+[33mcommit e78f183a168bef5b5afdb3a6a45bd71d3fd9058a[m[33m ([m[1;33mtag: 1.0.0[m[33m)[m
+Merge: e27120f 4cf0590
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Aug 27 15:34:15 2020 -0300
+
+    Merge branch 'release/1.0.0'
+
+[33mcommit 4cf059031656647845ec0ec38ca1f02c3dbcae74[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Aug 27 15:33:32 2020 -0300
+
+    Bumped version number to 1.0.0
+
+[33mcommit e27120f99091c76387705b5c1e9a0cfbf768fdfc[m
+Merge: 3cebd14 a386ba6
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Aug 27 15:29:52 2020 -0300
+
+    Merge branch 'release/1.0'
+
+[33mcommit a386ba688d833a78de21737b40522c1ec6ad8f99[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Aug 27 15:29:17 2020 -0300
+
+    Bumped version number to 1.0.0
+
+[33mcommit 3cebd148cae7b2d78e818d3a8cd31b494691c9ac[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Thu Aug 27 15:27:44 2020 -0300
+
+    routes implements with the last 1000 samples edited
+
+[33mcommit 984604f9623f831e8edb0b74df3faa5c102cc6f8[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Tue Aug 25 17:02:26 2020 -0300
+
+    included function to update Power BI Dataset
+
+[33mcommit fe66f742f81d52785f7cd634f7c3bb8eb62ce13c[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 22:04:33 2020 -0300
+
+    add information of sample error in then/catch in api.get
+
+[33mcommit c8ab3cb5f44e03aa9f4d025d2c9dae56b44709e2[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 21:51:12 2020 -0300
+
+    add then/catch in all api.get
+
+[33mcommit d6b2b5648bcc11ac341e43a3f59a4f6a6426fe5b[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 19:55:02 2020 -0300
+
+    try ECONNRESET resolv
+
+[33mcommit 93879963ce7a204d95c66ab599d26ae3d978b754[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 15:56:31 2020 -0300
+
+    fix counts show
+
+[33mcommit fbce1cb1833ddb37e03897a5576ae9ca74795108[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 15:49:40 2020 -0300
+
+    change Promise.All to work with await and then/catch
+
+[33mcommit 0a8700514b3517b9f304ebda44486a1c9f2cf606[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 13:29:36 2020 -0300
+
+    change action by error to abort
+
+[33mcommit bc04610191d2bbc99d206793aff319fea0157d21[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 13:25:22 2020 -0300
+
+    pm2 max_restarts param
+
+[33mcommit 9dd907fa0ade0c23a0ca44ba5393806ed86bb9ad[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 12:23:54 2020 -0300
+
+    fix change async/await all Promise.All to then/catch
+
+[33mcommit 2d4cdab68862389aab00d9a42ff8b6e8bf4e00e4[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 12:22:42 2020 -0300
+
+    change async/await all Promise.All to then/catch
+
+[33mcommit 5d53686c7574847441de000439b1e6a302a1a95b[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 11:31:02 2020 -0300
+
+    update pm2 config
+
+[33mcommit 2ccd8a50824549641d5702e7569df6552889f4c3[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 11:16:42 2020 -0300
+
+    Change await sync SamplesController AllPromisse to then/catch
+
+[33mcommit 8c8718c1e8057cbc7f64d9b332a05577900afe26[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 11:00:07 2020 -0300
+
+    pm2 fixes - watch
+
+[33mcommit dab1ad815386c13dac226da4ea73f91b8a4a668b[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 10:56:13 2020 -0300
+
+    pm2 fixes
+
+[33mcommit ce4ed795b293b96f4b6210978e25f1613f8c0d5f[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 10:54:16 2020 -0300
+
+    pm2 fixes
+
+[33mcommit da17b6dc9006b9b9eb9e25ca1d4de5d2193e1ccd[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 10:37:54 2020 -0300
+
+    clean/update .env
+
+[33mcommit 65df35a2b59088608c7e7fa3f38119739373a654[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 10:30:19 2020 -0300
+
+    Fix number convert with 'as number' to 'Number()'
+
+[33mcommit 7c662599495e642c034519123dc43055c32638e3[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 10:15:44 2020 -0300
+
+    revert last commit
+
+[33mcommit 673018cdc183c04a7246324dd695e39cf9cbc33f[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 10:10:52 2020 -0300
+
+    try resolv 'read ECONNRESET'
+
+[33mcommit 09bf17c8602e5662d69d320e9043bd0b6bd4441a[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 09:48:15 2020 -0300
+
+    Fix try/catch from function to job
+
+[33mcommit def87849c543188ec7a36835b83723c196575e2f[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 09:43:59 2020 -0300
+
+    Change try/catch from function to job
+
+[33mcommit 87aa8902c19767904baa56c6784d07c9a1503b18[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 08:50:09 2020 -0300
+
+    Import and Sync into  try/catch, and sample_method.service_area_id with is nullable true
+
+[33mcommit 8924b1469f6ed74029a232fe287e4b250c0898fe[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 08:04:11 2020 -0300
+
+    FIX add parm to sync last hour
+
+[33mcommit 841ad77c7b6b1f5d990c053fdb44b670ab6779fe[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Mon Aug 24 08:01:39 2020 -0300
+
+    add parm to sync last hour
+
+[33mcommit 9d0ef1655b08bd6b028efd4b28f71eca7eec8533[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Sat Aug 22 23:38:06 2020 -0300
+
+    removed unused modules
+
+[33mcommit 141418e29721f8a272a891fc27baf34b798962ac[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Sat Aug 22 23:01:36 2020 -0300
+
+    refactory finished
+
+[33mcommit 65b72c3fd0603fef1e93531272c9dc78d32485df[m
+Author: Leonardo Sampaio Cairo <leocairos@gmail.com>
+Date:   Sat Aug 22 22:42:57 2020 -0300
+
+    refactory continue ...

@@ -9,6 +9,8 @@ const runMode = (): string => {
         return 'sync';
       case 'API':
         return 'api';
+      // case 'REPROCESSTASKS':
+      //   return 'reprocessTasks';
       default:
         return 'noParms';
     }
@@ -30,6 +32,9 @@ const appPort = (): number => {
     case 'api':
       appPortAux += 2;
       break;
+    // case 'reprocessTasks':
+    //   appPortAux += 2;
+    //   break;
     default:
       logger.warn('Sorry, that is not something I know how to do.');
       process.exit(1);
