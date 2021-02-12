@@ -201,50 +201,56 @@ const serviceStatus = async (
   const myLIMsResponseTsk = await apiMYLIMS.get(
     `${urlMyLimsTaskbase}&$orderby=CreateDateTime`,
   );
-  const myLIMsResponseTskDesc = await apiMYLIMS.get(
-    `${urlMyLimsTaskbase}&$orderby=CreateDateTime desc`,
-  );
-
-  const messageOlder = myLIMsResponseTsk.data.Result[0]?.Message;
 
   const connectedMyLIMS = myLIMsResponseConn.data === true;
   const tasksWithError = myLIMsResponseTsk.data.TotalCount;
-  const olderTask = {
-    id: myLIMsResponseTsk.data.Result[0]?.Id,
-    trigger: myLIMsResponseTsk.data.Result[0]?.TaskTrigger?.Identification,
-    integration:
-      myLIMsResponseTsk.data.Result[0]?.ActiveIntegration?.Identification,
-    executionDateTime: myLIMsResponseTsk.data.Result[0]?.Execution,
-    createDateTime: myLIMsResponseTsk.data.Result[0]?.CreateDateTime,
-    createUser: myLIMsResponseTsk.data.Result[0]?.CreateUser?.Identification,
-    attempts: myLIMsResponseTsk.data.Result[0]?.Attempts,
-    data: myLIMsResponseTsk.data.Result[0]?.Data,
-    message: messageOlder.substring(
-      messageOlder.indexOf('<p><b>') + 6,
-      messageOlder.indexOf('</p>'),
-    ),
-  };
 
-  const messageNewest = myLIMsResponseTskDesc.data.Result[0]?.Message;
-  const newestTask = {
-    id: myLIMsResponseTskDesc.data.Result[0]?.Id,
-    trigger: myLIMsResponseTskDesc.data.Result[0]?.TaskTrigger?.Identification,
-    integration:
-      myLIMsResponseTskDesc.data.Result[0]?.ActiveIntegration?.Identification,
-    executionDateTime: myLIMsResponseTskDesc.data.Result[0]?.Execution,
-    createDateTime: myLIMsResponseTskDesc.data.Result[0]?.CreateDateTime,
-    createUser:
-      myLIMsResponseTskDesc.data.Result[0]?.CreateUser?.Identification,
-    attempts: myLIMsResponseTskDesc.data.Result[0]?.Attempts,
-    data: myLIMsResponseTskDesc.data.Result[0]?.Data,
-    message: messageNewest.substring(
-      messageNewest.indexOf('<p><b>') + 6,
-      messageNewest.indexOf('</p>'),
-    ),
-  };
-  return response
-    .status(200)
-    .json({ connectedMyLIMS, tasksWithError, olderTask, newestTask });
+  if (tasksWithError) {
+    const myLIMsResponseTskDesc = await apiMYLIMS.get(
+      `${urlMyLimsTaskbase}&$orderby=CreateDateTime desc`,
+    );
+
+    const messageOlder = myLIMsResponseTsk.data.Result[0]?.Message;
+
+    const olderTask = {
+      id: myLIMsResponseTsk.data.Result[0]?.Id,
+      trigger: myLIMsResponseTsk.data.Result[0]?.TaskTrigger?.Identification,
+      integration:
+        myLIMsResponseTsk.data.Result[0]?.ActiveIntegration?.Identification,
+      executionDateTime: myLIMsResponseTsk.data.Result[0]?.Execution,
+      createDateTime: myLIMsResponseTsk.data.Result[0]?.CreateDateTime,
+      createUser: myLIMsResponseTsk.data.Result[0]?.CreateUser?.Identification,
+      attempts: myLIMsResponseTsk.data.Result[0]?.Attempts,
+      data: myLIMsResponseTsk.data.Result[0]?.Data,
+      message: messageOlder.substring(
+        messageOlder.indexOf('<p><b>') + 6,
+        messageOlder.indexOf('</p>'),
+      ),
+    };
+
+    const messageNewest = myLIMsResponseTskDesc.data.Result[0]?.Message;
+    const newestTask = {
+      id: myLIMsResponseTskDesc.data.Result[0]?.Id,
+      trigger:
+        myLIMsResponseTskDesc.data.Result[0]?.TaskTrigger?.Identification,
+      integration:
+        myLIMsResponseTskDesc.data.Result[0]?.ActiveIntegration?.Identification,
+      executionDateTime: myLIMsResponseTskDesc.data.Result[0]?.Execution,
+      createDateTime: myLIMsResponseTskDesc.data.Result[0]?.CreateDateTime,
+      createUser:
+        myLIMsResponseTskDesc.data.Result[0]?.CreateUser?.Identification,
+      attempts: myLIMsResponseTskDesc.data.Result[0]?.Attempts,
+      data: myLIMsResponseTskDesc.data.Result[0]?.Data,
+      message: messageNewest.substring(
+        messageNewest.indexOf('<p><b>') + 6,
+        messageNewest.indexOf('</p>'),
+      ),
+    };
+    return response
+      .status(200)
+      .json({ connectedMyLIMS, tasksWithError, olderTask, newestTask });
+  }
+  return response.status(200).json({ connectedMyLIMS, tasksWithError });
 };
 
 const reprocessTasksWithErrorControlller = async (
