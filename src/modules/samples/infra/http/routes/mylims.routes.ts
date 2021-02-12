@@ -9,6 +9,7 @@ import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesContro
 
 import SampleMethod from '@modules/samples/infra/typeorm/entities/SampleMethod';
 import { BCryptHash, remoteIp } from '@shared/services/util';
+import { reprocessTasksWithError } from '@shared/infra/http/controller/ServerController';
 
 import ensureKeyAuthorization from '@modules/users/infra/http/middlewares/ensureKeyAuthorization';
 import SampleMailNotificationController from '@modules/samples/infra/controller/SampleMailNotificationController';
@@ -261,55 +262,56 @@ const serviceStatus = async (
     .json({ connectedMyLIMS, tasksWithError, olderTask, newestTask });
 };
 
-const reprocessTasksWithError = async (
+const reprocessTasksWithErrorControlller = async (
   request: Request,
   response: Response,
 ): Promise<Response> => {
   logger.info(`POST in reprocessTasksWithError (from ${remoteIp(request)})...`);
 
-  const urlMyLimsTaskbase =
-    '/tasks/9/Histories?$inlinecount=allpages&$top=10&$filter=Success eq false';
+  // const urlMyLimsTaskbase =
+  //   '/tasks/9/Histories?$inlinecount=allpages&$top=10&$filter=Success eq false';
 
-  const myLIMsResponseTsk = await apiMYLIMS.get(
-    `${urlMyLimsTaskbase}&$orderby=CreateDateTime`,
-  );
+  // const myLIMsResponseTsk = await apiMYLIMS.get(
+  //   `${urlMyLimsTaskbase}&$orderby=CreateDateTime`,
+  // );
 
-  const tasksToReprocess = myLIMsResponseTsk.data.TotalCount;
-  const tasksWithError = myLIMsResponseTsk.data.Result;
+  // const tasksToReprocess = myLIMsResponseTsk.data.TotalCount;
+  // const tasksWithError = myLIMsResponseTsk.data.Result;
 
-  /*
-   "Entity": "{\"SampleMethodId\":436378}",
-   "EntityId": "{\"SampleMethodId\":436378}"
-  */
-  const tasksDetails = tasksWithError.map(task => {
-    const rawData = task.Data;
-    const urlToReprocess = `/Tasks/9/Histories/${task.Id}/Execute`;
-    const parsedTask = {
-      Id: task.Id,
-      Event: task.TaskTrigger.Identification,
-      Entity: rawData.substring(
-        rawData.indexOf('{') + 2,
-        rawData.indexOf(':') - 1,
-      ),
-      EntityId: Number(
-        rawData.substring(rawData.indexOf(':') + 1, rawData.indexOf('}')),
-      ),
-      urlToReprocess,
-      // rawData,
-    };
+  // /*
+  //  "Entity": "{\"SampleMethodId\":436378}",
+  //  "EntityId": "{\"SampleMethodId\":436378}"
+  // */
+  // const tasksDetails = tasksWithError.map(task => {
+  //   const rawData = task.Data;
+  //   const urlToReprocess = `/Tasks/9/Histories/${task.Id}/Execute`;
+  //   const parsedTask = {
+  //     Id: task.Id,
+  //     Event: task.TaskTrigger.Identification,
+  //     Entity: rawData.substring(
+  //       rawData.indexOf('{') + 2,
+  //       rawData.indexOf(':') - 1,
+  //     ),
+  //     EntityId: Number(
+  //       rawData.substring(rawData.indexOf(':') + 1, rawData.indexOf('}')),
+  //     ),
+  //     urlToReprocess,
+  //     // rawData,
+  //   };
 
-    return parsedTask;
-  });
+  //   return parsedTask;
+  // });
 
-  await Promise.all(tasksDetails);
-  // eslint-disable-next-line no-restricted-syntax
-  for (const task of tasksDetails) {
-    // eslint-disable-next-line no-await-in-loop
-    // await
-    apiMYLIMS.get(task.urlToReprocess);
-    logger.info(`>> reprocessing Task ${task.Id} [${task.Event}]...`);
-  }
+  // await Promise.all(tasksDetails);
+  // // eslint-disable-next-line no-restricted-syntax
+  // for (const task of tasksDetails) {
+  //   // eslint-disable-next-line no-await-in-loop
+  //   // await
+  //   apiMYLIMS.get(task.urlToReprocess);
+  //   logger.info(`>> reprocessing Task ${task.Id} [${task.Event}]...`);
+  // }
 
+  const { tasksToReprocess, tasksDetails } = await reprocessTasksWithError();
   return response.status(200).json({
     tasksToReprocess,
     reprocessing: tasksDetails.length,
@@ -323,6 +325,9 @@ mylimsRouter.get('/status', serviceStatus);
 
 mylimsRouter.post('/notification', mylimsNotification);
 
-mylimsRouter.post('/reprocesstaskswitherror', reprocessTasksWithError);
+mylimsRouter.post(
+  '/reprocesstaskswitherror',
+  reprocessTasksWithErrorControlller,
+);
 
 export default mylimsRouter;

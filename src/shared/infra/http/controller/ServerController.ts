@@ -1,8 +1,11 @@
+/* eslint-disable no-loop-func */
+/* eslint-disable no-await-in-loop */
 import { CronJob } from 'cron';
 // import { Request, Response } from 'express';
 
 import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesControllerv2';
 import apiMYLIMS from '@shared/services/apiMYLIMS';
+// import apiCQ from '@shared/services/apiCQ';
 import AuxiliariesControllerv2 from '@modules/samples/infra/controller/AuxiliariesControllerv2';
 import { runMode, appPort } from '@config/runMode';
 import logger from '@config/logger';
@@ -102,7 +105,20 @@ const importNews = async (): Promise<void> => {
     });
 };
 
-const reprocessTasksWithError = async (): Promise<void> => {
+interface ITaskDetail {
+  Id: number;
+  Event: string;
+  Entity: string;
+  EntityId: number;
+  urlToReprocess: string;
+}
+
+interface IReprocessResult {
+  tasksToReprocess: number;
+  tasksDetails: ITaskDetail[];
+}
+
+export const reprocessTasksWithError = async (): Promise<IReprocessResult> => {
   logger.info(`Reprocessing Tasks With Error...`);
 
   const urlMyLimsTaskbase =
@@ -143,10 +159,25 @@ const reprocessTasksWithError = async (): Promise<void> => {
 
   // eslint-disable-next-line no-restricted-syntax
   for (const task of tasksDetails) {
-    // eslint-disable-next-line no-await-in-loop
-    await apiMYLIMS.get(task.urlToReprocess);
-    logger.info(`>> reprocessing Task ${task.Id} [${task.Event}]...`);
+    await apiMYLIMS
+      .get(task.urlToReprocess)
+      .then(resCode => {
+        logger.info(
+          `>> [${resCode.status}] Start reprocessing Task ${task.Id} [${task.Event}]...`,
+        );
+      })
+      .catch(error => {
+        logger.error(`[Tasks Reprocess] Aborted with error: ${error} `);
+      });
+    // await apiCQ.post('/mylims/notification', {
+    //   Entity: task.Entity,
+    //   EntityId: task.EntityId,
+    //   ReferenceKey: 'L001',
+    //   Event: task.Event,
+    // });
   }
+
+  return { tasksToReprocess, tasksDetails };
 };
 
 const runCheck = () => {
