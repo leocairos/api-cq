@@ -160,8 +160,6 @@ const mylimsNotification = async (
 
   let idSample = 0;
   if (Entity === 'Sample' || Entity === 'SampleMethod') {
-    const samplesController = new SamplesControllerv2();
-
     if (Entity === 'SampleMethod') {
       try {
         await createConnection();
@@ -179,23 +177,10 @@ const mylimsNotification = async (
       idSample = EntityId;
     }
 
+    const samplesController = new SamplesControllerv2();
     await samplesController.updateSample(idSample);
-
-    /* const sendMailEvents = [
-      'Método da Amostra - Finalizar',
-      'Amostra - Finalizar',
-    ]; */
-
     const sampleDetail = await getSampleToMail(idSample);
-
-    // if (sendMailEvents.includes(Event)) {
     sendMail(sampleDetail);
-    // } else {
-    //   updateHashMail(sampleDetail);
-    //   logger.info(
-    //     `Send mail Sample ${idSample} not sent, because sample Event is not in "${sendMailEvents}"`,
-    //   );
-    // }
 
     return response.status(200).json({ sample: idSample });
   }
@@ -319,11 +304,38 @@ const reprocessTasksWithErrorControlller = async (
   });
 };
 
+const mylimsSyncSample = async (
+  request: Request,
+  response: Response,
+): Promise<Response> => {
+  logger.info(
+    `PATCH in mylims/mylimsSyncSample (from ${remoteIp(request)})...`,
+  );
+
+  const { idSample } = request.params;
+
+  try {
+    if (idSample) {
+      const samplesController = new SamplesControllerv2();
+      await samplesController.updateSample(Number(idSample));
+      const sampleDetail = await getSampleToMail(Number(idSample));
+      sendMail(sampleDetail);
+      return response.status(200).json({ sample: idSample });
+    }
+    return response.status(400).json({ message: 'idSample is required!' });
+  } catch (err) {
+    logger.error(`[mylimsSyncSample] Aborted with error: ${err} `);
+    return response.sendStatus(400);
+  }
+};
+
 mylimsRouter.use(ensureKeyAuthorization);
 
 mylimsRouter.get('/status', serviceStatus);
 
 mylimsRouter.post('/notification', mylimsNotification);
+
+mylimsRouter.patch('/syncsample/:idSample', mylimsSyncSample);
 
 mylimsRouter.post(
   '/reprocesstaskswitherror',

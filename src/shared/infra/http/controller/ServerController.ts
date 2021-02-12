@@ -9,33 +9,6 @@ import apiMYLIMS from '@shared/services/apiMYLIMS';
 import AuxiliariesControllerv2 from '@modules/samples/infra/controller/AuxiliariesControllerv2';
 import { runMode, appPort } from '@config/runMode';
 import logger from '@config/logger';
-// import { remoteIp } from '@shared/services/util';
-
-/* const serviceStatus = async (
-  request: Request,
-  response: Response,
-): Promise<Response> => {
-  logger.info(`GET in serviceStatus (from ${remoteIp(request)})...`);
-  const myLIMsResponse = await apiMYLIMS.get('/checkConnection');
-  const connectedMyLIMS = myLIMsResponse.data === true;
-
-  return response.status(200).json({ connectedMyLIMS });
-};
-
-const checkTasks = async (
-  request: Request,
-  response: Response,
-): Promise<Response> => {
-  logger.info(`GET in checkTasks (from ${remoteIp(request)})...`);
-  let tasksUrl = '/tasks/9/Histories?$inlinecount=allpages&$top=50&';
-  tasksUrl += '$filter=Success eq false&$orderby=CreateDateTime';
-  const myLIMsResponse = await apiMYLIMS.get(tasksUrl);
-
-  const tasksWithError = myLIMsResponse.data.TotalCount;
-
-  return response.status(200).json({ tasksWithError });
-};
-*/
 
 const importAllSamples = async (): Promise<void> => {
   const samplesController = new SamplesControllerv2();
