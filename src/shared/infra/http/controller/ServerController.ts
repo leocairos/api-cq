@@ -98,7 +98,7 @@ export const reprocessTasksWithError = async (): Promise<IReprocessResult> => {
     '/tasks/9/Histories?$inlinecount=allpages&$top=10&$filter=Success eq false';
 
   const myLIMsResponseTsk = await apiMYLIMS.get(
-    `${urlMyLimsTaskbase}&$orderby=CreateDateTime desc`,
+    `${urlMyLimsTaskbase}&$orderby=CreateDateTime`,
   );
 
   const tasksToReprocess = myLIMsResponseTsk.data.TotalCount;
