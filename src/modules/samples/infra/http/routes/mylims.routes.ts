@@ -114,6 +114,15 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
   const isFornoMHF =
     sampleDetail.collectionPoint === 'Tubulação de Saída da Peneira PE-5001';
 
+  const pontosFlotacao = [
+    'Elevador de Canecas EC 0005 – Flotação',
+    'Descarga do Filtro de Mangas - Flotação de Talco -',
+    'Descarga do Filtro Horizontal - Flotação de Talco -',
+  ];
+
+  const isFlotacao = pontosFlotacao.includes(
+    sampleDetail.collectionPoint || '',
+  );
   /* const hashIsEqual = await hashProvider.compareHash(
     JSON.stringify(sampleDetail),
     hashMailStored || '',
@@ -128,16 +137,18 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
   } */
 
   try {
-    if (isFornoMHF) {
+    if (isFornoMHF || isFlotacao) {
       const sendSampleMailNotificationController = new SampleMailNotificationController();
 
       await sendSampleMailNotificationController.create(
-        `${process.env.MAIL_TO_FORNO}`,
+        isFornoMHF
+          ? `${process.env.MAIL_TO_FORNO}`
+          : `${process.env.MAIL_TO_FLOTACAO}`,
         sampleDetail,
       );
     } else {
       logger.info(
-        `Send mail Sample ${sampleDetail.id} not sent, because sample hash is not from MHF`,
+        `Send mail Sample ${sampleDetail.id} not sent, because sample hash is not from MHF or Flotação`,
       );
     }
 
