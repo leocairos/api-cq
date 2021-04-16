@@ -184,7 +184,8 @@ const serverListen = (): void => {
   logger.info(
     `\n${'#'.repeat(100)}\n${' '.repeat(
       26,
-    )} Service now running on port '${appPort()}' (${process.env.NODE_ENV
+    )} Service now running on port '${appPort()}' (${
+      process.env.NODE_ENV
     }) ${' '.repeat(26)} \n${'#'.repeat(100)}\n`,
   );
 
