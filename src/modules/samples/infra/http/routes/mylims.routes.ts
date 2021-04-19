@@ -115,9 +115,9 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
     sampleDetail.collectionPoint === 'Tubulação de Saída da Peneira PE-5001';
 
   const pontosFlotacao = [
-    'Elevador de Canecas EC 0005 – Flotação',
-    'Descarga do Filtro de Mangas - Flotação de Talco -',
-    'Descarga do Filtro Horizontal - Flotação de Talco -',
+    'Elevador de Canecas EC 0005 - Flotação',
+    'Descarga do Filtro de Mangas - Flotação de Talco - ',
+    'Descarga do Filtro Horizontal - Flotação de Talco - ',
   ];
 
   const isFlotacao = pontosFlotacao.includes(
