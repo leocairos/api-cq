@@ -116,8 +116,8 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
 
   const pontosFlotacao = [
     'Elevador de Canecas EC 0005 - Flotação',
-    'Descarga do Filtro de Mangas - Flotação de Talco - ',
-    'Descarga do Filtro Horizontal - Flotação de Talco - ',
+    // 'Descarga do Filtro de Mangas - Flotação de Talco - ',
+    // 'Descarga do Filtro Horizontal - Flotação de Talco - ',
   ];
 
   const isFlotacao = pontosFlotacao.includes(
