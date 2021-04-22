@@ -8,7 +8,7 @@ import Sample from '@modules/samples/infra/typeorm/entities/Sample';
 import SamplesControllerv2 from '@modules/samples/infra/controller/SamplesControllerv2';
 
 import SampleMethod from '@modules/samples/infra/typeorm/entities/SampleMethod';
-import { BCryptHash, remoteIp } from '@shared/services/util';
+import { remoteIp } from '@shared/services/util';
 import { reprocessTasksWithError } from '@shared/infra/http/controller/ServerController';
 
 import ensureKeyAuthorization from '@modules/users/infra/http/middlewares/ensureKeyAuthorization';
@@ -19,7 +19,7 @@ import sendMailDev from './sendMailDev';
 
 const mylimsRouter = Router();
 
-const getSampleToMail = async (idSample: number): Promise<any> => {
+const getSampleToMail = async (idSample: number): Promise<ISampleDetail> => {
   logger.info(`Getting sample detail for mail (Sample ${idSample})...`);
 
   try {
@@ -49,6 +49,23 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
   );
 
   const sampleAnalysis = findSampleDetail.map(sample => {
+    const dates = [
+      sample.updated_at.getTime(),
+      sample.taken_date_time.getTime(),
+      sample.received_time.getTime(),
+      sample.finalized_time.getTime(),
+      sample.published_time.getTime(),
+      sample.reviewed_time.getTime(),
+      sample.current_status_edition_date_time.getTime(),
+      sample.analyse_updated_at.getTime(),
+      sample.vsa_edition_data_time.getTime(),
+      sample.vsa_start_data_time.getTime(),
+      sample.vsa_execute_data_time.getTime(),
+      sample.vsa_vsm_updated_at.getTime(),
+    ];
+
+    const maxDate = Math.max(...dates);
+
     return {
       order: sample.analyse_order,
       method: sample.analyse_method,
@@ -56,10 +73,14 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
       conclusion: sample.analyse_conclusion,
       value: sample.analyse_display_value,
       unit: sample.analyse_measurement_unit,
+      lastDate: maxDate,
     };
   });
 
   await Promise.all(sampleAnalysis);
+  const maxDateInAnalisys = sampleAnalysis.map(a => a.lastDate);
+
+  const maxDateInSample = Math.max(...maxDateInAnalisys);
 
   try {
     const sampleDetail = {
@@ -73,10 +94,11 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
       observation: findSampleDetail[0].observation,
       analysis: sampleAnalysis,
       hashMail: findSampleDetail[0].hash_mail,
+      lastUpdated_at: new Date(maxDateInSample),
     };
     return sampleDetail;
   } catch {
-    return {};
+    return {} as ISampleDetail;
   }
 };
 
@@ -102,7 +124,8 @@ const updateHashMail = async (sampleDetail: ISampleDetail): Promise<void> => {
     //   JSON.stringify(sampleDetail),
     // );
 
-    findSample.hashMail = JSON.stringify(sampleDetail);
+    // findSample.hashMail = JSON.stringify(sampleDetail);
+    findSample.hashMail = sampleDetail.lastUpdated_at?.toString() || '';
 
     await ormRepository.save(findSample);
   }
@@ -138,7 +161,8 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
   // );
 
   const hashIsEqual =
-    JSON.stringify(sampleDetail) === JSON.stringify(hashMailStored);
+    sampleDetail.lastUpdated_at?.toString() ===
+    JSON.parse(hashMailStored || '');
 
   // Sample with same hash, send mail is not necessary
   /* if (hashIsEqual) {
