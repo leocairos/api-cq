@@ -16,5 +16,6 @@ export interface ISampleDetail {
   lote?: string;
   analysis?: IAnalysis[];
   hashMail?: string;
-  lastUpdated_at?: Date;
+  lastUpdated_at?: Date | string;
+  notificationEvent?: string;
 }

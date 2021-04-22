@@ -14,8 +14,9 @@ import { reprocessTasksWithError } from '@shared/infra/http/controller/ServerCon
 import ensureKeyAuthorization from '@modules/users/infra/http/middlewares/ensureKeyAuthorization';
 import SampleMailNotificationController from '@modules/samples/infra/controller/SampleMailNotificationController';
 import { ISampleDetail } from '@modules/samples/dtos/ISampleNotificationDTO';
+import { format } from 'date-fns';
 
-import sendMailDev from './sendMailDev';
+// import sendMailDev from './sendMailDev';
 
 const mylimsRouter = Router();
 
@@ -125,7 +126,7 @@ const updateHashMail = async (sampleDetail: ISampleDetail): Promise<void> => {
     // );
 
     // findSample.hashMail = JSON.stringify(sampleDetail);
-    findSample.hashMail = sampleDetail.lastUpdated_at?.toISOString() || '';
+    findSample.hashMail = sampleDetail.lastUpdated_at || '';
 
     await ormRepository.save(findSample);
   }
@@ -245,6 +246,16 @@ const mylimsNotification = async (
     const samplesController = new SamplesControllerv2();
     await samplesController.updateSample(idSample);
     const sampleDetail = await getSampleToMail(idSample);
+
+    Object.assign(sampleDetail, {
+      notificationEvent: `Entity: ${Entity} | Event: ${Event}`,
+    });
+
+    // eslint-disable-next-line no-param-reassign
+    // sampleDetail.lastUpdated_at = sampleDetail.lastUpdated_at
+    //   ? format(sampleDetail.lastUpdated_at as Date, 'dd/MM/yyyy HH:mm:ss')
+    //   : '';
+
     sendMail(sampleDetail);
 
     return response.status(200).json({ sample: idSample });
