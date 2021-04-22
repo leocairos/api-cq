@@ -137,7 +137,8 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
   //   hashMailStored || '',
   // );
 
-  const hashIsEqual = JSON.stringify(sampleDetail) === hashMailStored;
+  const hashIsEqual =
+    JSON.stringify(sampleDetail) === JSON.stringify(hashMailStored);
 
   // Sample with same hash, send mail is not necessary
   /* if (hashIsEqual) {
