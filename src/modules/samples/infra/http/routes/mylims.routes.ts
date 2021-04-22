@@ -50,18 +50,18 @@ const getSampleToMail = async (idSample: number): Promise<ISampleDetail> => {
 
   const sampleAnalysis = findSampleDetail.map(sample => {
     const dates = [
-      sample.updated_at.getTime(),
-      sample.taken_date_time.getTime(),
-      sample.received_time.getTime(),
-      sample.finalized_time.getTime(),
-      sample.published_time.getTime(),
-      sample.reviewed_time.getTime(),
-      sample.current_status_edition_date_time.getTime(),
-      sample.analyse_updated_at.getTime(),
-      sample.vsa_edition_data_time.getTime(),
-      sample.vsa_start_data_time.getTime(),
-      sample.vsa_execute_data_time.getTime(),
-      sample.vsa_vsm_updated_at.getTime(),
+      sample.updated_at?.getTime() || 0,
+      sample.taken_date_time?.getTime() || 0,
+      sample.received_time?.getTime() || 0,
+      sample.finalized_time?.getTime() || 0,
+      sample.published_time?.getTime() || 0,
+      sample.reviewed_time?.getTime() || 0,
+      sample.current_status_edition_date_time?.getTime() || 0,
+      sample.analyse_updated_at?.getTime() || 0,
+      sample.vsa_edition_data_time?.getTime() || 0,
+      sample.vsa_start_data_time?.getTime() || 0,
+      sample.vsa_execute_data_time?.getTime() || 0,
+      sample.vsa_vsm_updated_at?.getTime() || 0,
     ];
 
     const maxDate = Math.max(...dates);
