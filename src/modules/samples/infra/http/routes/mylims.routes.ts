@@ -81,7 +81,7 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
 };
 
 const updateHashMail = async (sampleDetail: ISampleDetail): Promise<void> => {
-  const hashProvider = new BCryptHash();
+  // const hashProvider = new BCryptHash();
 
   // eslint-disable-next-line no-param-reassign
   delete sampleDetail?.hashMail;
@@ -98,29 +98,23 @@ const updateHashMail = async (sampleDetail: ISampleDetail): Promise<void> => {
   });
 
   if (findSample) {
-    findSample.hashMail = await hashProvider.generateHash(
-      JSON.stringify(sampleDetail),
-    );
+    // findSample.hashMail = await hashProvider.generateHash(
+    //   JSON.stringify(sampleDetail),
+    // );
+
+    findSample.hashMail = JSON.stringify(sampleDetail);
 
     await ormRepository.save(findSample);
   }
-
-  await sendMailDev({
-    subject: `API CQ Dev - ID ${sampleDetail.id}`,
-    html: `sampleDetail: ${JSON.stringify(sampleDetail)} \n
-    findSample: ${JSON.stringify(findSample)}`,
-  });
 
   logger.info(`Sample ${sampleDetail.id}, hashMail updated`);
 };
 
 const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
-  const hashProvider = new BCryptHash();
+  // const hashProvider = new BCryptHash();
 
-  // const sampleDetail = await getSampleToMail(idSample);
+  // const sampleDetailInDB = await getSampleToMail(sampleDetail.id);
   const hashMailStored = sampleDetail.hashMail;
-  // eslint-disable-next-line no-param-reassign
-  delete sampleDetail.hashMail;
 
   const isFornoMHF =
     sampleDetail.collectionPoint === 'Tubulação de Saída da Peneira PE-5001';
@@ -138,10 +132,13 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
   // eslint-disable-next-line no-param-reassign
   delete sampleDetail?.hashMail;
 
-  const hashIsEqual = await hashProvider.compareHash(
-    JSON.stringify(sampleDetail),
-    hashMailStored || '',
-  );
+  // const hashIsEqual = await hashProvider.compareHash(
+  //   JSON.stringify(sampleDetail),
+  //   hashMailStored || '',
+  // );
+
+  const hashIsEqual =
+    JSON.stringify(sampleDetail) === JSON.stringify(hashMailStored);
 
   // Sample with same hash, send mail is not necessary
   /* if (hashIsEqual) {
