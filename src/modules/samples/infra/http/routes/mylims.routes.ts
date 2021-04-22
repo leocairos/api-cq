@@ -125,7 +125,7 @@ const updateHashMail = async (sampleDetail: ISampleDetail): Promise<void> => {
     // );
 
     // findSample.hashMail = JSON.stringify(sampleDetail);
-    findSample.hashMail = sampleDetail.lastUpdated_at?.toString() || '';
+    findSample.hashMail = sampleDetail.lastUpdated_at?.toISOString() || '';
 
     await ormRepository.save(findSample);
   }
@@ -160,7 +160,9 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
   //   hashMailStored || '',
   // );
 
-  const hashIsEqual = sampleDetail.lastUpdated_at === hashMailStored;
+  const hashIsEqual =
+    sampleDetail.lastUpdated_at?.toISOString() ===
+    new Date(hashMailStored || '').toISOString();
 
   // Sample with same hash, send mail is not necessary
   /* if (hashIsEqual) {
