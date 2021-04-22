@@ -83,6 +83,9 @@ const getSampleToMail = async (idSample: number): Promise<any> => {
 const updateHashMail = async (sampleDetail: ISampleDetail): Promise<void> => {
   const hashProvider = new BCryptHash();
 
+  // eslint-disable-next-line no-param-reassign
+  delete sampleDetail?.hashMail;
+
   try {
     await createConnection();
   } catch {
@@ -125,6 +128,10 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
   const isFlotacao = pontosFlotacao.includes(
     sampleDetail.collectionPoint || '',
   );
+
+  // eslint-disable-next-line no-param-reassign
+  delete sampleDetail?.hashMail;
+
   const hashIsEqual = await hashProvider.compareHash(
     JSON.stringify(sampleDetail),
     hashMailStored || '',
