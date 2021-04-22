@@ -162,7 +162,7 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
 
   const hashIsEqual =
     sampleDetail.lastUpdated_at?.toISOString() ===
-    new Date(hashMailStored || '').toISOString();
+    new Date(hashMailStored || new Date('2018-01-01')).toISOString();
 
   // Sample with same hash, send mail is not necessary
   /* if (hashIsEqual) {
@@ -196,12 +196,12 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
       );
 
       //
-      await sendMailDev({
-        subject: 'API CQ Dev',
-        html: `sampleDetail: ${JSON.stringify(sampleDetail)} \n
-        hashMailStored: ${hashMailStored} \n
-        hashIsEqual: ${hashIsEqual}`,
-      });
+      // await sendMailDev({
+      //   subject: 'API CQ Dev',
+      //   html: `sampleDetail: ${JSON.stringify(sampleDetail)} \n
+      //   hashMailStored: ${hashMailStored} \n
+      //   hashIsEqual: ${hashIsEqual}`,
+      // });
     } else {
       logger.info(
         `Send mail Sample ${sampleDetail.id} not sent, because sample hash is not from MHF or Flotação`,

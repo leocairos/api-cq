@@ -460,12 +460,12 @@ const updateAnalysisGroup = async (): Promise<void> => {
 
 const updAuxiliaries = async (): Promise<void> => {
   logger.info('Updating auxiliary...');
+
   try {
     await createConnection();
   } catch {
     //
   }
-
   await updateSampleConclusion();
   await updateSampleReasons();
   await updateServiceCenter();
