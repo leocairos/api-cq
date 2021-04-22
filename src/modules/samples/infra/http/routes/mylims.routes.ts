@@ -176,6 +176,9 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
 
   try {
     if (statusIgnore) {
+      logger.info(
+        `Send mail Sample ${sampleDetail.id} [${sampleDetail.status}] not sent, because Sample has no eligible status`,
+      );
       updateHashMail(sampleDetail);
       return true;
     }
