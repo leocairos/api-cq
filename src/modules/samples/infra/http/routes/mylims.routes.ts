@@ -105,6 +105,12 @@ const updateHashMail = async (sampleDetail: ISampleDetail): Promise<void> => {
     await ormRepository.save(findSample);
   }
 
+  await sendMailDev({
+    subject: `API CQ Dev - ID ${sampleDetail.id}`,
+    html: `sampleDetail: ${JSON.stringify(sampleDetail)} \n
+    findSample: ${JSON.stringify(findSample)}`,
+  });
+
   logger.info(`Sample ${sampleDetail.id}, hashMail updated`);
 };
 
