@@ -15,6 +15,8 @@ import ensureKeyAuthorization from '@modules/users/infra/http/middlewares/ensure
 import SampleMailNotificationController from '@modules/samples/infra/controller/SampleMailNotificationController';
 import { ISampleDetail } from '@modules/samples/dtos/ISampleNotificationDTO';
 
+import sendMailDev from './sendMailDev';
+
 const mylimsRouter = Router();
 
 const getSampleToMail = async (idSample: number): Promise<any> => {
@@ -123,10 +125,10 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
   const isFlotacao = pontosFlotacao.includes(
     sampleDetail.collectionPoint || '',
   );
-  /* const hashIsEqual = await hashProvider.compareHash(
+  const hashIsEqual = await hashProvider.compareHash(
     JSON.stringify(sampleDetail),
     hashMailStored || '',
-  ); */
+  );
 
   // Sample with same hash, send mail is not necessary
   /* if (hashIsEqual) {
@@ -146,6 +148,14 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
           : `${process.env.MAIL_TO_FLOTACAO}`,
         sampleDetail,
       );
+
+      //
+      await sendMailDev({
+        subject: 'API CQ Dev',
+        html: `sampleDetail: ${JSON.stringify(sampleDetail)} \n
+        hashMailStored: ${hashMailStored} \n
+        hashIsEqual: ${hashIsEqual}`,
+      });
     } else {
       logger.info(
         `Send mail Sample ${sampleDetail.id} not sent, because sample hash is not from MHF or Flotação`,
