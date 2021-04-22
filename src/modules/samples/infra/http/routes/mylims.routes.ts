@@ -148,7 +148,16 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
     return false;
   } */
 
+  const statusIgnore = ['Recebida', 'Registrada'].includes(
+    sampleDetail.status || '',
+  );
+
   try {
+    if (statusIgnore) {
+      updateHashMail(sampleDetail);
+      return true;
+    }
+
     if (isFornoMHF || isFlotacao) {
       const sendSampleMailNotificationController = new SampleMailNotificationController();
 
