@@ -160,9 +160,7 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
   //   hashMailStored || '',
   // );
 
-  const hashIsEqual =
-    sampleDetail.lastUpdated_at?.toISOString() ===
-    new Date(hashMailStored || new Date('2018-01-01')).toISOString();
+  const hashIsEqual = sampleDetail.lastUpdated_at === hashMailStored;
 
   // Sample with same hash, send mail is not necessary
   /* if (hashIsEqual) {
