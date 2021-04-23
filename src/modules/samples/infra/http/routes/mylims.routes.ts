@@ -164,12 +164,12 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
   const hashIsEqual = newHash === hashMailStored;
 
   // Sample with same hash, send mail is not necessary
-  /* if (hashIsEqual) {
+  if (hashIsEqual) {
     logger.info(
       `Send mail Sample ${sampleDetail.id} is not necessary, because sample hash is not new...`,
     );
     return false;
-  } */
+  }
 
   const statusIgnore = ['Recebida', 'Registrada'].includes(
     sampleDetail.status || '',
@@ -201,16 +201,16 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
         sampleDetail,
       );
 
-      await sendMailDev({
-        subject: 'API CQ Dev',
-        html: `sampleDetail: ${JSON.stringify(sampleDetail)} \n
-        sampleDetailParsed: ${JSON.stringify(sampleDetailParsed)} \n
-        hashMailStored: ${hashMailStored} \n
-        hashIsEqual: ${hashIsEqual} \n
-        md5(JSON.stringify(sampleDetailParsed)): ${md5(
-          JSON.stringify(sampleDetailParsed),
-        )}`,
-      });
+      // await sendMailDev({
+      //   subject: 'API CQ Dev',
+      //   html: `sampleDetail: ${JSON.stringify(sampleDetail)} \n
+      //   sampleDetailParsed: ${JSON.stringify(sampleDetailParsed)} \n
+      //   hashMailStored: ${hashMailStored} \n
+      //   hashIsEqual: ${hashIsEqual} \n
+      //   md5(JSON.stringify(sampleDetailParsed)): ${md5(
+      //     JSON.stringify(sampleDetailParsed),
+      //   )}`,
+      // });
     } else {
       logger.info(
         `Send mail Sample ${sampleDetail.id} not sent, because sample hash is not from MHF or Flotação`,
