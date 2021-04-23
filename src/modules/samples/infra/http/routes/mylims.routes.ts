@@ -52,23 +52,6 @@ const getSampleToMail = async (idSample: number): Promise<ISampleDetail> => {
   );
 
   const sampleAnalysis = findSampleDetail.map(sample => {
-    const dates = [
-      sample.updated_at?.getTime() || 0,
-      sample.taken_date_time?.getTime() || 0,
-      sample.received_time?.getTime() || 0,
-      sample.finalized_time?.getTime() || 0,
-      sample.published_time?.getTime() || 0,
-      sample.reviewed_time?.getTime() || 0,
-      sample.current_status_edition_date_time?.getTime() || 0,
-      sample.analyse_updated_at?.getTime() || 0,
-      sample.vsa_edition_data_time?.getTime() || 0,
-      sample.vsa_start_data_time?.getTime() || 0,
-      sample.vsa_execute_data_time?.getTime() || 0,
-      sample.vsa_vsm_updated_at?.getTime() || 0,
-    ];
-
-    const maxDate = Math.max(...dates);
-
     return {
       order: sample.analyse_order,
       method: sample.analyse_method,
@@ -76,11 +59,16 @@ const getSampleToMail = async (idSample: number): Promise<ISampleDetail> => {
       conclusion: sample.analyse_conclusion,
       value: sample.analyse_display_value,
       unit: sample.analyse_measurement_unit,
-      // lastDate: maxDate,
     };
   });
 
   await Promise.all(sampleAnalysis);
+
+  await sampleAnalysis.sort(function (a, b) {
+    if (a.analyse > b.analyse) return 1;
+    if (a.analyse < b.analyse) return -1;
+    return 0;
+  });
   // const maxDateInAnalisys = sampleAnalysis.map(a => a.lastDate);
 
   // const maxDateInSample = Math.max(...maxDateInAnalisys);
@@ -216,16 +204,16 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
         sampleDetail,
       );
 
-      // await sendMailDev({
-      //   subject: 'API CQ Dev',
-      //   html: `sampleDetail: ${JSON.stringify(sampleDetail)} \n
-      //   sampleDetailParsed: ${JSON.stringify(sampleDetailParsed)} \n
-      //   hashMailStored: ${hashMailStored} \n
-      //   hashIsEqual: ${hashIsEqual} \n
-      //   md5(JSON.stringify(sampleDetailParsed)): ${md5(
-      //     JSON.stringify(sampleDetailParsed),
-      //   )}`,
-      // });
+      await sendMailDev({
+        subject: 'API CQ Dev',
+        html: `sampleDetail: ${JSON.stringify(sampleDetail)} \n
+        sampleDetailParsed: ${JSON.stringify(sampleDetailParsed)} \n
+        hashMailStored: ${hashMailStored} \n
+        hashIsEqual: ${hashIsEqual} \n
+        md5(JSON.stringify(sampleDetailParsed)): ${md5(
+          JSON.stringify(sampleDetailParsed),
+        )}`,
+      });
     } else {
       logger.info(
         `Send mail Sample ${sampleDetail.id} not sent, because sample hash is not from MHF or Flotação`,
