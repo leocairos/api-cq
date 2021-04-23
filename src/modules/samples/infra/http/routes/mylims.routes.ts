@@ -69,9 +69,6 @@ const getSampleToMail = async (idSample: number): Promise<ISampleDetail> => {
     if (a.analyse < b.analyse) return -1;
     return 0;
   });
-  // const maxDateInAnalisys = sampleAnalysis.map(a => a.lastDate);
-
-  // const maxDateInSample = Math.max(...maxDateInAnalisys);
 
   try {
     const sampleDetail = {
