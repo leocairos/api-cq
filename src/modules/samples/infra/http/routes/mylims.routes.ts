@@ -14,7 +14,9 @@ import { reprocessTasksWithError } from '@shared/infra/http/controller/ServerCon
 import ensureKeyAuthorization from '@modules/users/infra/http/middlewares/ensureKeyAuthorization';
 import SampleMailNotificationController from '@modules/samples/infra/controller/SampleMailNotificationController';
 import { ISampleDetail } from '@modules/samples/dtos/ISampleNotificationDTO';
+import md5 from 'md5';
 import { format } from 'date-fns';
+import sendMailDev from './sendMailDev';
 
 // import sendMailDev from './sendMailDev';
 
@@ -74,14 +76,14 @@ const getSampleToMail = async (idSample: number): Promise<ISampleDetail> => {
       conclusion: sample.analyse_conclusion,
       value: sample.analyse_display_value,
       unit: sample.analyse_measurement_unit,
-      lastDate: maxDate,
+      // lastDate: maxDate,
     };
   });
 
   await Promise.all(sampleAnalysis);
-  const maxDateInAnalisys = sampleAnalysis.map(a => a.lastDate);
+  // const maxDateInAnalisys = sampleAnalysis.map(a => a.lastDate);
 
-  const maxDateInSample = Math.max(...maxDateInAnalisys);
+  // const maxDateInSample = Math.max(...maxDateInAnalisys);
 
   try {
     const sampleDetail = {
@@ -95,7 +97,7 @@ const getSampleToMail = async (idSample: number): Promise<ISampleDetail> => {
       observation: findSampleDetail[0].observation,
       analysis: sampleAnalysis,
       hashMail: findSampleDetail[0].hash_mail,
-      lastUpdated_at: new Date(maxDateInSample),
+      // lastUpdated_at: new Date(maxDateInSample),
     };
     return sampleDetail;
   } catch {
@@ -108,6 +110,10 @@ const updateHashMail = async (sampleDetail: ISampleDetail): Promise<void> => {
 
   // eslint-disable-next-line no-param-reassign
   delete sampleDetail?.hashMail;
+  // eslint-disable-next-line no-param-reassign
+  // delete sampleDetail.lastUpdated_at;
+  // eslint-disable-next-line no-param-reassign
+  delete sampleDetail.notificationEvent;
 
   try {
     await createConnection();
@@ -126,7 +132,7 @@ const updateHashMail = async (sampleDetail: ISampleDetail): Promise<void> => {
     // );
 
     // findSample.hashMail = JSON.stringify(sampleDetail);
-    findSample.hashMail = sampleDetail.lastUpdated_at || '';
+    findSample.hashMail = md5(JSON.stringify(sampleDetail));
 
     await ormRepository.save(findSample);
   }
@@ -135,9 +141,6 @@ const updateHashMail = async (sampleDetail: ISampleDetail): Promise<void> => {
 };
 
 const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
-  // const hashProvider = new BCryptHash();
-
-  // const sampleDetailInDB = await getSampleToMail(sampleDetail.id);
   const hashMailStored = sampleDetail.hashMail;
 
   const isFornoMHF =
@@ -153,15 +156,27 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
     sampleDetail.collectionPoint || '',
   );
 
+  const sampleDetailParsed = {} as ISampleDetail;
+
+  Object.assign(sampleDetailParsed, sampleDetail);
+
   // eslint-disable-next-line no-param-reassign
-  delete sampleDetail?.hashMail;
+  delete sampleDetailParsed?.hashMail;
+  // eslint-disable-next-line no-param-reassign
+  // delete sampleDetailParsed.lastUpdated_at;
+  // eslint-disable-next-line no-param-reassign
+  delete sampleDetailParsed.notificationEvent;
 
-  // const hashIsEqual = await hashProvider.compareHash(
-  //   JSON.stringify(sampleDetail),
-  //   hashMailStored || '',
-  // );
+  // eslint-disable-next-line no-param-reassign
+  sampleDetailParsed.takenDateTime = sampleDetailParsed.takenDateTime
+    ? format(
+        sampleDetailParsed.takenDateTime as Date,
+        "dd/MM/yyyy 'às' HH:mm'h'",
+      )
+    : '';
 
-  const hashIsEqual = sampleDetail.lastUpdated_at === hashMailStored;
+  const newHash = md5(JSON.stringify(sampleDetailParsed));
+  const hashIsEqual = newHash === hashMailStored;
 
   // Sample with same hash, send mail is not necessary
   /* if (hashIsEqual) {
@@ -187,6 +202,13 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
     if (isFornoMHF || isFlotacao) {
       const sendSampleMailNotificationController = new SampleMailNotificationController();
 
+      Object.assign(sampleDetail, {
+        notificationEvent: `${sampleDetail.notificationEvent}
+        | hashMailStored: ${hashMailStored}
+        | newHash: ${newHash}
+        | hashIsEqual: ${hashIsEqual}`,
+      });
+
       await sendSampleMailNotificationController.create(
         isFornoMHF
           ? `${process.env.MAIL_TO_FORNO}`
@@ -194,12 +216,15 @@ const sendMail = async (sampleDetail: ISampleDetail): Promise<boolean> => {
         sampleDetail,
       );
 
-      //
       // await sendMailDev({
       //   subject: 'API CQ Dev',
       //   html: `sampleDetail: ${JSON.stringify(sampleDetail)} \n
+      //   sampleDetailParsed: ${JSON.stringify(sampleDetailParsed)} \n
       //   hashMailStored: ${hashMailStored} \n
-      //   hashIsEqual: ${hashIsEqual}`,
+      //   hashIsEqual: ${hashIsEqual} \n
+      //   md5(JSON.stringify(sampleDetailParsed)): ${md5(
+      //     JSON.stringify(sampleDetailParsed),
+      //   )}`,
       // });
     } else {
       logger.info(
